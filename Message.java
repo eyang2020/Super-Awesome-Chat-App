@@ -54,6 +54,7 @@ public class Message {
      * @param time time the time the message was sent
      * @param text text the corresponding text that was sent
      */
+    
     public void setMessage(String date, String time, String text) {
         this.date = date;
         this.time = time;
