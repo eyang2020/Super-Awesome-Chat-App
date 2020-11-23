@@ -5,7 +5,7 @@ import java.util.*;
  * 
  * This class will act as a representation of a group of users. 
  * Together, they can chat among people in their group.
- * Users can also edit and delete their messageLabels, and
+ * Users can also edit and delete their messages, and
  * also leave the group.
  * 
  * @author Evan Yang, 006 
@@ -14,7 +14,7 @@ import java.util.*;
 public class Group {
     private String groupName; // the name of the group chat.
     private ArrayList<User> users; // a collection of users that are part of the group.
-    private ArrayList<Message> messages; // a collection of messageLabels sent within the group.
+    private ArrayList<Message> messages; // a collection of messages sent within the group.
 
     /**
      * @param groupName the given name of the group chat.
@@ -35,7 +35,7 @@ public class Group {
         return users;
     }
 
-    // returns the ArrayList of messageLabels sent within the group.
+    // returns the ArrayList of messages sent within the group.
     public ArrayList<Message> getMessages() {
         return messages;
     }
@@ -57,7 +57,7 @@ public class Group {
 
     /**
      * @param message a new message to be added to the ArrayList
-     * of messageLabels.
+     * of messages.
      */
     public void addMessage(Message message) {
         messages.add(message);
@@ -65,7 +65,7 @@ public class Group {
 
     /**
      * This method edits a message at the specified index
-     * of the ArrayList of messageLabels.
+     * of the ArrayList of messages.
      * @param idx index of the message to be edited.
      * @param message the new, edited message.
      */
@@ -75,7 +75,7 @@ public class Group {
 
     /**
      * This method deletes a message at the specified index
-     * of the ArrayList of messageLabels.
+     * of the ArrayList of messages.
      * @param idx index of the message to be deleted.
      */
     public void deleteMessage(int idx) {

@@ -4,7 +4,7 @@
  *
  * Project 5
  *
- * This class will act as representation of all messageLabels sent from users
+ * This class will act as representation of all messages sent from users
  *
  */
 
