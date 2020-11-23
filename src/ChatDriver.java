@@ -17,6 +17,7 @@ public class ChatDriver extends JComponent implements Runnable {
     JLabel testLabel;
 
 
+
     public ChatDriver() {
 
     }
@@ -27,7 +28,7 @@ public class ChatDriver extends JComponent implements Runnable {
         Container content = frame.getContentPane();
         content.setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel();
+        JPanel southPanel = new JPanel();
         message = new JTextField("Send message...", 20);
         sendMessage = new JButton("Send");
         testLabel = new JLabel();
@@ -37,9 +38,11 @@ public class ChatDriver extends JComponent implements Runnable {
                 testLabel.setText(message.getText());
             }
         });
-        panel.add(message);
-        panel.add(sendMessage);
-        content.add(panel, BorderLayout.SOUTH);
+        southPanel.add(message);
+        southPanel.add(sendMessage);
+        content.add(southPanel, BorderLayout.SOUTH);
+
+        JPanel centerPanel = new JPanel(new GridLayout(5, 1));
         content.add(testLabel, BorderLayout.CENTER);
 
         frame.setSize(400, 600);
