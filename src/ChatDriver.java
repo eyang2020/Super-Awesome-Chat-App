@@ -65,18 +65,27 @@ public class ChatDriver extends JComponent implements Runnable {
         southPanel.add(sendMessage);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        JPanel centerPanel = new JPanel(new GridLayout(1, 1));
+        JPanel centerPanel = new JPanel(new GridLayout(0, 1, 5, 10));
 
-        // TODO: make the messages actually show up
         sendMessage.addActionListener(new ActionListener() {
+            /**
+             * Displays the message sent in the chat pane.
+             * @param e the press of the send button
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 messageLabels.push(new JLabel(message.getText()));
                 centerPanel.add(messageLabels.peek());
+                centerPanel.revalidate();
+                message.setText("");
             }
         });
 
-        content.add(centerPanel);
+        JScrollPane chatPane = new JScrollPane(centerPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        content.add(chatPane);
 
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
