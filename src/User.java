@@ -162,6 +162,27 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Returns the username of the user
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Returns the password of the user
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Adds a given group to the groups arraylist
+     * @param group the group to be added to groups
+     */
+    public void addGroup(Group group) {
+        groups.add(group);
+    }
 }
 
 

@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * @version 11/23/20
  */
 public class Server {
-    private ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
-    private ArrayList<User> users;          //A collection of all of the users for the messaging app
+    static public ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
+    static public ArrayList<User> users;          //A collection of all of the users for the messaging app
     private static int port = 4242;         //The port of the server
     ServerSocket serverSocket;              //The socket used to connect the server and client
 
@@ -23,6 +23,11 @@ public class Server {
         while (true) {
             server.acceptor();
         }
+    }
+
+    public Server() {
+        groups = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     /**
