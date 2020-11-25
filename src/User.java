@@ -186,6 +186,7 @@ public class User {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == login) {
+                frame.dispose();
                 content.removeAll();
 
                 frame.setSize(225, 200);
@@ -218,6 +219,7 @@ public class User {
 
             //This creates a new window for user creation
             if (e.getSource() == createUser) {
+                frame.dispose();
                 content.removeAll();
 
                 frame.setSize(225, 320);
@@ -272,11 +274,12 @@ public class User {
 
             if (e.getSource() == login1) {
                 user.loginUser(username1.getText(), password1.getText());
-
+                frame.dispose();
             }
             if (e.getSource() == create) {
                 long usersPhoneNumber = Long.parseLong(phoneNumber1.getText());
                 user.userCreation(name1.getText(), username1.getText(), email1.getText(), usersPhoneNumber, password1.getText());
+                frame.dispose();
             }
         }
     };
