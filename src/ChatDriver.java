@@ -39,7 +39,16 @@ public class ChatDriver extends JComponent implements Runnable {
     public final User USER = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
             1234567890, "testPassword" );
 
+    /**
+     * The current user of the chat.
+     */
     private User clientUser;
+
+    /**
+     * The current group displayed on the chat pane.
+     * TODO: multiple groups????? whomst
+     */
+    private Group currentGroup;
 
     /**
      * Default constructor for ChatDriver. Initializes ArrayList of messageLabels.
@@ -106,6 +115,12 @@ public class ChatDriver extends JComponent implements Runnable {
         centerPanel.setAutoscrolls(true);
 
         content.add(centerPanel, BorderLayout.CENTER);
+
+        JPanel westPanel = new JPanel();
+        // todo: make this a thing
+        JList<Group> groupJList = new JList<>();
+        westPanel.add(groupJList);
+        content.add(westPanel, BorderLayout.WEST);
 
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
