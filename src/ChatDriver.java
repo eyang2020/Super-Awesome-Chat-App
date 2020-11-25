@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +12,7 @@ import java.util.Stack;
  * A GUI panel that a chat user interacts with.
  *
  * @author Camber Boles
- * @version 23 November 2020
+ * @version 25 November 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
