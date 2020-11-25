@@ -9,7 +9,7 @@
  */
 
 public class Message {
-    private final String author; // the author of the message
+    private final User author; // the author of the message
     private String date; // the date that the message was sent
     private String time; // the time that the message was sent
     private String text; // the current text that was sent
@@ -21,7 +21,7 @@ public class Message {
      * @param text the corresponding text that was sent
      */
 
-    public Message(String author , String date , String time , String text) {
+    public Message(User author , String date , String time , String text) {
         this.author = author;
         this.date = date;
         this.time = time;
@@ -29,7 +29,7 @@ public class Message {
     }
 
     // returns the user that sent the message
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
