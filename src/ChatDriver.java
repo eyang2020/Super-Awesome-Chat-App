@@ -1,8 +1,10 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Stack;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Stack;
  * A GUI panel that a chat user interacts with.
  *
  * @author Camber Boles
- * @version 23 November 2020
+ * @version 25 November 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
@@ -34,17 +36,29 @@ public class ChatDriver extends JComponent implements Runnable {
      * A test user for testing the message log.
      * TODO: replace with a user-created profile
      */
-    public final User user;
+    public final User USER = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
+            1234567890, "testPassword" );
+
+    private User clientUser;
 
     /**
-     * Constructor for ChatDriver. Initializes ArrayList of messageLabels.
-     * Also initializes test user.
+     * Default constructor for ChatDriver. Initializes ArrayList of messageLabels.
+     * Also initializes test user. For testing purposes only!
      * TODO: cease reliance on test user
      */
     public ChatDriver() {
         messageLabels = new Stack<>();
-        user = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
-                1234567890, "testPassword" );
+        clientUser = USER;
+    }
+
+    /**
+     * Constructs a ChatDriver object based on the current user on the client-side program.
+     *
+     * @param user the current user
+     */
+    public ChatDriver(User user) {
+        messageLabels = new Stack<>();
+        clientUser = user;
     }
 
     /**
@@ -58,29 +72,58 @@ public class ChatDriver extends JComponent implements Runnable {
         content.setLayout(new BorderLayout());
 
         JPanel southPanel = new JPanel();
-        message = new JTextField("Send message...", 20);
+        message = new JTextField(20);
         sendMessage = new JButton("Send");
 
         southPanel.add(message);
         southPanel.add(sendMessage);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        JPanel centerPanel = new JPanel(new GridLayout(1, 1));
+        JPanel chatPanel = new JPanel(new GridLayout(0, 1, 5, 10));
 
-        // TODO: make the messages actually show up
         sendMessage.addActionListener(new ActionListener() {
+            /**
+             * Displays the message sent in the chat pane.
+             * @param e the press of the send button
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Message creation to send to server
+                sendMessageToServer(message.getText());
+
+                // Message display on GUI
                 messageLabels.push(new JLabel(message.getText()));
-                centerPanel.add(messageLabels.peek());
+                chatPanel.add(messageLabels.peek());
+                chatPanel.revalidate();
+                message.setText("");
             }
         });
 
-        content.add(centerPanel);
+        JScrollPane centerPanel = new JScrollPane(chatPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        centerPanel.setAutoscrolls(true);
+
+        content.add(centerPanel, BorderLayout.CENTER);
 
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    /**
+     * Called when sendMessage is pressed.
+     * Creates a new Message object to be written to the server.
+     *
+     * @param text the text of the message
+     * @return a Message object
+     */
+    public Message sendMessageToServer(String text) {
+        String date = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
+        String time = DateFormat.getTimeInstance(DateFormat.FULL).format(new Date());
+
+        return new Message(clientUser, date, time, text);
     }
 
     /**
