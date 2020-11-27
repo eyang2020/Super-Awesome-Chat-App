@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -97,6 +98,29 @@ public class ServerThread extends Server implements Runnable{
                     }
                     out.writeBoolean(true);
                     out.flush();
+                }
+                case "addMessage" -> {
+                    LocalDateTime dateTime = (LocalDateTime) in.readObject();
+                    String username = (String) in.readObject();
+                    String message = (String) in.readObject();
+                    String groupname = (String) in.readObject();
+                    User realUser = null;
+                    for (User user : users) {
+                        if(user.getUsername().equals(username)) {
+                            realUser = user;
+                            break;
+                        }
+                    }
+                    Group realGroup = null;
+                    for (Group group : groups) {
+                        if(group.getGroupName().equals(groupname)) {
+                            realGroup = group;
+                            break;
+                        }
+                    }
+                    Message realMessage = new Message(realUser, dateTime, message);
+                    realGroup.addMessage(realMessage);
+                    out.writeBoolean(true);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

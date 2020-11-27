@@ -15,13 +15,13 @@ import java.util.ArrayList;
  * @version November 22, 2020
  *
  */
-public class User {
-    private String name; //name of user
-    private String username; //username of user
-    private String email; //email of user
-    private long phoneNumber; //phone number of user
-    private String password; //password for users account
-    ArrayList<Group> groups; //groups the user is in
+public class User implements Serializable {
+    transient private String name; //name of user
+    transient private String username; //username of user
+    transient private String email; //email of user
+    transient private long phoneNumber; //phone number of user
+    transient private String password; //password for users account
+    transient private ArrayList<Group> groups; //groups the user is in
 
     /**
      *
@@ -176,7 +176,7 @@ public class User {
     /**
      * The action listener for the buttons on the login/user creation screens
      */
-    ActionListener actionListener = new ActionListener() {
+    transient ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == login) {
@@ -385,8 +385,8 @@ public class User {
      * Runs the welcome screen
      */
     public static void main(String[] args) {
-        User user1 = new User();
-        user1.run();
+        //User user1 = new User();
+        //user1.run();
     }
 }
 

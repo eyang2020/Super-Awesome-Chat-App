@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 /**
  * ClientSocket
@@ -76,5 +77,17 @@ public class Client {
         out.flush();
         created = in.readBoolean();
         return created;
+    }
+
+    public boolean addMessage(LocalDateTime dateTime, String username, String message, String groupname) throws IOException{
+        boolean added;
+        out.writeObject("addMessage");
+        out.writeObject(dateTime);
+        out.writeObject(username);
+        out.writeObject(message);
+        out.writeObject(groupname);
+        out.flush();
+        added = in.readBoolean();
+        return added;
     }
 }
