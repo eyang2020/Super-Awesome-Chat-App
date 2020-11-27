@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Stack;
@@ -19,18 +21,18 @@ public class ChatDriver extends JComponent implements Runnable {
     /**
      * A text field where the user can send a chat message.
      */
-    JTextField message;
+    JTextField messageTextField;
 
     /**
      * A button that sends the user's message.
      */
-    JButton sendMessage;
+    JButton sendMessageButton;
 
 
     /**
      * An ArrayList of labels for displaying the messages in this group.
      */
-    Stack<JLabel> messageLabels;
+    Stack<JLabel> messageLabelStack;
 
     /**
      * A test user for testing the message log.
@@ -56,7 +58,7 @@ public class ChatDriver extends JComponent implements Runnable {
      * TODO: cease reliance on test user
      */
     public ChatDriver() {
-        messageLabels = new Stack<>();
+        messageLabelStack = new Stack<>();
         clientUser = USER;
     }
 
@@ -66,7 +68,7 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param user the current user
      */
     public ChatDriver(User user) {
-        messageLabels = new Stack<>();
+        messageLabelStack = new Stack<>();
         clientUser = user;
     }
 
@@ -81,16 +83,16 @@ public class ChatDriver extends JComponent implements Runnable {
         content.setLayout(new BorderLayout());
 
         JPanel southPanel = new JPanel();
-        message = new JTextField(20);
-        sendMessage = new JButton("Send");
+        messageTextField = new JTextField(20);
+        sendMessageButton = new JButton("Send");
 
-        southPanel.add(message);
-        southPanel.add(sendMessage);
+        southPanel.add(messageTextField);
+        southPanel.add(sendMessageButton);
         content.add(southPanel, BorderLayout.SOUTH);
 
         JPanel chatPanel = new JPanel(new GridLayout(0, 1, 5, 10));
 
-        sendMessage.addActionListener(new ActionListener() {
+        sendMessageButton.addActionListener(new ActionListener() {
             /**
              * Displays the message sent in the chat pane.
              * @param e the press of the send button
@@ -98,13 +100,14 @@ public class ChatDriver extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Message creation to send to server
-                sendMessageToServer(message.getText());
+                sendMessageToServer(messageTextField.getText());
 
                 // Message display on GUI
-                messageLabels.push(new JLabel(message.getText()));
-                chatPanel.add(messageLabels.peek());
+                messageLabelStack.push(new JLabel(messageTextField.getText()));
+                chatPanel.add(new JLabel(clientUser.getUsername()));
+                chatPanel.add(messageLabelStack.peek());
                 chatPanel.revalidate();
-                message.setText("");
+                messageTextField.setText("");
             }
         });
 
@@ -112,6 +115,7 @@ public class ChatDriver extends JComponent implements Runnable {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        // todo: make it actually autoscroll
         centerPanel.setAutoscrolls(true);
 
         content.add(centerPanel, BorderLayout.CENTER);
@@ -121,6 +125,12 @@ public class ChatDriver extends JComponent implements Runnable {
         JList<Group> groupJList = new JList<>();
         westPanel.add(groupJList);
         content.add(westPanel, BorderLayout.WEST);
+
+        frame.addWindowFocusListener(new WindowAdapter() {
+            public void windowGainedFocus(WindowEvent e) {
+                messageTextField.requestFocusInWindow();
+            }
+        });
 
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
