@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Stack;
+import java.time.LocalDateTime;
 
 /**
  * ChatDriver
@@ -145,10 +146,9 @@ public class ChatDriver extends JComponent implements Runnable {
      * @return a Message object
      */
     public Message sendMessageToServer(String text) {
-        String date = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
-        String time = DateFormat.getTimeInstance(DateFormat.FULL).format(new Date());
+        LocalDateTime dateTime = LocalDateTime.now();
 
-        return new Message(clientUser, date, time, text);
+        return new Message(clientUser, dateTime, text);
     }
 
     /**

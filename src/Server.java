@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * ServerSocket
@@ -18,7 +19,7 @@ public class Server {
     private static int port = 4242;         //The port of the server
     ServerSocket serverSocket;              //The socket used to connect the server and client
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Server server = new Server();
         while (true) {
             server.acceptor();
@@ -48,6 +49,52 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void readInUsersAndGroups(String usersFilename, String groupsFilename) {
+        try {
+            users.clear();
+            groups.clear();
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(usersFilename));
+            try {
+                users = (ArrayList<User>) in.readObject();
+
+            } catch (EOFException e) {
+                e.printStackTrace();
+            }
+            in.close();
+
+            in = new ObjectInputStream(new FileInputStream(groupsFilename));
+            try {
+                groups = (ArrayList<Group>) in.readObject();
+
+            } catch (EOFException e) {
+                e.printStackTrace();
+            }
+            in.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeUsersAndGroups(String usersFilename, String groupsFilename) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(usersFilename));
+            out.flush();
+
+            out.writeObject(users);
+
+            out.close();
+
+            out = new ObjectOutputStream(new FileOutputStream(groupsFilename));
+            out.flush();
+
+            out.writeObject(groups);
+
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

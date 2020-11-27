@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,7 +12,7 @@ import java.util.*;
  * @author Evan Yang, 006 
  * @version November 21, 2020
 */
-public class Group {
+public class Group implements Serializable {
     private String groupName; // the name of the group chat.
     private ArrayList<User> users; // a collection of users that are part of the group.
     private ArrayList<Message> messages; // a collection of messages sent within the group.

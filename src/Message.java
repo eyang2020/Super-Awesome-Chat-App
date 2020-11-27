@@ -1,3 +1,6 @@
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * @author AJ Wheatley
  * @version 11/22/2020
@@ -8,23 +11,20 @@
  *
  */
 
-public class Message {
+public class Message implements Serializable {
     private final User author; // the author of the message
-    private String date; // the date that the message was sent
-    private String time; // the time that the message was sent
+    private LocalDateTime dateTime; // the date and time that the message was sent
     private String text; // the current text that was sent
 
     /**
      * @param author the name of the user who sent the message
-     * @param date the date the message was sent
-     * @param time the time the message was sent
+     * @param dateTime the date and time the message was sent
      * @param text the corresponding text that was sent
      */
 
-    public Message(User author , String date , String time , String text) {
+    public Message(User author , LocalDateTime dateTime , String text) {
         this.author = author;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.text = text;
     }
 
@@ -33,14 +33,9 @@ public class Message {
         return author;
     }
 
-    // returns the date the message was sent at
-    public String getDate() {
-        return date;
-    }
-
-    // returns the time the message was sent at
-    public String getTime() {
-        return time;
+    // returns the date and time the message was sent at
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     // returns the corresponding text sent by the user
@@ -50,14 +45,12 @@ public class Message {
 
     /**
      * This method sets the current message to a new message from the same user
-     * @param date the date the message was sent
-     * @param time time the time the message was sent
+     * @param dateTime the date and time the message was sent
      * @param text text the corresponding text that was sent
      */
     
-    public void setMessage(String date, String time, String text) {
-        this.date = date;
-        this.time = time;
+    public void setMessage(LocalDateTime dateTime, String text) {
+        this.dateTime = dateTime;
         this.text = text;
     }
 }
