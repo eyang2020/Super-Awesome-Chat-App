@@ -1,21 +1,19 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Stack;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * ChatDriver
  * A GUI panel that a chat user interacts with.
  *
  * @author Camber Boles
- * @version 25 November 2020
+ * @version 27 November 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
@@ -36,10 +34,20 @@ public class ChatDriver extends JComponent implements Runnable {
     Stack<JLabel> messageLabelStack;
 
     /**
+     * A specific JLabel, corresponding with the current user,
+     */
+    JLabel usernameLabel;
+
+    /**
+     * A button the user can press to change account settings.
+     */
+    JButton userSettingsButton;
+
+    /**
      * A test user for testing the message log.
      * TODO: replace with a user-created profile
      */
-    public final User USER = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
+    public static final User USER = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
             1234567890, "testPassword" );
 
     /**
@@ -49,19 +57,8 @@ public class ChatDriver extends JComponent implements Runnable {
 
     /**
      * The current group displayed on the chat pane.
-     * TODO: multiple groups????? whomst
      */
     private Group currentGroup;
-
-    /**
-     * Default constructor for ChatDriver. Initializes ArrayList of messageLabels.
-     * Also initializes test user. For testing purposes only!
-     * TODO: cease reliance on test user
-     */
-    public ChatDriver() {
-        messageLabelStack = new Stack<>();
-        clientUser = USER;
-    }
 
     /**
      * Constructs a ChatDriver object based on the current user on the client-side program.
@@ -71,6 +68,10 @@ public class ChatDriver extends JComponent implements Runnable {
     public ChatDriver(User user) {
         messageLabelStack = new Stack<>();
         clientUser = user;
+        usernameLabel = new JLabel(clientUser.getUsername());
+        // currentGroup = clientUser.getGroups().get(0);
+        currentGroup = new Group("Test Group", new ArrayList<>());
+        userSettingsButton = new JButton("Settings");
     }
 
     /**
@@ -105,7 +106,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 // Message display on GUI
                 messageLabelStack.push(new JLabel(messageTextField.getText()));
-                chatPanel.add(new JLabel(clientUser.getUsername()));
+                chatPanel.add(usernameLabel);
                 chatPanel.add(messageLabelStack.peek());
                 chatPanel.revalidate();
                 messageTextField.setText("");
@@ -127,7 +128,23 @@ public class ChatDriver extends JComponent implements Runnable {
         westPanel.add(groupJList);
         content.add(westPanel, BorderLayout.WEST);
 
+        JPanel eastPanel = new JPanel();
+        JList<User> userJList = new JList<>(currentGroup.getUsers().toArray(new User[0]));
+        eastPanel.add(userJList);
+        content.add(eastPanel, BorderLayout.EAST);
+
+        JPanel northPanel = new JPanel();
+        northPanel.add(new JLabel(currentGroup.getGroupName()));
+        northPanel.add(userSettingsButton);
+        content.add(northPanel, BorderLayout.NORTH);
+
         frame.addWindowFocusListener(new WindowAdapter() {
+            /**
+             * Changes focus to the message text field within this frame.
+             * From "How to Use the Focus Subsystem" on the Java Tutorials page.
+             *
+             * @param e the chat frame gaining focus
+             */
             public void windowGainedFocus(WindowEvent e) {
                 messageTextField.requestFocusInWindow();
             }
@@ -160,6 +177,6 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new ChatDriver());
+        SwingUtilities.invokeLater(new ChatDriver(USER));
     }
 }
