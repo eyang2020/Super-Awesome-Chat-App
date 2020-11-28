@@ -16,27 +16,26 @@ import java.io.IOException;
  */
 
 public class Login {
-    JButton login;
-    JButton createUser;
-    JButton login1;
-    JButton create;
+    JButton login; //the option to login
+    JButton createUser; //the option to create a user
+    JButton login1; //confirm login
+    JButton create; //confirm create
 
     JFrame frame = new JFrame("Super Awesome Chat App");
-    JPanel panel = new JPanel();
-    JPanel panel1 = new JPanel();
-    JPanel panel2 = new JPanel();
+    JPanel panel1 = new JPanel(); //login panel
+    JPanel panel2 = new JPanel(); //user creation panel
     Container content = frame.getContentPane();
 
-    JTextField username1 = new JTextField(15);
-    JTextField password1 = new JTextField(15);
-    JTextField email1 = new JTextField(15);
-    JTextField name1 = new JTextField(15);
-    JTextField phoneNumber1 = new JTextField(15);
+    JTextField username = new JTextField(15); //username the user inputs
+    JTextField password = new JTextField(15); //password the user inputs
+    JTextField email = new JTextField(15); //email the user inputs
+    JTextField name = new JTextField(15); //name the user inputs
+    JTextField phoneNumber = new JTextField(15); //phone number the user inputs
 
     Login newLogin;
-    Client client = new Client();
-    Server server = new Server();
-    User user = new User();
+    Client client = new Client(); //login or create user
+    Server server = new Server(); //access current users
+    User user = new User(); //new user to be created
 
     /**
      * The action listener for the buttons on the login/user creation screens
@@ -61,9 +60,9 @@ public class Login {
                 passwordLabel.setBounds(50, 200, 50, 100);
 
                 panel1.add(usernameLabel);
-                panel1.add(username1);
+                panel1.add(username);
                 panel1.add(passwordLabel);
-                panel1.add(password1);
+                panel1.add(password);
                 login1 = new JButton("Login");
                 login1.addActionListener(actionListener);
                 login1.setBorder(new LineBorder(Color.BLACK));
@@ -106,19 +105,19 @@ public class Login {
                 passwordLabel.setBounds(200, 500, frame.getWidth(), frame.getHeight());
 
                 panel2.add(nameLabel);
-                panel2.add(name1);
+                panel2.add(name);
 
                 panel2.add(emailLabel);
-                panel2.add(email1);
+                panel2.add(email);
 
                 panel2.add(phoneNumberLabel);
-                panel2.add(phoneNumber1);
+                panel2.add(phoneNumber);
 
                 panel2.add(usernameLabel);
-                panel2.add(username1);
+                panel2.add(username);
 
                 panel2.add(passwordLabel);
-                panel2.add(password1);
+                panel2.add(password);
 
                 create = new JButton("Create User");
                 create.addActionListener(actionListener);
@@ -133,16 +132,16 @@ public class Login {
 
             if (e.getSource() == login1) {
                 try {
-                    newLogin.loginUser(username1.getText(), password1.getText());
+                    newLogin.loginUser(username.getText(), password.getText());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
                 frame.dispose();
             }
             if (e.getSource() == create) {
-                long usersPhoneNumber = Long.parseLong(phoneNumber1.getText());
+                long usersPhoneNumber = Long.parseLong(phoneNumber.getText());
                 try {
-                    newLogin.userCreation(name1.getText(), username1.getText(), email1.getText(), usersPhoneNumber, password1.getText());
+                    newLogin.userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }

@@ -123,6 +123,29 @@ public class User implements Serializable {
         return this.groups;
     }
 
+    /**
+     *
+     * @return the name of the user
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     *
+     * @return the email of the user
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     *
+     * @return the phone number of the user
+     */
+    public long getPhoneNumber() {
+        return phoneNumber;
+    }
 }
 
 
