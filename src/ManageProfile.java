@@ -150,7 +150,7 @@ public class ManageProfile {
                         cPhoneNumber = new JLabel(String.valueOf(loggedIn.getUser().getPhoneNumber()));
                         break;
                 }
-                frame.dispose();
+                frame.setVisible(true);
             }
         }
     };
