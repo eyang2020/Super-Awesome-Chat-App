@@ -130,24 +130,34 @@ public class ManageProfile {
                 switch (selection) {
                     case 1:
                         loggedIn.getUser().setUsername(newUsername.getText());
+                        panel.remove(cUsername);
                         cUsername = new JLabel(loggedIn.getUser().getUsername());
+                        panel.add(cUsername);
                         break;
                     case 2:
                         loggedIn.getUser().setPassword(newPassword.getText());
+                        panel.remove(cPassword);
                         cPassword = new JLabel(loggedIn.getUser().getPassword());
+                        panel.add(cPassword);
                         break;
                     case 3:
                         loggedIn.getUser().setName(newName.getText());
+                        panel.remove(cName);
                         cName = new JLabel(loggedIn.getUser().getName());
+                        panel.add(cName);
                         break;
                     case 4:
                         loggedIn.getUser().setEmail(newEmail.getText());
+                        panel.remove(cEmail);
                         cEmail = new JLabel(loggedIn.getUser().getEmail());
+                        panel.add(cEmail);
                         break;
                     case 5:
                         long number = Long.parseLong(newPhoneNumber.getText());
                         loggedIn.getUser().setPhoneNumber(number);
+                        panel.remove(cPhoneNumber);
                         cPhoneNumber = new JLabel(String.valueOf(loggedIn.getUser().getPhoneNumber()));
+                        panel.add(cPhoneNumber);
                         break;
                 }
                 frame.setVisible(true);
