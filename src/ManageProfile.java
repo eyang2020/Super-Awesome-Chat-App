@@ -20,6 +20,7 @@ public class ManageProfile {
     JButton editEmail;
     JButton editPhoneNumber;
     JButton change;
+    JButton deleteAccount;
 
     JTextField newUsername;
     JTextField newPassword;
@@ -34,6 +35,7 @@ public class ManageProfile {
     int selection = 0;
 
     Login loggedIn = new Login();
+    Server server = new Server();
 
     /**
      *Takes the button the user selects and lets them edit the information they want
@@ -42,17 +44,13 @@ public class ManageProfile {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == editUsername) {
-                content.setLayout(new BorderLayout());
-                frame.setSize(225, 360);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 JLabel usernameLabel = new JLabel("New Username:");
                 usernameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 usernameLabel.setBounds(50, 100, 50, 100);
                 change = new JButton("Change");
                 panel.add(change);
-                newUsername = new JTextField();
+                newUsername = new JTextField(10);
 
                 panel.add(usernameLabel);
                 panel.add(newUsername);
@@ -62,17 +60,13 @@ public class ManageProfile {
                 selection = 1;
             }
             if (e.getSource() == editPassword) {
-                content.setLayout(new BorderLayout());
-                frame.setSize(225, 360);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 JLabel passwordLabel = new JLabel("New Password:");
                 passwordLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 passwordLabel.setBounds(50, 100, 50, 100);
                 change = new JButton("Change");
                 panel.add(change);
-                newPassword = new JTextField();
+                newPassword = new JTextField(10);
 
                 panel.add(passwordLabel);
                 panel.add(newPassword);
@@ -82,17 +76,13 @@ public class ManageProfile {
                 selection = 2;
             }
             if (e.getSource() == editName) {
-                content.setLayout(new BorderLayout());
-                frame.setSize(225, 360);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 JLabel nameLabel = new JLabel("New Name:");
                 nameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 nameLabel.setBounds(50, 100, 50, 100);
                 change = new JButton("Change");
                 panel.add(change);
-                newName = new JTextField();
+                newName = new JTextField(10);
 
                 panel.add(nameLabel);
                 panel.add(newName);
@@ -102,17 +92,12 @@ public class ManageProfile {
                 selection = 3;
             }
             if (e.getSource() == editEmail) {
-                content.setLayout(new BorderLayout());
-                frame.setSize(225, 360);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
                 JLabel emailLabel = new JLabel("New Email:");
                 emailLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 emailLabel.setBounds(50, 100, 50, 100);
                 change = new JButton("Change");
                 panel.add(change);
-                newEmail = new JTextField();
+                newEmail = new JTextField(10);
 
                 panel.add(emailLabel);
                 panel.add(newEmail);
@@ -122,17 +107,12 @@ public class ManageProfile {
                 selection = 4;
             }
             if (e.getSource() == editPhoneNumber) {
-                content.setLayout(new BorderLayout());
-                frame.setSize(225, 360);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
                 JLabel phoneNumberLabel = new JLabel("New Phone Number:");
                 phoneNumberLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 phoneNumberLabel.setBounds(50, 100, 50, 100);
                 change = new JButton("Change");
                 panel.add(change);
-                newPhoneNumber = new JTextField();
+                newPhoneNumber = new JTextField(10);
 
                 panel.add(phoneNumberLabel);
                 panel.add(newPhoneNumber);
@@ -140,6 +120,10 @@ public class ManageProfile {
 
                 frame.setVisible(true);
                 selection = 5;
+            }
+            if (e.getSource() == deleteAccount) {
+                server.getUsers().remove(loggedIn.getUser());
+                frame.dispose();
             }
             if (e.getSource() == change) {
                 switch (selection) {
@@ -160,13 +144,14 @@ public class ManageProfile {
                         loggedIn.getUser().setPhoneNumber(number);
                         break;
                 }
+                frame.dispose();
             }
         }
     };
 
     public void run() {
         content.setLayout(new BorderLayout());
-        frame.setSize(225, 320);
+        frame.setSize(225, 175);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -195,11 +180,17 @@ public class ManageProfile {
         editPhoneNumber.setBackground(Color.decode("#C4E9E7"));
         editPhoneNumber.addActionListener(actionListener);
 
+        deleteAccount = new JButton("Delete Account");
+        deleteAccount.setBorder(new LineBorder(Color.BLACK));
+        deleteAccount.setBackground(Color.decode("#C4E9E7"));
+        deleteAccount.addActionListener(actionListener);
+
         panel.add(editUsername);
         panel.add(editPassword);
         panel.add(editName);
         panel.add(editEmail);
         panel.add(editPhoneNumber);
+        panel.add(deleteAccount);
         panel.setBackground(Color.decode("#98DE7B"));
         content.add(panel, BorderLayout.CENTER);
         frame.setVisible(true);

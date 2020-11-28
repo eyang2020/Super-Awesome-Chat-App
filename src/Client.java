@@ -1,3 +1,5 @@
+package src;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -60,13 +62,13 @@ public class Client {
     }
 
     public boolean login(String username, String password) throws IOException {
-        boolean logedin;
+        boolean loggedin;
         out.writeObject("login");
         out.writeObject(username);
         out.writeObject(password);
         out.flush();
-        logedin = in.readBoolean();
-        return logedin;
+        loggedin = in.readBoolean();
+        return loggedin;
     }
 
     public boolean createGroup(String groupName, String[] usernames) throws IOException{

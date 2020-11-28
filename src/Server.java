@@ -1,3 +1,5 @@
+package src;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -96,6 +98,10 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
     }
 }
 
