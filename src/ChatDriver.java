@@ -27,7 +27,6 @@ public class ChatDriver extends JComponent implements Runnable {
      */
     JButton sendMessageButton;
 
-
     /**
      * An ArrayList of labels for displaying the messages in this group.
      */
@@ -42,13 +41,6 @@ public class ChatDriver extends JComponent implements Runnable {
      * A button the user can press to change account settings.
      */
     JButton userSettingsButton;
-
-    /**
-     * A test user for testing the message log.
-     * TODO: replace with a user-created profile
-     */
-    public static final User USER = new User("Camber Boles", "boles2", "boles2@purdue.edu,",
-            1234567890, "testPassword" );
 
     /**
      * The current user of the chat.
@@ -177,6 +169,8 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new ChatDriver(USER));
+        SwingUtilities.invokeLater(new ChatDriver(
+                new User("Camber Boles", "boles2", "boles2@purdue.edu,",
+                1234567890, "testPassword" )));
     }
 }
