@@ -32,7 +32,7 @@ public class ServerThread extends Server implements Runnable{
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         String input;
-        User currentUser;
+        User currentUser = null;
 
         try{
             out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
@@ -59,7 +59,7 @@ public class ServerThread extends Server implements Runnable{
                     }
                     currentUser = new User(name, username, email, phoneNumber, password);
                     users.add(currentUser);
-                    out.writeBoolean(true);
+                    out.writeObject(currentUser);
                     out.flush();
                 }
                 case "login" -> {
@@ -77,6 +77,7 @@ public class ServerThread extends Server implements Runnable{
                         }
                     }
                     out.writeBoolean(false);
+                    out.writeObject(currentUser);
                     out.flush();
                 }
                 case "createGroup" -> {

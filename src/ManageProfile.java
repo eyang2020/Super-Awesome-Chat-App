@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -41,7 +41,6 @@ public class ManageProfile {
     int selection = 0;
 
     Login loggedIn = new Login(); // used to access the user currently logged in
-    Server server = new Server(); //accesses the users
 
     /**
      *Takes the button the user selects and lets them edit the information they want
@@ -123,7 +122,7 @@ public class ManageProfile {
                 selection = 5;
             }
             if (e.getSource() == deleteAccount) {
-                server.getUsers().remove(loggedIn.getUser());
+                Server.getUsers().remove(loggedIn.getUser());
                 frame.dispose();
             }
             if (e.getSource() == change) {

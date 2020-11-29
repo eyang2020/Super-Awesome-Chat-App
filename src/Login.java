@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  *
- *Gui for the user to log in
+ * Gui for the user to log in
  *
  * @author Ruth Baldwin
  * @version November 27, 2020
@@ -34,7 +34,6 @@ public class Login {
 
     Login newLogin;
     Client client = new Client(); //login or create user
-    Server server = new Server(); //access current users
     User user = new User(); //new user to be created
 
     /**
@@ -142,8 +141,8 @@ public class Login {
                 long usersPhoneNumber = Long.parseLong(phoneNumber.getText());
                 try {
                     newLogin.userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
                 }
                 frame.dispose();
             }
@@ -160,12 +159,7 @@ public class Login {
     public void loginUser(String usernameToFind, String passwordToCheck) throws IOException {
         boolean success = client.login(usernameToFind, passwordToCheck);
         if (success == true) {
-            for (int i = 0; i < server.getUsers().size(); i++) {
-                if (server.getUsers().get(i).getUsername().equals(usernameToFind)
-                        && server.getUsers().get(i).getUsername().equals(passwordToCheck)) {
-                    user = server.getUsers().get(i);
-                }
-            }
+            user = client.getCurrentUser();
         }
         //login user
     }
@@ -179,8 +173,7 @@ public class Login {
      * @param usersPassword the password for the account
      */
     public void userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber, String usersPassword) throws IOException {
-        client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
-        user = new User(usersName, usersUsername, usersEmail, usersPhoneNumber, usersPassword);
+        user = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
     }
 
     /**

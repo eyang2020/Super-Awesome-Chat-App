@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import java.io.*;
 import java.net.*;
@@ -16,8 +16,8 @@ import java.util.Arrays;
  * @version 11/23/20
  */
 public class Server {
-    static public ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
-    static public ArrayList<User> users;          //A collection of all of the users for the messaging app
+    static protected ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
+    static protected ArrayList<User> users;          //A collection of all of the users for the messaging app
     private static int port = 4242;         //The port of the server
     ServerSocket serverSocket;              //The socket used to connect the server and client
 
@@ -54,6 +54,11 @@ public class Server {
         }
     }
 
+    /**
+     * Reads in the users and groups arraylist from two files
+     * @param usersFilename The filename where the users arraylist is stored
+     * @param groupsFilename The filename where the groups arraylist is stored
+     */
     public void readInUsersAndGroups(String usersFilename, String groupsFilename) {
         try {
             users.clear();
@@ -80,6 +85,11 @@ public class Server {
         }
     }
 
+    /**
+     * Writes the users and groups arraylist to two files
+     * @param usersFilename The filename where the users arraylist is stored
+     * @param groupsFilename The filename where the groups arraylist is stored
+     */
     public void writeUsersAndGroups(String usersFilename, String groupsFilename) {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(usersFilename));
@@ -100,7 +110,11 @@ public class Server {
         }
     }
 
-    public ArrayList<User> getUsers() {
+    /**
+     * Returns the users arraylist
+     * @return The users arraylist
+     */
+    public static ArrayList<User> getUsers() {
         return users;
     }
 }
