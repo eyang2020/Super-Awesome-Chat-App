@@ -23,7 +23,7 @@ TODO: add description about testing done on class.
 
 ## Group Class
 
-TODO: add description about the class.
+This class is used to represent a group conversation including two or more users. Each instance of the group class keeps track of the users that make up the group and the messages that have been sent within the group. It also maintains a title which acts as the nickname of the conversation for all the users in that group.
 
 TODO: add description about testing done on class.
 
