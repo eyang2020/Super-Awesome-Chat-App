@@ -1,5 +1,6 @@
 //package src;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -24,13 +25,16 @@ public class Client {
     User currentUser = null;       //The user that this client represents
 
     public static void main(String[] args) throws IOException {
-        Client client1 = new Client();
-        client1.host = "localhost";
-        client1.port = 4242;
-        System.out.println("que");
+        Client client1 = new Client("localhost", 4242);
         client1.connectToServer();
-        System.out.println("hello");
+        SwingUtilities.invokeLater(new Login(client1));
         client1.createGroup("Hello", new String[]{"Hi", "Bye"});
+    }
+
+    public Client(String host, int port) {
+        this.host = host;
+        this.port = port;
+        connectToServer();
     }
 
     /**
@@ -46,7 +50,6 @@ public class Client {
             out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
             out.flush();
             in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            System.out.println("hello1");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,20 +118,16 @@ public class Client {
     }
 
     /**
-     *
-     * @param dateTime An object representing the date and time of the message creation
-     * @param username The username of the person adding the message
+     * Adds the given message to the given group
      * @param message The message to be added
-     * @param groupname The name of the group the message should be added to
+     * @param group The group the message is to be added to
      * @return Whether or not the message was created successfully
      */
-    public boolean addMessage(LocalDateTime dateTime, String username, String message, String groupname) throws IOException{
-        boolean added;
+    public boolean addMessage(Message message, Group group) throws IOException {
+        boolean added = false;
         out.writeObject("addMessage");
-        out.writeObject(dateTime);
-        out.writeObject(username);
         out.writeObject(message);
-        out.writeObject(groupname);
+        out.writeObject(group);
         out.flush();
         added = in.readBoolean();
         return added;

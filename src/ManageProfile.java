@@ -40,7 +40,13 @@ public class ManageProfile {
 
     int selection = 0;
 
-    Login loggedIn = new Login(); // used to access the user currently logged in
+    Client client;
+    User user;
+
+    public ManageProfile(Client client) {
+        this.client = client;
+        user = client.getCurrentUser();
+    }
 
     /**
      *Takes the button the user selects and lets them edit the information they want
@@ -122,40 +128,40 @@ public class ManageProfile {
                 selection = 5;
             }
             if (e.getSource() == deleteAccount) {
-                Server.getUsers().remove(loggedIn.getUser());
+                Server.getUsers().remove(user);
                 frame.dispose();
             }
             if (e.getSource() == change) {
                 switch (selection) {
                     case 1:
-                        loggedIn.getUser().setUsername(newUsername.getText());
+                        user.setUsername(newUsername.getText());
                         panel.remove(cUsername);
-                        cUsername = new JLabel(loggedIn.getUser().getUsername());
+                        cUsername = new JLabel(user.getUsername());
                         panel.add(cUsername);
                         break;
                     case 2:
-                        loggedIn.getUser().setPassword(newPassword.getText());
+                        user.setPassword(newPassword.getText());
                         panel.remove(cPassword);
-                        cPassword = new JLabel(loggedIn.getUser().getPassword());
+                        cPassword = new JLabel(user.getPassword());
                         panel.add(cPassword);
                         break;
                     case 3:
-                        loggedIn.getUser().setName(newName.getText());
+                        user.setName(newName.getText());
                         panel.remove(cName);
-                        cName = new JLabel(loggedIn.getUser().getName());
+                        cName = new JLabel(user.getName());
                         panel.add(cName);
                         break;
                     case 4:
-                        loggedIn.getUser().setEmail(newEmail.getText());
+                        user.setEmail(newEmail.getText());
                         panel.remove(cEmail);
-                        cEmail = new JLabel(loggedIn.getUser().getEmail());
+                        cEmail = new JLabel(user.getEmail());
                         panel.add(cEmail);
                         break;
                     case 5:
                         long number = Long.parseLong(newPhoneNumber.getText());
-                        loggedIn.getUser().setPhoneNumber(number);
+                        user.setPhoneNumber(number);
                         panel.remove(cPhoneNumber);
-                        cPhoneNumber = new JLabel(String.valueOf(loggedIn.getUser().getPhoneNumber()));
+                        cPhoneNumber = new JLabel(String.valueOf(user.getPhoneNumber()));
                         panel.add(cPhoneNumber);
                         break;
                 }
@@ -175,15 +181,15 @@ public class ManageProfile {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        cUsername = new JLabel("Username:" + loggedIn.getUser().getUsername());
+        cUsername = new JLabel("Username:" + user.getUsername());
         cUsername.setFont( new Font("Comic Sans", Font.PLAIN, 14));
-        cPassword = new JLabel("Password:" + loggedIn.getUser().getPassword());
+        cPassword = new JLabel("Password:" + user.getPassword());
         cPassword.setFont( new Font("Comic Sans", Font.PLAIN, 14));
-        cName = new JLabel("Name:" + loggedIn.getUser().getName());
+        cName = new JLabel("Name:" + user.getName());
         cName.setFont( new Font("Comic Sans", Font.PLAIN, 14));
-        cEmail = new JLabel("Email:" + loggedIn.getUser().getEmail());
+        cEmail = new JLabel("Email:" + user.getEmail());
         cEmail.setFont( new Font("Comic Sans", Font.PLAIN, 14));
-        cPhoneNumber = new JLabel("Phone Number:" + loggedIn.getUser().getPhoneNumber());
+        cPhoneNumber = new JLabel("Phone Number:" + user.getPhoneNumber());
         cPhoneNumber.setFont( new Font("Comic Sans", Font.PLAIN, 14));
 
         editUsername = new JButton("Edit Username");

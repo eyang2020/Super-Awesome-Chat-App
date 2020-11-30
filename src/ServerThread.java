@@ -41,91 +41,80 @@ public class ServerThread extends Server implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            input = (String) in.readObject();
-            switch (input) {
-                case "createAccount" -> {
-                    String username = (String) in.readObject();
-                    String password = (String) in.readObject();
-                    String name = (String) in.readObject();
-                    String email = (String) in.readObject();
-                    long phoneNumber = in.readLong();
-                    for (User user : users) {
-                        if(user.getUsername().equals(username)) {
-                            out.writeBoolean(false);
-                            out.flush();
-                            break;
-                        }
-                    }
-                    currentUser = new User(name, username, email, phoneNumber, password);
-                    users.add(currentUser);
-                    out.writeObject(currentUser);
-                    out.flush();
-                }
-                case "login" -> {
-                    String username = (String) in.readObject();
-                    String password = (String) in.readObject();
-                    for (User user : users) {
-                        if(user.getUsername().equals(username)) {
-                            if(user.getPassword().equals(password)) {
-                                out.writeBoolean(true);
-                                currentUser = user;
+        while (true) {
+            try {
+                input = (String) in.readObject();
+                switch (input) {
+                    case "createAccount" -> {
+                        String username = (String) in.readObject();
+                        String password = (String) in.readObject();
+                        String name = (String) in.readObject();
+                        String email = (String) in.readObject();
+                        long phoneNumber = in.readLong();
+                        for (User user : users) {
+                            if (user.getUsername().equals(username)) {
+                                out.writeBoolean(false);
                                 out.flush();
                                 break;
                             }
-                            //Add a way for the client to tell the reason for the failed login
                         }
+                        currentUser = new User(name, username, email, phoneNumber, password);
+                        users.add(currentUser);
+                        out.writeObject(currentUser);
+                        out.flush();
                     }
-                    out.writeBoolean(false);
-                    out.writeObject(currentUser);
-                    out.flush();
-                }
-                case "createGroup" -> {
-                    String groupName = (String) in.readObject();
-                    String[] usernames = (String[]) in.readObject();
-                    ArrayList<User> addedUsers = new ArrayList<>();
-                    Group newGroup;
-                    for (String username : usernames) {
+                    case "login" -> {
+                        String username = (String) in.readObject();
+                        String password = (String) in.readObject();
                         for (User user : users) {
-                            if(user.getUsername().equals(username)) {
-                                addedUsers.add(user);
+                            if (user.getUsername().equals(username)) {
+                                if (user.getPassword().equals(password)) {
+                                    out.writeBoolean(true);
+                                    currentUser = user;
+                                    out.flush();
+                                    break;
+                                }
+                                //Add a way for the client to tell the reason for the failed login
                             }
                         }
+                        out.writeBoolean(false);
+                        out.writeObject(currentUser);
+                        out.flush();
                     }
-                    newGroup = new Group(groupName, addedUsers);
-                    groups.add(newGroup);
-                    for (User user : addedUsers) {
-                        user.addGroup(newGroup);
-                    }
-                    out.writeBoolean(true);
-                    out.flush();
-                }
-                case "addMessage" -> {
-                    LocalDateTime dateTime = (LocalDateTime) in.readObject();
-                    String username = (String) in.readObject();
-                    String message = (String) in.readObject();
-                    String groupname = (String) in.readObject();
-                    User realUser = null;
-                    for (User user : users) {
-                        if(user.getUsername().equals(username)) {
-                            realUser = user;
-                            break;
+                    case "createGroup" -> {
+                        String groupName = (String) in.readObject();
+                        String[] usernames = (String[]) in.readObject();
+                        ArrayList<User> addedUsers = new ArrayList<>();
+                        Group newGroup;
+                        for (String username : usernames) {
+                            for (User user : users) {
+                                if (user.getUsername().equals(username)) {
+                                    addedUsers.add(user);
+                                }
+                            }
                         }
-                    }
-                    Group realGroup = null;
-                    for (Group group : groups) {
-                        if(group.getGroupName().equals(groupname)) {
-                            realGroup = group;
-                            break;
+                        newGroup = new Group(groupName, addedUsers);
+                        groups.add(newGroup);
+                        for (User user : addedUsers) {
+                            user.addGroup(newGroup);
                         }
+                        out.writeBoolean(true);
+                        out.flush();
                     }
-                    Message realMessage = new Message(realUser, dateTime, message);
-                    realGroup.addMessage(realMessage);
-                    out.writeBoolean(true);
+                    case "addMessage" -> {
+                        Message message = (Message) in.readObject();
+                        Group group = (Group) in.readObject();
+                        group.addMessage(message);
+                        assert out != null;
+                        out.writeBoolean(true);
+                        out.flush();
+                    }
                 }
+            } catch (EOFException e) {
+                break;
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -15,7 +15,7 @@ import java.io.IOException;
  * @version November 27, 2020
  */
 
-public class Login {
+public class Login implements Runnable {
     JButton login; //the option to login
     JButton createUser; //the option to create a user
     JButton login1; //confirm login
@@ -33,8 +33,21 @@ public class Login {
     JTextField phoneNumber = new JTextField(15); //phone number the user inputs
 
     Login newLogin;
-    Client client = new Client(); //login or create user
+    Client client;
     User user = new User(); //new user to be created
+
+    public Login(Client client) {
+        this.client = client;
+    }
+
+    public void run() {
+        content.setLayout(new BorderLayout());
+        JPanel starter = new JPanel();
+        content.add(starter);
+        starter.add(login);
+        starter.add(login);
+        frame.setVisible(true);
+    }
 
     /**
      * The action listener for the buttons on the login/user creation screens

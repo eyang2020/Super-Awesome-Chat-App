@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -48,6 +49,11 @@ public class ChatDriver extends JComponent implements Runnable {
     private User clientUser;
 
     /**
+     * The current client of the user.
+     */
+    private Client client;
+
+    /**
      * The current group displayed on the chat pane.
      */
     private Group currentGroup;
@@ -55,11 +61,12 @@ public class ChatDriver extends JComponent implements Runnable {
     /**
      * Constructs a ChatDriver object based on the current user on the client-side program.
      *
-     * @param user the current user
+     * @param client the client of the current user
      */
-    public ChatDriver(User user) {
+    public ChatDriver(Client client) {
         messageLabelStack = new Stack<>();
-        clientUser = user;
+        this.client = client;
+        clientUser = client.getCurrentUser();
         usernameLabel = new JLabel(clientUser.getUsername());
         // currentGroup = clientUser.getGroups().get(0);
         currentGroup = new Group("Test Group", new ArrayList<>());
@@ -154,10 +161,14 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param text the text of the message
      * @return a Message object
      */
-    public Message sendMessageToServer(String text) {
+    public void sendMessageToServer(String text){
         LocalDateTime dateTime = LocalDateTime.now();
 
-        return new Message(clientUser, dateTime, text);
+        try {
+            client.addMessage(new Message(clientUser, dateTime, text), currentGroup);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -169,8 +180,6 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new ChatDriver(
-                new User("Camber Boles", "boles2", "boles2@purdue.edu,",
-                1234567890, "testPassword" )));
+        SwingUtilities.invokeLater(new ChatDriver(new Client("localhost", 4242)));
     }
 }
