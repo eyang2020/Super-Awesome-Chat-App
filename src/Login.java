@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -22,6 +22,7 @@ public class Login implements Runnable {
     JButton create; //confirm create
 
     JFrame frame = new JFrame("Super Awesome Chat App");
+    JPanel panel = new JPanel(); //welcome panel
     JPanel panel1 = new JPanel(); //login panel
     JPanel panel2 = new JPanel(); //user creation panel
     Container content = frame.getContentPane();
@@ -40,13 +41,39 @@ public class Login implements Runnable {
         this.client = client;
     }
 
-    public void run() {
+    public void run () {
+        user = new User();
         content.setLayout(new BorderLayout());
-        JPanel starter = new JPanel();
-        content.add(starter);
-        starter.add(login);
-        starter.add(login);
+        login = new JButton("Login");
+        login.setBorder(new LineBorder(Color.BLACK));
+        login.setBackground(Color.decode("#C4E9E7"));
+        login.addActionListener(actionListener);
+        createUser = new JButton("Create an Account");
+        createUser.setBorder(new LineBorder(Color.BLACK));
+        createUser.setBackground(Color.decode("#C4E9E7"));
+        createUser.addActionListener(actionListener);
+
+        frame.setSize(200, 150);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
+        JLabel welcome = new JLabel("Welcome!");
+        welcome.setFont( new Font("Comic Sans", Font.BOLD, 16));
+        welcome.setBounds(200, 50, frame.getWidth(), frame.getHeight());
+        JLabel option = new JLabel("Please select an option:");
+        option.setFont( new Font("Comic Sans", Font.PLAIN, 14));
+        welcome.setBounds(200, 100, frame.getWidth(), frame.getHeight());
+        login.setBounds(200, 150, frame.getWidth(), frame.getHeight());
+        createUser.setBounds(200, 200, frame.getWidth(), frame.getHeight());
+
+        panel.add(welcome);
+        panel.add(option);
+        panel.add(login);
+        panel.add(createUser);
+        panel.setBackground(Color.decode("#98DE7B"));
+        content.add(panel, BorderLayout.CENTER);
+
     }
 
     /**
