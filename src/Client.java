@@ -31,6 +31,8 @@ public class Client {
         client1.connectToServer();
         System.out.println("hello");
         client1.createGroup("Hello", new String[]{"Hi", "Bye"});
+
+        ChatDriver.chat(client1.getCurrentUser());
     }
 
     /**
