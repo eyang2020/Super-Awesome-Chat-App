@@ -29,6 +29,8 @@ public class Client {
         client1.connectToServer();
         SwingUtilities.invokeLater(new Login(client1));
         client1.createGroup("Hello", new String[]{"Hi", "Bye"});
+
+        ChatDriver.chat(client1.getCurrentUser());
     }
 
     public Client(String host, int port) {

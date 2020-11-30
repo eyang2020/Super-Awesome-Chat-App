@@ -14,7 +14,7 @@ import java.util.Stack;
  * A GUI panel that a chat user interacts with.
  *
  * @author Camber Boles
- * @version 27 November 2020
+ * @version 30 November 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
@@ -44,6 +44,11 @@ public class ChatDriver extends JComponent implements Runnable {
     JButton userSettingsButton;
 
     /**
+     * A button the user can press to create a new group.
+     */
+    JButton createGroupButton;
+
+    /**
      * The current user of the chat.
      */
     private User clientUser;
@@ -68,9 +73,15 @@ public class ChatDriver extends JComponent implements Runnable {
         this.client = client;
         clientUser = client.getCurrentUser();
         usernameLabel = new JLabel(clientUser.getUsername());
-        // currentGroup = clientUser.getGroups().get(0);
-        currentGroup = new Group("Test Group", new ArrayList<>());
+
+        if (clientUser.getGroups().size() != 0) {
+            currentGroup = clientUser.getGroups().get(0);
+        } else {
+            currentGroup = new Group("Create your first Group!", new ArrayList<>());
+        }
+
         userSettingsButton = new JButton("Settings");
+        createGroupButton = new JButton("New Group");
     }
 
     /**
@@ -91,7 +102,8 @@ public class ChatDriver extends JComponent implements Runnable {
         southPanel.add(sendMessageButton);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        JPanel chatPanel = new JPanel(new GridLayout(0, 1, 5, 10));
+        ListModel<Message> listModel = new DefaultListModel<>();
+        JList<Message> chatPanel = new JList<>(listModel);
 
         sendMessageButton.addActionListener(new ActionListener() {
             /**
@@ -104,8 +116,12 @@ public class ChatDriver extends JComponent implements Runnable {
                 sendMessageToServer(messageTextField.getText());
 
                 // Message display on GUI
+                // todo: change to JList display, add edit/delete buttons
                 messageLabelStack.push(new JLabel(messageTextField.getText()));
-                chatPanel.add(usernameLabel);
+                JLabel userLabel = new JLabel(clientUser.getUsername());
+                userLabel.setLabelFor(messageLabelStack.peek());
+                userLabel.setForeground(new Color(125, 125, 125));
+                chatPanel.add(userLabel);
                 chatPanel.add(messageLabelStack.peek());
                 chatPanel.revalidate();
                 messageTextField.setText("");
@@ -121,19 +137,32 @@ public class ChatDriver extends JComponent implements Runnable {
 
         content.add(centerPanel, BorderLayout.CENTER);
 
-        JPanel westPanel = new JPanel();
-        // todo: make this a thing
-        JList<Group> groupJList = new JList<>();
-        westPanel.add(groupJList);
+        JPanel westPanel = new JPanel(new BorderLayout());
+        JList<Group> groupJList = new JList<>(clientUser.getGroups().toArray(new Group[0]));
+        JScrollPane groupsPane = new JScrollPane(groupJList);
+        westPanel.add(groupsPane, BorderLayout.CENTER);
+        westPanel.add(createGroupButton, BorderLayout.SOUTH);
         content.add(westPanel, BorderLayout.WEST);
 
         JPanel eastPanel = new JPanel();
         JList<User> userJList = new JList<>(currentGroup.getUsers().toArray(new User[0]));
-        eastPanel.add(userJList);
+        JScrollPane usersPane = new JScrollPane(userJList);
+        eastPanel.add(usersPane);
         content.add(eastPanel, BorderLayout.EAST);
 
         JPanel northPanel = new JPanel();
         northPanel.add(new JLabel(currentGroup.getGroupName()));
+        userSettingsButton.addActionListener(new ActionListener() {
+            /**
+             * Opens a new ManageProfile window when the settings button is clicked.
+             * @param e the press of the user settings button
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManageProfile mp = new ManageProfile();
+                mp.run();
+            }
+        });
         northPanel.add(userSettingsButton);
         content.add(northPanel, BorderLayout.NORTH);
 
@@ -150,6 +179,7 @@ public class ChatDriver extends JComponent implements Runnable {
         });
 
         frame.setSize(400, 600);
+        frame.setLocation(400, 100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
