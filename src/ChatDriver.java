@@ -215,4 +215,18 @@ public class ChatDriver extends JComponent implements Runnable {
     public static void chat(User user) {
         SwingUtilities.invokeLater(new ChatDriver(user));
     }
+
+    /**
+     * Cell renderer class to display Messages properly in the chat pane.
+     */
+    class MessageRenderer extends JComponent implements ListCellRenderer<Message> {
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Message> list, Message value,
+                                                      int index, boolean isSelected, boolean cellHasFocus) {
+
+
+            return null;
+        }
+    }
 }
