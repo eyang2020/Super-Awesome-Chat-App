@@ -24,6 +24,7 @@ public class Group implements Serializable {
     public Group(String groupName, ArrayList<User> users) {
         this.groupName = groupName;
         this.users = users;
+        messages = new ArrayList<>();
     }
 
     // returns the current name of the group chat.
