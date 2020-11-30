@@ -49,6 +49,16 @@ public class ChatDriver extends JComponent implements Runnable {
     JButton createGroupButton;
 
     /**
+     * A button for editing a message. Enabled when a message is selected.
+     */
+    JButton editMessageButton;
+
+    /**
+     * A button to delete a message. Enabled when a message is selected.
+     */
+    JButton deleteMessageButton;
+
+    /**
      * The current user of the chat.
      */
     private User clientUser;
@@ -82,6 +92,8 @@ public class ChatDriver extends JComponent implements Runnable {
 
         userSettingsButton = new JButton("Settings");
         createGroupButton = new JButton("New Group");
+        editMessageButton = new JButton("Edit");
+        deleteMessageButton = new JButton("Delete");
     }
 
     /**
