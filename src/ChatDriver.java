@@ -159,7 +159,7 @@ public class ChatDriver extends JComponent implements Runnable {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                ManageProfile mp = new ManageProfile();
+                ManageProfile mp = new ManageProfile(client);
                 mp.run();
             }
         });
