@@ -1,17 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * ChatDriver
  * A GUI panel that a chat user interacts with.
+ *
+ * Resources used for help:
+ * <ul>
+ *     <li><a href="https://stackoverflow.com/questions/685521/multiline-text-in-jlabel">
+ *         Multiline text in JLabel (Stack Overflow)
+ *         </a></li>
+ *     <li><a href="https://www.oracle.com/technical-resources/articles/javase/oconner-customlist-gd-aurev.html">
+ *         Customize Your JList Display (Oracle)
+ *         </a></li>
+ * </ul>
  *
  * @author Camber Boles
  * @version 30 November 2020
@@ -27,12 +33,6 @@ public class ChatDriver extends JComponent implements Runnable {
      * A button that sends the user's message.
      */
     JButton sendMessageButton;
-
-    /**
-     * An ArrayList of labels for displaying the messages in this group.
-     * todo: delete (safely)
-     */
-    Stack<JLabel> messageLabelStack;
 
     /**
      * A button the user can press to change account settings.
@@ -55,6 +55,18 @@ public class ChatDriver extends JComponent implements Runnable {
     JButton deleteMessageButton;
 
     /**
+     * An action listener for the edit and delete functionality.
+     * Disables buttons if no selection; enables buttons and allows
+     * button press action
+     */
+    ActionListener editDeleteListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+
+    /**
      * The current user of the chat.
      */
     private User clientUser;
@@ -75,7 +87,6 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param client the client of the current user
      */
     public ChatDriver(Client client) {
-        messageLabelStack = new Stack<>();
         this.client = client;
         clientUser = client.getCurrentUser();
 
