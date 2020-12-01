@@ -30,13 +30,9 @@ public class ChatDriver extends JComponent implements Runnable {
 
     /**
      * An ArrayList of labels for displaying the messages in this group.
+     * todo: delete (safely)
      */
     Stack<JLabel> messageLabelStack;
-
-    /**
-     * A specific JLabel, corresponding with the current user,
-     */
-    JLabel usernameLabel;
 
     /**
      * A button the user can press to change account settings.
@@ -82,12 +78,11 @@ public class ChatDriver extends JComponent implements Runnable {
         messageLabelStack = new Stack<>();
         this.client = client;
         clientUser = client.getCurrentUser();
-        usernameLabel = new JLabel(clientUser.getUsername());
 
-        if (clientUser.getGroups().size() != 0) {
-            currentGroup = clientUser.getGroups().get(0);
-        } else {
+        if (clientUser.getGroups() == null || clientUser.getGroups().size() == 0) {
             currentGroup = new Group("Create your first Group!", new ArrayList<>());
+        } else {
+            currentGroup = clientUser.getGroups().get(0);
         }
 
         userSettingsButton = new JButton("Settings");
@@ -98,7 +93,6 @@ public class ChatDriver extends JComponent implements Runnable {
 
     /**
      * Sets up the layout of the main GUI.
-     * TODO: move handling of sending message to server
      */
     @Override
     public void run() {
@@ -112,10 +106,22 @@ public class ChatDriver extends JComponent implements Runnable {
 
         southPanel.add(messageTextField);
         southPanel.add(sendMessageButton);
+        southPanel.add(editMessageButton);
+        southPanel.add(deleteMessageButton);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        ListModel<Message> listModel = new DefaultListModel<>();
-        JList<Message> chatPanel = new JList<>(listModel);
+        DefaultListModel<Message> messageListModel = new DefaultListModel<>();
+        JList<Message> chatPanel = new JList<>(messageListModel);
+
+        // Loading in existing messages todo: add this to a listener for the group JList
+        if (currentGroup.getMessages() != null && currentGroup.getMessages().size() > 0) {
+            for (Message message : currentGroup.getMessages()) {
+                messageListModel.addElement(message);
+            }
+        }
+
+        MessageRenderer renderer = new MessageRenderer();
+        chatPanel.setCellRenderer(renderer);
 
         sendMessageButton.addActionListener(new ActionListener() {
             /**
@@ -125,18 +131,22 @@ public class ChatDriver extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Message creation to send to server
-                sendMessageToServer(messageTextField.getText());
+                Message message = sendMessageToServer(messageTextField.getText());
 
                 // Message display on GUI
                 // todo: change to JList display, add edit/delete buttons
-                messageLabelStack.push(new JLabel(messageTextField.getText()));
-                JLabel userLabel = new JLabel(clientUser.getUsername());
-                userLabel.setLabelFor(messageLabelStack.peek());
-                userLabel.setForeground(new Color(125, 125, 125));
-                chatPanel.add(userLabel);
-                chatPanel.add(messageLabelStack.peek());
-                chatPanel.revalidate();
+                messageListModel.addElement(message);
+
+//                messageLabelStack.push(new JLabel(messageTextField.getText()));
+//                JLabel userLabel = new JLabel(clientUser.getUsername());
+//                userLabel.setLabelFor(messageLabelStack.peek());
+//                userLabel.setForeground(new Color(125, 125, 125));
+//                chatPanel.add(userLabel);
+//                chatPanel.add(messageLabelStack.peek());
+
+                // chatPanel.revalidate();
                 messageTextField.setText("");
+                messageTextField.requestFocusInWindow();
             }
         });
 
@@ -150,14 +160,16 @@ public class ChatDriver extends JComponent implements Runnable {
         content.add(centerPanel, BorderLayout.CENTER);
 
         JPanel westPanel = new JPanel(new BorderLayout());
-        JList<Group> groupJList = new JList<>(clientUser.getGroups().toArray(new Group[0]));
+        DefaultListModel<Group> groupListModel = new DefaultListModel<>();
+        JList<Group> groupJList = new JList<>(groupListModel);
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
         westPanel.add(createGroupButton, BorderLayout.SOUTH);
         content.add(westPanel, BorderLayout.WEST);
 
         JPanel eastPanel = new JPanel();
-        JList<User> userJList = new JList<>(currentGroup.getUsers().toArray(new User[0]));
+        DefaultListModel<User> userListModel = new DefaultListModel<>();
+        JList<User> userJList = new JList<>(userListModel);
         JScrollPane usersPane = new JScrollPane(userJList);
         eastPanel.add(usersPane);
         content.add(eastPanel, BorderLayout.EAST);
@@ -190,7 +202,7 @@ public class ChatDriver extends JComponent implements Runnable {
             }
         });
 
-        frame.setSize(400, 600);
+        frame.setSize(800, 600);
         frame.setLocation(400, 100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -201,41 +213,62 @@ public class ChatDriver extends JComponent implements Runnable {
      * Creates a new Message object to be written to the server.
      *
      * @param text the text of the message
-     * @return a Message object
+     * @return a new Message object
      */
-    public void sendMessageToServer(String text){
+    public Message sendMessageToServer(String text){
         LocalDateTime dateTime = LocalDateTime.now();
 
+        Message message = new Message(clientUser, dateTime, text);
+
         try {
-            client.addMessage(new Message(clientUser, dateTime, text), currentGroup);
+            client.addMessage(message, currentGroup);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return message;
     }
 
     /**
      * Runs the driver on the EventDispatcher thread for stability.
      * Will eventually be called by the client-side program, as opposed to
      * this program.
-     * TODO: call method from client side as opposed to command line
      *
      * @param args the command-line arguments
      */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new ChatDriver(new Client("localhost", 4242)));
+    public static void main(String[] args) throws IOException {
+        Client client = new Client("localhost", 4242);
+        client.createAccount("boles2", "12345", "cam",
+                "boles2@purdue.edu", Long.parseLong("1234567890"));
+        SwingUtilities.invokeLater(new ChatDriver(client));
     }
 
     /**
      * Cell renderer class to display Messages properly in the chat pane.
      */
-    class MessageRenderer extends JComponent implements ListCellRenderer<Message> {
+    static class MessageRenderer extends JLabel implements ListCellRenderer<Message> {
 
+        /**
+         * Renders messages in the message pane in a friendly way, with both username and text.
+         *
+         * @param list The JList structure
+         * @param value The message to render
+         * @param index The index of the specific message
+         * @param isSelected Whether this message is selected
+         * @param cellHasFocus Whether this cell has the focus
+         * @return A JLabel style to apply to all elements in list
+         */
         @Override
         public Component getListCellRendererComponent(JList<? extends Message> list, Message value,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
+            String username = value.getAuthor().getUsername();
+            String text = value.getText();
 
+            setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+            setText(String.format("<html><span style='color: grey'>%s</span><br>%s</html>",
+                    username, text));
 
-            return null;
+            return this;
         }
     }
 }
