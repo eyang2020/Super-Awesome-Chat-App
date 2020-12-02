@@ -170,7 +170,9 @@ public class Login implements Runnable {
             if (e.getSource() == login1) {
                 try {
                     if (username.getText() != null && password.getText() != null) {
-                        loginUser(username.getText(), password.getText());
+                        if(!loginUser(username.getText(), password.getText())) {
+                            return;
+                        }
                     }
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
@@ -213,13 +215,15 @@ public class Login implements Runnable {
      * @param usernameToFind the username to be found on the file
      * @param passwordToCheck the password to be checked for the user
      */
-    public void loginUser(String usernameToFind, String passwordToCheck) throws IOException {
+    public boolean loginUser(String usernameToFind, String passwordToCheck) throws IOException {
         boolean success = client.login(usernameToFind, passwordToCheck);
         if (success == true) {
             user = client.getCurrentUser();
             SwingUtilities.invokeLater(new ChatDriver(client));
+            return true;
         }
-        //login user
+        JOptionPane.showMessageDialog(null, "Either username or password didn't match, please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
 
     /**

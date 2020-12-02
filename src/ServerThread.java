@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author Ian Blacklock B11
  * @version 11/23/20
  */
-public class ServerThread extends Server implements Runnable{
+public class ServerThread implements Runnable{
     private Socket socket;          //The socket that connects the client and the server
 
     /**
@@ -51,7 +51,7 @@ public class ServerThread extends Server implements Runnable{
                         String name = (String) in.readObject();
                         String email = (String) in.readObject();
                         long phoneNumber = in.readLong();
-                        for (User user : users) {
+                        for (User user : Server.getUsers()) {
                             if (user.getUsername().equals(username)) {
                                 out.writeObject(null);
                                 out.flush();
@@ -59,19 +59,20 @@ public class ServerThread extends Server implements Runnable{
                             }
                         }
                         currentUser = new User(name, username, email, phoneNumber, password);
-                        users.add(currentUser);
+                        Server.getUsers().add(currentUser);
                         out.reset();
-                        out.writeObject(null);
+                        out.writeObject(currentUser);
                         out.flush();
                     }
                     case "login" -> {
                         String username = (String) in.readObject();
                         String password = (String) in.readObject();
-                        for (User user : users) {
+                        for (User user : Server.getUsers()) {
                             if (user.getUsername().equals(username)) {
                                 if (user.getPassword().equals(password)) {
                                     out.writeBoolean(true);
                                     currentUser = user;
+                                    out.writeObject(currentUser);
                                     out.flush();
                                     break;
                                 }
@@ -88,14 +89,14 @@ public class ServerThread extends Server implements Runnable{
                         ArrayList<User> addedUsers = new ArrayList<>();
                         Group newGroup;
                         for (String username : usernames) {
-                            for (User user : users) {
+                            for (User user : Server.getUsers()) {
                                 if (user.getUsername().equals(username)) {
                                     addedUsers.add(user);
                                 }
                             }
                         }
                         newGroup = new Group(groupName, addedUsers);
-                        groups.add(newGroup);
+                        Server.getGroups().add(newGroup);
                         for (User user : addedUsers) {
                             user.addGroup(newGroup);
                         }
@@ -111,7 +112,7 @@ public class ServerThread extends Server implements Runnable{
                         out.flush();
                     }
                 }
-            } catch (EOFException e) {
+            } catch (EOFException | SocketException e) {
                 break;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

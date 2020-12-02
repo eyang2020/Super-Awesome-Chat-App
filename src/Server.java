@@ -16,41 +16,42 @@ import java.util.Arrays;
  * @version 11/23/20
  */
 public class Server {
-    static protected ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
-    static protected ArrayList<User> users;          //A collection of all of the users for the messaging app
+    static private ArrayList<Group> groups;        //A collection of all of the groups for the messaging app
+    static private ArrayList<User> users;          //A collection of all of the users for the messaging app
     private static int port = 4242;         //The port of the server
     ServerSocket serverSocket;              //The socket used to connect the server and client
 
     public static void main(String[] args) throws IOException {
         Server server = new Server();
+        users.add(new User("1234", "1234", "1234", 1234, "1234"));
+        try{
+            server.serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (true) {
             server.acceptor();
+            //server.writeUsersAndGroups("src/users.txt", "src/groups.txt");
         }
     }
 
     public Server() {
         groups = new ArrayList<>();
         users = new ArrayList<>();
+        //readInUsersAndGroups("src/users.txt", "src/groups.txt");
     }
 
     /**
      * A method that is constantly checking for new clients to connect to the server
      */
     public void acceptor() {
+        ServerThread thread;
         try{
-            serverSocket = new ServerSocket(port);
+            thread = new ServerThread(serverSocket.accept());
+            Thread t = new Thread(thread);
+            t.start();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        while(true){
-            ServerThread thread;
-            try{
-                thread = new ServerThread(serverSocket.accept());
-                Thread t = new Thread(thread);
-                t.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -63,7 +64,12 @@ public class Server {
         try {
             users.clear();
             groups.clear();
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(usersFilename));
+            ObjectInputStream in = null;
+            try {
+                in = new ObjectInputStream(new FileInputStream(usersFilename));
+            } catch (EOFException e) {
+                return;
+            }
             try {
                 users = (ArrayList<User>) in.readObject();
 
@@ -116,6 +122,14 @@ public class Server {
      */
     public static ArrayList<User> getUsers() {
         return users;
+    }
+
+    /**
+     * Returns the groups arraylist
+     * @return The groups arraylist
+     */
+    public static ArrayList<Group> getGroups() {
+        return groups;
     }
 }
 
