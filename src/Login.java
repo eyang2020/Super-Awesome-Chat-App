@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -181,9 +181,11 @@ public class Login implements Runnable {
                 long usersPhoneNumber = 0L;
                 if (phoneNumber.getText() != null) {
                     try {
-                        usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                        if (!phoneNumber.getText().equals("")) {
+                            usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                        }
                     } catch (NumberFormatException exception) {
-                        JOptionPane.showMessageDialog(null, "Make sure that your phonenumber only has numbers in it", "Errors", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Make sure that your phonenumber only has numbers in it!", "Errors", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
@@ -193,6 +195,8 @@ public class Login implements Runnable {
                         if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText())) {
                             return;
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Make sure that you fill out everything!", "Errors", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException exception) {
                     exception.printStackTrace();
