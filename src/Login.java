@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -169,25 +169,30 @@ public class Login implements Runnable {
 
             if (e.getSource() == login1) {
                 try {
-                    loginUser(username.getText(), password.getText());
+                    if (username.getText() != null && password.getText() != null) {
+                        loginUser(username.getText(), password.getText());
+                    }
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
                 frame.dispose();
             }
             if (e.getSource() == create) {
-                long usersPhoneNumber = 0;
-                try {
-                    usersPhoneNumber = Long.parseLong(phoneNumber.getText());
-                } catch (NumberFormatException exception) {
-                    if (!phoneNumber.getText().equals("")) {
+                long usersPhoneNumber = 0L;
+                if (phoneNumber.getText() != null) {
+                    try {
+                        usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                    } catch (NumberFormatException exception) {
                         JOptionPane.showMessageDialog(null, "Make sure that your phonenumber only has numbers in it", "Errors", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
                 try {
-                    if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText())) {
-                        return;
+                    if (username.getText() != null && password.getText() != null
+                            && name.getText() != null && email.getText() != null) {
+                        if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText())) {
+                            return;
+                        }
                     }
                 } catch (IOException exception) {
                     exception.printStackTrace();

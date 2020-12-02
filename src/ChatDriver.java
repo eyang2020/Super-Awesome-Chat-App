@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -121,6 +122,7 @@ public class ChatDriver extends JComponent implements Runnable {
         JList<Message> chatPanel = new JList<>();
 
         chatPanel.setModel(changeChatModel(0));
+        chatPanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
@@ -156,21 +158,10 @@ public class ChatDriver extends JComponent implements Runnable {
 
         content.add(centerPanel, BorderLayout.CENTER);
 
+
         JPanel westPanel = new JPanel(new BorderLayout());
         DefaultListModel<Group> groupListModel = new DefaultListModel<>();
         JList<Group> groupJList = new JList<>(groupListModel);
-
-        groupJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        groupJList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int index = groupJList.getSelectedIndex();
-
-                if (index != -1) {
-                    chatPanel.setModel(changeChatModel(index));
-                }
-            }
-        });
 
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
@@ -178,14 +169,16 @@ public class ChatDriver extends JComponent implements Runnable {
         content.add(westPanel, BorderLayout.WEST);
 
         JPanel eastPanel = new JPanel();
-        DefaultListModel<User> userListModel = new DefaultListModel<>();
-        JList<User> userJList = new JList<>(userListModel);
+
+        JList<User> userJList = new JList<>(changeUserModel());
+
         JScrollPane usersPane = new JScrollPane(userJList);
         eastPanel.add(usersPane);
         content.add(eastPanel, BorderLayout.EAST);
 
         JPanel northPanel = new JPanel();
         northPanel.add(new JLabel(currentGroup.getGroupName()));
+
         userSettingsButton.addActionListener(new ActionListener() {
             /**
              * Opens a new ManageProfile window when the settings button is clicked.
@@ -197,8 +190,35 @@ public class ChatDriver extends JComponent implements Runnable {
                 mp.run();
             }
         });
+
         northPanel.add(userSettingsButton);
         content.add(northPanel, BorderLayout.NORTH);
+
+        groupJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        groupJList.addListSelectionListener(new ListSelectionListener() {
+            /**
+             * When a new group is selected, this updates the chat pane with
+             * the group's messages and the user pane with the group's users.
+             *
+             * @param e the selection of a new group
+             */
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int index = groupJList.getSelectedIndex();
+
+                if (index != -1) {
+                    chatPanel.setModel(changeChatModel(index));
+                    userJList.setModel(changeUserModel());
+                }
+            }
+        });
+
+        createGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // todo: create group things
+            }
+        });
 
         frame.addWindowFocusListener(new WindowAdapter() {
             /**
@@ -235,6 +255,21 @@ public class ChatDriver extends JComponent implements Runnable {
         }
 
         return messageListModel;
+    }
+
+    /**
+     * Loads Users from the current group into the east panel.
+     *
+     * @return a list model containing the users in the group
+     */
+    public DefaultListModel<User> changeUserModel() {
+        DefaultListModel<User> userListModel = new DefaultListModel<>();
+
+        for (User user : currentGroup.getUsers()) {
+            userListModel.addElement(user);
+        }
+
+        return userListModel;
     }
 
     /**
@@ -296,8 +331,11 @@ public class ChatDriver extends JComponent implements Runnable {
             String text = value.getText();
 
             setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-            setText(String.format("<html><span style='color: grey'>%s</span><br>%s</html>",
+            setText(String.format("<html><span style='color: grey;'>%s</span><br>%s</html>",
                     username, text));
+
+            // Adds margins
+            setBorder(new EmptyBorder(10, 10, 3, 10));
 
             return this;
         }
