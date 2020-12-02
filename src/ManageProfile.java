@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -61,6 +61,7 @@ public class ManageProfile {
                 JLabel usernameLabel = new JLabel("New Username:");
                 usernameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newUsername = new JTextField(10);
 
@@ -76,6 +77,7 @@ public class ManageProfile {
                 JLabel passwordLabel = new JLabel("New Password:");
                 passwordLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newPassword = new JTextField(10);
 
@@ -91,6 +93,7 @@ public class ManageProfile {
                 JLabel nameLabel = new JLabel("New Name:");
                 nameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newName = new JTextField(10);
 
@@ -105,6 +108,7 @@ public class ManageProfile {
                 JLabel emailLabel = new JLabel("New Email:");
                 emailLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newEmail = new JTextField(10);
 
@@ -119,6 +123,7 @@ public class ManageProfile {
                 JLabel phoneNumberLabel = new JLabel("New Phone Number:");
                 phoneNumberLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newPhoneNumber = new JTextField(10);
 
