@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
  * </ul>
  *
  * @author Camber Boles
- * @version 30 November 2020
+ * @version 1 December 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
@@ -59,12 +61,7 @@ public class ChatDriver extends JComponent implements Runnable {
      * Disables buttons if no selection; enables buttons and allows
      * button press action
      */
-    ActionListener editDeleteListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-        }
-    };
+    ActionListener editDeleteListener;
 
     /**
      * The current user of the chat.
@@ -121,15 +118,9 @@ public class ChatDriver extends JComponent implements Runnable {
         southPanel.add(deleteMessageButton);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        DefaultListModel<Message> messageListModel = new DefaultListModel<>();
-        JList<Message> chatPanel = new JList<>(messageListModel);
+        JList<Message> chatPanel = new JList<>();
 
-        // Loading in existing messages todo: add this to a listener for the group JList
-        if (currentGroup.getMessages() != null && currentGroup.getMessages().size() > 0) {
-            for (Message message : currentGroup.getMessages()) {
-                messageListModel.addElement(message);
-            }
-        }
+        chatPanel.setModel(changeChatModel(0));
 
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
@@ -144,18 +135,13 @@ public class ChatDriver extends JComponent implements Runnable {
                 // Message creation to send to server
                 Message message = sendMessageToServer(messageTextField.getText());
 
+                // adds message to the group object
+                currentGroup.addMessage(message);
+
                 // Message display on GUI
-                // todo: change to JList display, add edit/delete buttons
-                messageListModel.addElement(message);
+                // todo: add edit/delete buttons
+                ( (DefaultListModel<Message>) chatPanel.getModel()).addElement(message);
 
-//                messageLabelStack.push(new JLabel(messageTextField.getText()));
-//                JLabel userLabel = new JLabel(clientUser.getUsername());
-//                userLabel.setLabelFor(messageLabelStack.peek());
-//                userLabel.setForeground(new Color(125, 125, 125));
-//                chatPanel.add(userLabel);
-//                chatPanel.add(messageLabelStack.peek());
-
-                // chatPanel.revalidate();
                 messageTextField.setText("");
                 messageTextField.requestFocusInWindow();
             }
@@ -173,6 +159,19 @@ public class ChatDriver extends JComponent implements Runnable {
         JPanel westPanel = new JPanel(new BorderLayout());
         DefaultListModel<Group> groupListModel = new DefaultListModel<>();
         JList<Group> groupJList = new JList<>(groupListModel);
+
+        groupJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        groupJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int index = groupJList.getSelectedIndex();
+
+                if (index != -1) {
+                    chatPanel.setModel(changeChatModel(index));
+                }
+            }
+        });
+
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
         westPanel.add(createGroupButton, BorderLayout.SOUTH);
@@ -213,10 +212,29 @@ public class ChatDriver extends JComponent implements Runnable {
             }
         });
 
-        frame.setSize(800, 600);
-        frame.setLocation(400, 100);
+        frame.setSize(1000, 600);
+        frame.setLocation(60, 30);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    /**
+     * Provides a ListModel for loading in messages when a group is selected.
+     *
+     * @param index The index of the selected group in the user's list of groups
+     * @return A ListModel containing the messages of the selected group
+     */
+    public DefaultListModel<Message> changeChatModel(int index) {
+        DefaultListModel<Message> messageListModel = new DefaultListModel<>();
+        if (clientUser.getGroups() != null && clientUser.getGroups().size() > 0) {
+            currentGroup = clientUser.getGroups().get(index);
+
+            for (Message message : currentGroup.getMessages()) {
+                messageListModel.addElement(message);
+            }
+        }
+
+        return messageListModel;
     }
 
     /**
@@ -231,11 +249,13 @@ public class ChatDriver extends JComponent implements Runnable {
 
         Message message = new Message(clientUser, dateTime, text);
 
-        try {
-            client.addMessage(message, currentGroup);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // when I commented this out it worked, i have no idea what's up
+        // TODO: ian
+//        try {
+//            client.addMessage(message, currentGroup);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return message;
     }
