@@ -13,12 +13,12 @@ import java.util.ArrayList;
  *
  */
 public class User implements Serializable {
-    transient private String name; //name of user
-    transient private String username; //username of user
-    transient private String email; //email of user
-    transient private long phoneNumber; //phone number of user
-    transient private String password; //password for users account
-    transient private ArrayList<Group> groups; //groups the user is in
+    private String name; //name of user
+    private String username; //username of user
+    private String email; //email of user
+    private long phoneNumber; //phone number of user
+    private String password; //password for users account
+    private ArrayList<Group> groups; //groups the user is in
 
     /**
      *
@@ -37,8 +37,7 @@ public class User implements Serializable {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        groups = new ArrayList<Group>();
-
+        groups = new ArrayList<>();
     }
 
     public User() {}
@@ -145,6 +144,18 @@ public class User implements Serializable {
      */
     public long getPhoneNumber() {
         return phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", password='" + password + '\'' +
+                ", groups=" + groups +
+                '}';
     }
 }
 

@@ -53,14 +53,15 @@ public class ServerThread extends Server implements Runnable{
                         long phoneNumber = in.readLong();
                         for (User user : users) {
                             if (user.getUsername().equals(username)) {
-                                out.writeBoolean(false);
+                                out.writeObject(null);
                                 out.flush();
                                 break;
                             }
                         }
                         currentUser = new User(name, username, email, phoneNumber, password);
                         users.add(currentUser);
-                        out.writeObject(currentUser);
+                        out.reset();
+                        out.writeObject(null);
                         out.flush();
                     }
                     case "login" -> {

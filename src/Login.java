@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -33,7 +33,6 @@ public class Login implements Runnable {
     JTextField name = new JTextField(15); //name the user inputs
     JTextField phoneNumber = new JTextField(15); //phone number the user inputs
 
-    Login newLogin;
     Client client;
     User user = new User(); //new user to be created
 
@@ -73,7 +72,6 @@ public class Login implements Runnable {
         panel.add(createUser);
         panel.setBackground(Color.decode("#98DE7B"));
         content.add(panel, BorderLayout.CENTER);
-
     }
 
     /**
@@ -171,16 +169,26 @@ public class Login implements Runnable {
 
             if (e.getSource() == login1) {
                 try {
-                    newLogin.loginUser(username.getText(), password.getText());
+                    loginUser(username.getText(), password.getText());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
                 frame.dispose();
             }
             if (e.getSource() == create) {
-                long usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                long usersPhoneNumber = 0;
                 try {
-                    newLogin.userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText());
+                    usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                } catch (NumberFormatException exception) {
+                    if (!phoneNumber.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Make sure that your phonenumber only has numbers in it", "Errors", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                try {
+                    if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText())) {
+                        return;
+                    }
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
@@ -200,6 +208,7 @@ public class Login implements Runnable {
         boolean success = client.login(usernameToFind, passwordToCheck);
         if (success == true) {
             user = client.getCurrentUser();
+            SwingUtilities.invokeLater(new ChatDriver(client));
         }
         //login user
     }
@@ -212,8 +221,14 @@ public class Login implements Runnable {
      * @param usersPhoneNumber the phone number for the account
      * @param usersPassword the password for the account
      */
-    public void userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber, String usersPassword) throws IOException {
+    public boolean userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber, String usersPassword) throws IOException {
         user = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
+        if (user == null) {
+            JOptionPane.showMessageDialog(null, "An account with that username already exists, please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        SwingUtilities.invokeLater(new ChatDriver(client));
+        return true;
     }
 
     /**
@@ -222,5 +237,11 @@ public class Login implements Runnable {
      */
     public User getUser() {
         return this.user;
+    }
+
+    public static void main(String[] args) {
+        Client client = new Client("localhost", 4242);
+        //client.createAccount("RedJyve", "12345", "Ian", "iblacklo@purdue.edu", Long.parseLong("9258859123"));
+        SwingUtilities.invokeLater(new Login(client));
     }
 }

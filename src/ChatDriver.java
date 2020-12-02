@@ -84,9 +84,9 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param client the client of the current user
      */
     public ChatDriver(Client client) {
+
         this.client = client;
         clientUser = client.getCurrentUser();
-
         if (clientUser.getGroups() == null || clientUser.getGroups().size() == 0) {
             currentGroup = new Group("Create your first Group!", new ArrayList<>());
         } else {

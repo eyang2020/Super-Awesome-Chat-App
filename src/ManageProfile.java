@@ -46,6 +46,8 @@ public class ManageProfile {
     public ManageProfile(Client client) {
         this.client = client;
         user = client.getCurrentUser();
+        System.out.println(user);
+        System.out.println(user.getName());
     }
 
     /**
