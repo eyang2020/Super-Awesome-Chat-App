@@ -171,16 +171,25 @@ public class Login implements Runnable {
 
             if (e.getSource() == login1) {
                 try {
-                    newLogin.loginUser(username.getText(), password.getText());
+                    if (username.getText() != null && password.getText() != null) {
+                        newLogin.loginUser(username.getText(), password.getText());
+                    }
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
                 frame.dispose();
             }
             if (e.getSource() == create) {
-                long usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                long usersPhoneNumber = 0L;
+                if (phoneNumber.getText() != null) {
+                    usersPhoneNumber = Long.parseLong(phoneNumber.getText());
+                }
                 try {
-                    newLogin.userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText());
+                    if (username.getText() != null && password.getText() != null
+                            && name.getText() != null && email.getText() != null) {
+                        newLogin.userCreation(name.getText(), username.getText(), email.getText(),
+                                usersPhoneNumber, password.getText());
+                    }
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }

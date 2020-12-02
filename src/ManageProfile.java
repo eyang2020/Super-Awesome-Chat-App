@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -134,35 +134,45 @@ public class ManageProfile {
             if (e.getSource() == change) {
                 switch (selection) {
                     case 1:
-                        user.setUsername(newUsername.getText());
-                        panel.remove(cUsername);
-                        cUsername = new JLabel(user.getUsername());
-                        panel.add(cUsername);
+                        if (newUsername.getText() != null) {
+                            user.setUsername(newUsername.getText());
+                            panel.remove(cUsername);
+                            cUsername = new JLabel(user.getUsername());
+                            panel.add(cUsername);
+                        }
                         break;
                     case 2:
-                        user.setPassword(newPassword.getText());
-                        panel.remove(cPassword);
-                        cPassword = new JLabel(user.getPassword());
-                        panel.add(cPassword);
+                        if (newPassword.getText() != null) {
+                            user.setPassword(newPassword.getText());
+                            panel.remove(cPassword);
+                            cPassword = new JLabel(user.getPassword());
+                            panel.add(cPassword);
+                        }
                         break;
                     case 3:
-                        user.setName(newName.getText());
-                        panel.remove(cName);
-                        cName = new JLabel(user.getName());
-                        panel.add(cName);
+                        if (newName.getText() != null) {
+                            user.setName(newName.getText());
+                            panel.remove(cName);
+                            cName = new JLabel(user.getName());
+                            panel.add(cName);
+                        }
                         break;
                     case 4:
-                        user.setEmail(newEmail.getText());
-                        panel.remove(cEmail);
-                        cEmail = new JLabel(user.getEmail());
-                        panel.add(cEmail);
+                        if (newEmail.getText() != null) {
+                            user.setEmail(newEmail.getText());
+                            panel.remove(cEmail);
+                            cEmail = new JLabel(user.getEmail());
+                            panel.add(cEmail);
+                        }
                         break;
                     case 5:
-                        long number = Long.parseLong(newPhoneNumber.getText());
-                        user.setPhoneNumber(number);
-                        panel.remove(cPhoneNumber);
-                        cPhoneNumber = new JLabel(String.valueOf(user.getPhoneNumber()));
-                        panel.add(cPhoneNumber);
+                        if (newPhoneNumber.getText() != null) {
+                            long number = Long.parseLong(newPhoneNumber.getText());
+                            user.setPhoneNumber(number);
+                            panel.remove(cPhoneNumber);
+                            cPhoneNumber = new JLabel(String.valueOf(user.getPhoneNumber()));
+                            panel.add(cPhoneNumber);
+                        }
                         break;
                 }
                 frame.setVisible(true);
