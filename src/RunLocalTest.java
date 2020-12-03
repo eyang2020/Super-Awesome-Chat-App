@@ -156,18 +156,9 @@ public class RunLocalTest {
             Field author;
             Field dateTime;
             Field text;
-            Constructor<?> constructor;
             Method method;
             Class<?> returnType;
             Class<?> expectedReturnType;
-
-            // check for default constructor
-            try {
-                constructor = messageObject.getDeclaredConstructor(User.class, LocalDateTime.class, String.class);
-            } catch (NoSuchMethodException e) {
-                System.out.println(e.toString());
-                return;
-            }
             int modifiers;
             try {
                 author = messageObject.getField("author");
