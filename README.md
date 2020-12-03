@@ -19,7 +19,7 @@ TODO: add description about testing done on class.
 
 This class creates a message object that takes in specific information from that message as parameters. Each message object contains a user, the date and time that the message was sent, and the corresponding text that goes with the message. This class contains getters and setters for each parameter besides the user, and also allows users to change the corresponding message. 
 
-TODO: add description about testing done on class.
+This class was tested by checking every field and method and making sure that all of them exist, have correct accessors, correct type / return type, and successful and unsuccessful implementation.
 
 ## Group Class
 
