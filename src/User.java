@@ -19,6 +19,7 @@ public class User implements Serializable {
     private long phoneNumber; //phone number of user
     private String password; //password for users account
     private ArrayList<Group> groups; //groups the user is in
+    private int userID; //Number unique to each user
 
     /**
      *
@@ -144,6 +145,22 @@ public class User implements Serializable {
      */
     public long getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     *
+     * @return the userID
+     */
+    public int getUserID() {
+        return userID;
+    }
+
+    /**
+     * Sets the users id
+     * @param userID the user's id
+     */
+    public void setUserID(int userID) {
+        userID = userID;
     }
 
     @Override

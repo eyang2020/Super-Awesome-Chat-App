@@ -57,10 +57,11 @@ public class ManageProfile {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == editUsername) {
-
+                System.out.println("test1");
                 JLabel usernameLabel = new JLabel("New Username:");
                 usernameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newUsername = new JTextField(10);
 
@@ -76,6 +77,7 @@ public class ManageProfile {
                 JLabel passwordLabel = new JLabel("New Password:");
                 passwordLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newPassword = new JTextField(10);
 
@@ -91,6 +93,7 @@ public class ManageProfile {
                 JLabel nameLabel = new JLabel("New Name:");
                 nameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newName = new JTextField(10);
 
@@ -105,6 +108,7 @@ public class ManageProfile {
                 JLabel emailLabel = new JLabel("New Email:");
                 emailLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newEmail = new JTextField(10);
 
@@ -119,6 +123,7 @@ public class ManageProfile {
                 JLabel phoneNumberLabel = new JLabel("New Phone Number:");
                 phoneNumberLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
+                change.addActionListener(actionListener);
                 panel.add(change);
                 newPhoneNumber = new JTextField(10);
 
@@ -130,7 +135,12 @@ public class ManageProfile {
                 selection = 5;
             }
             if (e.getSource() == deleteAccount) {
-                Server.getUsers().remove(user);
+                try {
+                    throw new Exception("Uncomment");
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                //Server.getUsers().remove(user);
                 frame.dispose();
             }
             if (e.getSource() == change) {
@@ -141,6 +151,7 @@ public class ManageProfile {
                             panel.remove(cUsername);
                             cUsername = new JLabel(user.getUsername());
                             panel.add(cUsername);
+                            client.updateUser(user);
                         }
                         break;
                     case 2:
@@ -149,6 +160,7 @@ public class ManageProfile {
                             panel.remove(cPassword);
                             cPassword = new JLabel(user.getPassword());
                             panel.add(cPassword);
+                            client.updateUser(user);
                         }
                         break;
                     case 3:
@@ -157,6 +169,7 @@ public class ManageProfile {
                             panel.remove(cName);
                             cName = new JLabel(user.getName());
                             panel.add(cName);
+                            client.updateUser(user);
                         }
                         break;
                     case 4:
@@ -165,6 +178,7 @@ public class ManageProfile {
                             panel.remove(cEmail);
                             cEmail = new JLabel(user.getEmail());
                             panel.add(cEmail);
+                            client.updateUser(user);
                         }
                         break;
                     case 5:
@@ -174,6 +188,7 @@ public class ManageProfile {
                             panel.remove(cPhoneNumber);
                             cPhoneNumber = new JLabel(String.valueOf(user.getPhoneNumber()));
                             panel.add(cPhoneNumber);
+                            client.updateUser(user);
                         }
                         break;
                 }

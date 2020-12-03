@@ -41,15 +41,24 @@ public class ServerThread implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*try {
+            out.writeObject(Server.getUsers());
+            out.writeObject(Server.getGroups());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        OUTERLOOP:
         while (true) {
             try {
                 input = (String) in.readObject();
+                System.out.println(input);
                 switch (input) {
                     case "createAccount" -> {
                         String username = (String) in.readObject();
                         String password = (String) in.readObject();
                         String name = (String) in.readObject();
                         String email = (String) in.readObject();
+                        int userID = in.readInt();
                         long phoneNumber = in.readLong();
                         for (User user : Server.getUsers()) {
                             if (user.getUsername().equals(username)) {
@@ -59,6 +68,7 @@ public class ServerThread implements Runnable{
                             }
                         }
                         currentUser = new User(name, username, email, phoneNumber, password);
+                        currentUser.setUserID(userID);
                         Server.getUsers().add(currentUser);
                         out.reset();
                         out.writeObject(currentUser);
@@ -74,11 +84,12 @@ public class ServerThread implements Runnable{
                                     currentUser = user;
                                     out.writeObject(currentUser);
                                     out.flush();
-                                    break;
+                                    continue OUTERLOOP;
                                 }
                                 //Add a way for the client to tell the reason for the failed login
                             }
                         }
+                        System.out.println("spot1");
                         out.writeBoolean(false);
                         out.writeObject(currentUser);
                         out.flush();
@@ -110,6 +121,28 @@ public class ServerThread implements Runnable{
                         assert out != null;
                         out.writeBoolean(true);
                         out.flush();
+                    }
+                    case "refresh" -> {
+                        out.reset();
+                        System.out.println(Server.getUsers());
+                        out.writeObject(Server.getUsers());
+                        System.out.println(Server.getGroups());
+                        out.writeObject(Server.getGroups());
+                        out.flush();
+                    }
+                    case "updateUser" -> {
+                        User tempUser = (User) in.readObject();
+                        for (User user : Server.getUsers()) {
+                            System.out.println(user.getUsername());
+                            System.out.println(tempUser.getUsername());
+                            if (user.getUserID() == tempUser.getUserID()) {
+                                user.setName(tempUser.getName());
+                                user.setEmail(tempUser.getEmail());
+                                user.setPassword(tempUser.getPassword());
+                                user.setPhoneNumber(tempUser.getPhoneNumber());
+                                user.setUsername(tempUser.getUsername());
+                            }
+                        }
                     }
                 }
             } catch (EOFException | SocketException e) {

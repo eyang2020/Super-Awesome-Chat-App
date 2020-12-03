@@ -219,6 +219,7 @@ public class Login implements Runnable {
         boolean success = client.login(usernameToFind, passwordToCheck);
         if (success == true) {
             user = client.getCurrentUser();
+            client.refreshUsersAndGroups();
             SwingUtilities.invokeLater(new ChatDriver(client));
             return true;
         }

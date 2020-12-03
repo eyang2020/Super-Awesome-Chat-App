@@ -23,6 +23,9 @@ public class Client {
     ObjectOutputStream out; //The output stream for sending objects to the server
     ObjectInputStream in;   //The input stream for getting objects from the server
     User currentUser = null;       //The user that this client represents
+    ArrayList<User> users;
+    ArrayList<Group> groups;
+    int userIDCounter;
 
     public static void main(String[] args) throws IOException {
         Client client1 = new Client("localhost", 4242);
@@ -36,6 +39,9 @@ public class Client {
     public Client(String host, int port) {
         this.host = host;
         this.port = port;
+        users = new ArrayList<>();
+        groups = new ArrayList<>();
+        userIDCounter = 1;
         connectToServer();
     }
 
@@ -55,6 +61,12 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*try {
+            users = (ArrayList<User>) in.readObject();
+            groups = (ArrayList<Group>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }*/
     }
 
     /**
@@ -73,12 +85,15 @@ public class Client {
         out.writeObject(name);
         out.writeObject(email);
         out.writeLong(phoneNumber);
+        out.writeInt(userIDCounter);
+        userIDCounter++;
         out.flush();
         try {
             currentUser = (User) in.readObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        refreshUsersAndGroups();
         return currentUser;
     }
 
@@ -133,6 +148,28 @@ public class Client {
         out.flush();
         added = in.readBoolean();
         return added;
+    }
+
+    public void refreshUsersAndGroups() throws IOException {
+        out.writeObject("refresh");
+        out.flush();
+
+        try {
+            users = (ArrayList<User>) in.readObject();
+            groups = (ArrayList<Group>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUser(User user) {
+        try {
+            out.writeObject("updateUser");
+            out.writeObject(user);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
