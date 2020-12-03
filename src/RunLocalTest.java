@@ -99,14 +99,6 @@ public class RunLocalTest {
             Field phoneNumber;
             Field password;
             Field groups;
-            Constructor<?> constructor;
-            // check for default constructor
-            try {
-                constructor = userObject.getDeclaredConstructor(String.class, String.class, String.class, long.class, String.class);
-            } catch (NoSuchMethodException e) {
-                System.out.println(e.toString());
-                return;
-            }
             int modifiers;
             try {
                 name = userObject.getField("name");
