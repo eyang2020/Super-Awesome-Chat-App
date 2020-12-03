@@ -31,12 +31,12 @@ public class RunLocalTest {
         if (result.wasSuccessful()) {
             System.out.println("Excellent - Tests ran successfully");
         } else {
-            for (Failure failure : result.getFailures()) {
-                System.out.println(failure.toString());
-            }
+        	for (Failure failure : result.getFailures()) {
+            	System.out.println(failure.toString());
+        	}
         }
     }
-
+    
     /**
      * A framework to run public test cases.
      *
@@ -46,59 +46,93 @@ public class RunLocalTest {
     public static class TestCase {
         private final PrintStream originalOutput = System.out;
         private final InputStream originalSysin = System.in;
-
+        
         @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayInputStream testIn;
+	    private ByteArrayInputStream testIn;
 
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayOutputStream testOut;
-
-        @Before
-        public void outputStart() {
-            testOut = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(testOut));
-        }
-
+	    @SuppressWarnings("FieldCanBeLocal")
+	    private ByteArrayOutputStream testOut;
+        
+	    @Before
+	    public void outputStart() {
+		    testOut = new ByteArrayOutputStream();
+		    System.setOut(new PrintStream(testOut));
+	    }
+        
         @After
-        public void restoreInputAndOutput() {
-            System.setIn(originalSysin);
-            System.setOut(originalOutput);
-        }
-
+	    public void restoreInputAndOutput() {
+		    System.setIn(originalSysin);
+		    System.setOut(originalOutput);
+	    }
+        
         private String getOutput() {
-            return testOut.toString();
-        }
-
+		    return testOut.toString();
+	    }
+        
         @SuppressWarnings("SameParameterValue")
         private void receiveInput(String str) {
             testIn = new ByteArrayInputStream(str.getBytes());
             System.setIn(testIn);
-        }
-
+        } 
+       
+        // testing for User class
         @Test(timeout = 1000)
-        public void classDeclarationTest() {
-            Class<?> clazz = Book.class;
+        public void userClassTest() {
+            // check if User class exists
+            try {
+                Class.forName("User");
+            }
+            catch(ClassNotFoundException e) {
+                System.out.println("Ensure that `User` exists!");
+                return;
+            }
+            Class<?> userObject = User.class;
+            // check for correct superclass
+            Class<?> superclass = userObject.getSuperclass();
+            assertEquals("Ensure that your `User` class does NOT extend any other class!", superclass, Object.class);
+            // check if fields exist
+            Field name;
+            Field username;
+            Field email;
+            Field phoneNumber;
+            Field password;
+            Field groups;
+            int modifiers;
+            try {
+                name = userObject.getField("name");
+                username = userObject.getField("username");
+                email = userObject.getField("email");
+                phoneNumber = userObject.getField("phoneNumber");
+                password = userObject.getField("password");
+                groups = userObject.getField("groups");
+            }
+            catch(NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = name.getModifiers();
+            assertTrue("Ensure that `name` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `name` in `User` class is of type String!", String.class.isAssignableFrom(name.getType()));
+            modifiers = username.getModifiers();
+            assertTrue("Ensure that `username` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `username` in `User` class is of type String!", String.class.isAssignableFrom(username.getType()));
+            modifiers = email.getModifiers();
+            assertTrue("Ensure that `email` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `email` in `User` class is of type String!", String.class.isAssignableFrom(email.getType()));
+            modifiers = phoneNumber.getModifiers();
+            assertTrue("Ensure that `phoneNumber` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `phoneNumber` in `User` class is of type String!", Long.class.isAssignableFrom(phoneNumber.getType()));
+            modifiers = password.getModifiers();
+            assertTrue("Ensure that `password` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `password` in `User` class is of type String!", String.class.isAssignableFrom(password.getType()));
+            modifiers = groups.getModifiers();
+            assertTrue("Ensure that `groups` in `User` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groups` in `User` class is of type String!", Collection.class.isAssignableFrom(groups.getType()));
+            // TODO: check if methods of User are implemented correctly with correct type and access modifier
+            
+            // TODO: two implementation test: 1. success with proper input 2. failure with improper input
 
-            int modifiers = clazz.getModifiers();
-
-            Class<?>[] superinterfaces = clazz.getInterfaces();
-
-            assertTrue("Ensure that `Book` is `public`!", Modifier.isPublic(modifiers));
-
-            assertFalse("Ensure that `Book` is NOT `abstract`!", Modifier.isAbstract(modifiers));
-
-            Assert.assertEquals("Ensure that `Book` implements no interfaces!", 0, superinterfaces.length);
         }
-
-        @Test(timeout = 1000)
-        public void testRestock() {
-            Book book = new Book("Harry Potter", "J K Rowling", 2012, 12,
-                    5, 4, 2);
-            book.restock(20);
-            assertEquals("Ensure that your restock method adds the given quantity to the existing quantity!",
-                    book.getQuantityAvailable(), 25);
-        }
-
-
-    }
+    }    
 }
