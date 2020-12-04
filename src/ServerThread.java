@@ -89,7 +89,6 @@ public class ServerThread implements Runnable{
                                 //Add a way for the client to tell the reason for the failed login
                             }
                         }
-                        System.out.println("spot1");
                         out.writeBoolean(false);
                         out.writeObject(currentUser);
                         out.flush();
@@ -117,11 +116,9 @@ public class ServerThread implements Runnable{
                     case "addMessage" -> {
                         Message message = (Message) in.readObject();
                         Group group = (Group) in.readObject();
-                        System.out.println(group.getGroupName());
                         for (Group group1 : Server.getGroups()) {
                             if (group1.getGroupName().equals(group.getGroupName())) {
                                 group1.addMessage(message);
-                                System.out.println("Yass");
                             }
                         }
                         assert out != null;
@@ -130,19 +127,13 @@ public class ServerThread implements Runnable{
                     }
                     case "refresh" -> {
                         out.reset();
-                        System.out.println(Server.getUsers());
                         out.writeObject(Server.getUsers());
-                        System.out.println(Server.getGroups());
                         out.writeObject(Server.getGroups());
                         out.flush();
                     }
                     case "updateUser" -> {
                         User tempUser = (User) in.readObject();
                         for (User user : Server.getUsers()) {
-                            System.out.println(user.getUsername());
-                            System.out.println(tempUser.getUsername());
-                            System.out.println(user.getUserID());
-                            System.out.println(tempUser.getUserID());
                             if (user.getUserID() == tempUser.getUserID()) {
                                 user.setName(tempUser.getName());
                                 user.setEmail(tempUser.getEmail());

@@ -151,6 +151,7 @@ public class ManageProfile {
                             panel.remove(cUsername);
                             cUsername = new JLabel(user.getUsername());
                             panel.add(cUsername);
+                            System.out.println(user);
                             client.updateUser(user);
                         }
                         break;

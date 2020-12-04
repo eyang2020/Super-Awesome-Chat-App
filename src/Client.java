@@ -166,6 +166,7 @@ public class Client {
     public void updateUser(User user) {
         try {
             out.writeObject("updateUser");
+            out.reset();
             out.writeObject(user);
             out.flush();
         } catch (IOException e) {

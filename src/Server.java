@@ -27,7 +27,7 @@ public class Server {
         users.add(new User("1234", "1234", "1234", 1234, "1234"));
         users.get(0).setUserID(1);
         users.add(new User("asdf", "asdf", "asdf", 1234, "asdf"));
-        users.get(0).setUserID(2);
+        users.get(1).setUserID(2);
         userIDCounter = 2;
         ArrayList<User> blah = new ArrayList<>();
         blah.add(users.get(0));
