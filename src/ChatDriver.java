@@ -127,6 +127,12 @@ public class ChatDriver extends JComponent implements Runnable {
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
 
+        sendMessageToServer("testing1");
+        client.refreshUsersAndGroups();
+        //for (int i = 0; i < currentGroup.getMessages().size(); i++) {
+        //    ( (DefaultListModel<Message>) chatPanel.getModel()).addElement(currentGroup.getMessages().get(i));
+        //}
+
         sendMessageButton.addActionListener(new ActionListener() {
             /**
              * Displays the message sent in the chat pane.
@@ -136,9 +142,6 @@ public class ChatDriver extends JComponent implements Runnable {
             public void actionPerformed(ActionEvent e) {
                 // Message creation to send to server
                 Message message = sendMessageToServer(messageTextField.getText());
-
-                // adds message to the group object
-                currentGroup.addMessage(message);
 
                 // Message display on GUI
                 // todo: add edit/delete buttons
@@ -170,7 +173,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JPanel eastPanel = new JPanel();
 
-        JList<User> userJList = new JList<>(changeUserModel());
+        JList<String> userJList = new JList<>(changeUserModel());
 
         JScrollPane usersPane = new JScrollPane(userJList);
         eastPanel.add(usersPane);
@@ -262,11 +265,11 @@ public class ChatDriver extends JComponent implements Runnable {
      *
      * @return a list model containing the users in the group
      */
-    public DefaultListModel<User> changeUserModel() {
-        DefaultListModel<User> userListModel = new DefaultListModel<>();
+    public DefaultListModel<String> changeUserModel() {
+        DefaultListModel<String> userListModel = new DefaultListModel<>();
 
         for (User user : currentGroup.getUsers()) {
-            userListModel.addElement(user);
+            userListModel.addElement(user.getName());
         }
 
         return userListModel;
@@ -280,17 +283,16 @@ public class ChatDriver extends JComponent implements Runnable {
      * @return a new Message object
      */
     public Message sendMessageToServer(String text){
+        System.out.println("????");
         LocalDateTime dateTime = LocalDateTime.now();
+
 
         Message message = new Message(clientUser, dateTime, text);
 
         // when I commented this out it worked, i have no idea what's up
         // TODO: ian
-//        try {
-//            client.addMessage(message, currentGroup);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        client.addMessage(message, currentGroup);
+
 
         return message;
     }

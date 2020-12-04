@@ -25,7 +25,6 @@ public class Client {
     User currentUser = null;       //The user that this client represents
     ArrayList<User> users;
     ArrayList<Group> groups;
-    int userIDCounter;
 
     public static void main(String[] args) throws IOException {
         Client client1 = new Client("localhost", 4242);
@@ -41,8 +40,8 @@ public class Client {
         this.port = port;
         users = new ArrayList<>();
         groups = new ArrayList<>();
-        userIDCounter = 1;
         connectToServer();
+        refreshUsersAndGroups();
     }
 
     /**
@@ -61,12 +60,6 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*try {
-            users = (ArrayList<User>) in.readObject();
-            groups = (ArrayList<Group>) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /**
@@ -85,8 +78,6 @@ public class Client {
         out.writeObject(name);
         out.writeObject(email);
         out.writeLong(phoneNumber);
-        out.writeInt(userIDCounter);
-        userIDCounter++;
         out.flush();
         try {
             currentUser = (User) in.readObject();
@@ -124,13 +115,17 @@ public class Client {
      * @param usernames The usernames of the people to be added to the group
      * @return Whether or not the group was created successfully
      */
-    public boolean createGroup(String groupName, String[] usernames) throws IOException{
-        boolean created;
-        out.writeObject("createGroup");
-        out.writeObject(groupName);
-        out.writeObject(usernames);
-        out.flush();
-        created = in.readBoolean();
+    public boolean createGroup(String groupName, String[] usernames){
+        boolean created = false;
+        try {
+            out.writeObject("createGroup");
+            out.writeObject(groupName);
+            out.writeObject(usernames);
+            out.flush();
+            created = in.readBoolean();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return created;
     }
 
@@ -140,21 +135,27 @@ public class Client {
      * @param group The group the message is to be added to
      * @return Whether or not the message was created successfully
      */
-    public boolean addMessage(Message message, Group group) throws IOException {
+    public boolean addMessage(Message message, Group group){
         boolean added = false;
-        out.writeObject("addMessage");
-        out.writeObject(message);
-        out.writeObject(group);
-        out.flush();
-        added = in.readBoolean();
+        group.addMessage(message);
+        try {
+            out.writeObject("addMessage");
+            out.writeObject(message);
+            out.writeObject(group);
+            out.flush();
+            added = in.readBoolean();
+            refreshUsersAndGroups();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return added;
     }
 
-    public void refreshUsersAndGroups() throws IOException {
-        out.writeObject("refresh");
-        out.flush();
-
+    public void refreshUsersAndGroups(){
         try {
+            out.writeObject("refresh");
+            out.flush();
+
             users = (ArrayList<User>) in.readObject();
             groups = (ArrayList<Group>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -178,5 +179,21 @@ public class Client {
      */
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    /**
+     *
+     * @return the users arraylist
+     */
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    /**
+     *
+     * @return the groups arraylist
+     */
+    public ArrayList<Group> getGroups() {
+        return groups;
     }
 }

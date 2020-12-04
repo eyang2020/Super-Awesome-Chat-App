@@ -20,10 +20,22 @@ public class Server {
     static private ArrayList<User> users;          //A collection of all of the users for the messaging app
     private static int port = 4242;         //The port of the server
     ServerSocket serverSocket;              //The socket used to connect the server and client
+    private static int userIDCounter;
 
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         users.add(new User("1234", "1234", "1234", 1234, "1234"));
+        users.get(0).setUserID(1);
+        users.add(new User("asdf", "asdf", "asdf", 1234, "asdf"));
+        users.get(0).setUserID(2);
+        userIDCounter = 2;
+        ArrayList<User> blah = new ArrayList<>();
+        blah.add(users.get(0));
+        blah.add(users.get(1));
+        Group group = new Group("Testing1", blah);
+        groups.add(group);
+        users.get(0).addGroup(group);
+        users.get(1).addGroup(group);
         try{
             server.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -31,13 +43,13 @@ public class Server {
         }
         while (true) {
             server.acceptor();
-            //server.writeUsersAndGroups("src/users.txt", "src/groups.txt");
         }
     }
 
     public Server() {
         groups = new ArrayList<>();
         users = new ArrayList<>();
+        userIDCounter = 0;
         //readInUsersAndGroups("src/users.txt", "src/groups.txt");
     }
 
@@ -89,6 +101,10 @@ public class Server {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        for (User user : users) {
+            userIDCounter++;
+            user.setUserID(userIDCounter);
+        }
     }
 
     /**
@@ -96,7 +112,7 @@ public class Server {
      * @param usersFilename The filename where the users arraylist is stored
      * @param groupsFilename The filename where the groups arraylist is stored
      */
-    public void writeUsersAndGroups(String usersFilename, String groupsFilename) {
+    public static void writeUsersAndGroups(String usersFilename, String groupsFilename) {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(usersFilename));
             out.flush();
@@ -130,6 +146,15 @@ public class Server {
      */
     public static ArrayList<Group> getGroups() {
         return groups;
+    }
+
+    /**
+     *
+     * @return The userIDCounter
+     */
+    public static int getUserIDCounter() {
+        userIDCounter++;
+        return userIDCounter;
     }
 }
 

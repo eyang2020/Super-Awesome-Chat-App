@@ -160,7 +160,7 @@ public class User implements Serializable {
      * @param userID the user's id
      */
     public void setUserID(int userID) {
-        userID = userID;
+        this.userID = userID;
     }
 
     @Override
@@ -171,6 +171,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", password='" + password + '\'' +
+                ", userID='" + userID + '\'' +
                 ", groups=" + groups +
                 '}';
     }

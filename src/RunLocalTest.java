@@ -128,7 +128,7 @@ public class RunLocalTest {
             assertTrue("Ensure that `password` in `User` class is of type String!", String.class.isAssignableFrom(password.getType()));
             modifiers = groups.getModifiers();
             assertTrue("Ensure that `groups` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `groups` in `User` class is of type String!", Collection.class.isAssignableFrom(groups.getType()));
+            assertTrue("Ensure that `groups` in `User` class is of type String!", ArrayList.class.isAssignableFrom(groups.getType()));
             // TODO: check if methods of User are implemented correctly with correct type and access modifier
             
             // TODO: two implementation test: 1. success with proper input 2. failure with improper input

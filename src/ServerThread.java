@@ -58,7 +58,7 @@ public class ServerThread implements Runnable{
                         String password = (String) in.readObject();
                         String name = (String) in.readObject();
                         String email = (String) in.readObject();
-                        int userID = in.readInt();
+                        int userID = Server.getUserIDCounter();
                         long phoneNumber = in.readLong();
                         for (User user : Server.getUsers()) {
                             if (user.getUsername().equals(username)) {
@@ -117,7 +117,13 @@ public class ServerThread implements Runnable{
                     case "addMessage" -> {
                         Message message = (Message) in.readObject();
                         Group group = (Group) in.readObject();
-                        group.addMessage(message);
+                        System.out.println(group.getGroupName());
+                        for (Group group1 : Server.getGroups()) {
+                            if (group1.getGroupName().equals(group.getGroupName())) {
+                                group1.addMessage(message);
+                                System.out.println("Yass");
+                            }
+                        }
                         assert out != null;
                         out.writeBoolean(true);
                         out.flush();
@@ -135,6 +141,8 @@ public class ServerThread implements Runnable{
                         for (User user : Server.getUsers()) {
                             System.out.println(user.getUsername());
                             System.out.println(tempUser.getUsername());
+                            System.out.println(user.getUserID());
+                            System.out.println(tempUser.getUserID());
                             if (user.getUserID() == tempUser.getUserID()) {
                                 user.setName(tempUser.getName());
                                 user.setEmail(tempUser.getEmail());
@@ -150,6 +158,7 @@ public class ServerThread implements Runnable{
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            Server.writeUsersAndGroups("src/users.txt", "src/groups.txt");
         }
     }
 }
