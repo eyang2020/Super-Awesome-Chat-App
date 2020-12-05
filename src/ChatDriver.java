@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * </ul>
  *
  * @author Camber Boles
- * @version 1 December 2020
+ * @version 5 December 2020
  */
 public class ChatDriver extends JComponent implements Runnable {
 
@@ -162,8 +162,8 @@ public class ChatDriver extends JComponent implements Runnable {
 
 
         JPanel westPanel = new JPanel(new BorderLayout());
-        DefaultListModel<Group> groupListModel = new DefaultListModel<>();
-        JList<Group> groupJList = new JList<>(groupListModel);
+
+        JList<Group> groupJList = new JList<>(changeGroupModel());
 
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
@@ -216,9 +216,54 @@ public class ChatDriver extends JComponent implements Runnable {
         });
 
         createGroupButton.addActionListener(new ActionListener() {
+            /**
+             * Prompts the user to create a new group.
+             *
+             * @param e the click of the New Group button
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo: create group things
+                ArrayList<User> users = new ArrayList<>();
+                Group group;
+                int input;
+
+                users.add(clientUser);
+
+                String name = JOptionPane.showInputDialog("Name of the group?");
+
+                JComboBox<User> userJComboBox = new JComboBox<>();
+                DefaultComboBoxModel<User> userListModel = new DefaultComboBoxModel<>();
+                userListModel.addAll(client.getUsers());
+                userJComboBox.setModel(userListModel);
+
+                JLabel comboBoxLabel = new JLabel("Select a user and OK to add to group.");
+                comboBoxLabel.setLabelFor(userJComboBox);
+
+                JPanel panel = new JPanel();
+                panel.add(comboBoxLabel);
+                panel.add(userJComboBox);
+
+                do {
+                    input = JOptionPane.showOptionDialog(null,
+                            panel,
+                            "New Group",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            client.getUsers().toArray(),
+                            client.getUsers().toArray()[0]);
+
+                    if (input == JOptionPane.OK_OPTION) {
+                        users.add((User) userJComboBox.getSelectedItem());
+                    }
+                } while (input != JOptionPane.CANCEL_OPTION);
+
+                System.out.println(users);
+
+                group = new Group(name, users);
+                clientUser.addGroup(group);
+
+                groupJList.setModel(changeGroupModel());
             }
         });
 
@@ -272,6 +317,21 @@ public class ChatDriver extends JComponent implements Runnable {
         }
 
         return userListModel;
+    }
+
+    /**
+     * Loads Groups the user is in into the west panel.
+     *
+     * @return a list model containing the groups
+     */
+    public DefaultListModel<Group> changeGroupModel() {
+        DefaultListModel<Group> groupListModel = new DefaultListModel<>();
+
+        for (Group group : clientUser.getGroups()) {
+            groupListModel.addElement(group);
+        }
+
+        return groupListModel;
     }
 
     /**
