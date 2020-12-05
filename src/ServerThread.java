@@ -131,7 +131,7 @@ public class ServerThread implements Runnable{
                         out.writeObject(Server.getGroups());
                         out.flush();
                     }
-                    case "updateUser" -> {
+                    case "updateServerUser" -> {
                         User tempUser = (User) in.readObject();
                         for (User user : Server.getUsers()) {
                             if (user.getUserID() == tempUser.getUserID()) {
@@ -140,6 +140,25 @@ public class ServerThread implements Runnable{
                                 user.setPassword(tempUser.getPassword());
                                 user.setPhoneNumber(tempUser.getPhoneNumber());
                                 user.setUsername(tempUser.getUsername());
+                            }
+                        }
+                    }
+                    case "editMessage" -> {
+                        boolean delete = in.readBoolean();
+                        Message message = (Message) in.readObject();
+                        String groupName = (String) in.readObject();
+                        for (Group group : Server.getGroups()) {
+                            if (group.getGroupName().equals(groupName)) {
+                                for (Message message1 : group.getMessages()) {
+                                    if (message1.equals(message)) {
+                                        if (delete) {
+                                            group.getMessages().remove(message1);
+                                        } else {
+                                            String newMessage = (String) in.readObject();
+                                            message1.setMessage(LocalDateTime.now(), newMessage);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
