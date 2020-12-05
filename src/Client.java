@@ -156,8 +156,8 @@ public class Client {
             out.writeObject("refresh");
             out.flush();
 
-            users = (ArrayList<User>) in.readObject();
-            groups = (ArrayList<Group>) in.readObject();
+            users.add((User) in.readObject());
+            groups.add((Group) in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
