@@ -236,8 +236,10 @@ public class Login implements Runnable {
      * @param usersPassword the password for the account
      */
     public boolean userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber, String usersPassword) throws IOException {
-        user = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
-        if (user == null) {
+        boolean created = false;
+        created = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
+        user = client.getCurrentUser();
+        if (!created) {
             JOptionPane.showMessageDialog(null, "An account with that username already exists, please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
             return false;
         }

@@ -33,6 +33,7 @@ public class Client {
         SwingUtilities.invokeLater(new Login(client1));
         client1.createGroup("Hello", new String[]{"Hi", "Bye"});
 
+
         //ChatDriver.chat(client1.getCurrentUser());
     }
 
@@ -72,7 +73,8 @@ public class Client {
      * @param phoneNumber the phone number for the account
      * @return the user that is created
      */
-    public User createAccount(String username, String password, String name, String email, long phoneNumber) throws IOException {
+    public boolean createAccount(String username, String password, String name, String email, long phoneNumber) throws IOException {
+        boolean created = false;
         out.writeObject("createAccount");
         out.writeObject(username);
         out.writeObject(password);
@@ -81,12 +83,15 @@ public class Client {
         out.writeLong(phoneNumber);
         out.flush();
         try {
-            currentUser = (User) in.readObject();
+            created = in.readBoolean();
+            if (created) {
+                currentUser = (User) in.readObject();
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        refreshUsersAndGroups();
-        return currentUser;
+        //refreshUsersAndGroups();
+        return created;
     }
 
     /**
@@ -124,6 +129,9 @@ public class Client {
             out.writeObject(usernames);
             out.flush();
             created = in.readBoolean();
+            System.out.println("Created");
+            updateCurrentUser();
+            System.out.println("hel");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,6 +165,7 @@ public class Client {
             out.writeObject("refresh");
             out.flush();
 
+            Object rando = in.read();
             users = (ArrayList<User>) in.readObject();
             groups = (ArrayList<Group>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -221,6 +230,21 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public User updateCurrentUser() {
+        try {
+            User user;
+            out.writeObject("updateCurrentUser");
+            out.writeInt(currentUser.getUserID());
+            out.flush();
+            user = (User) in.readObject();
+            currentUser.setGroups(user.getGroups());
+            return user;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setChatDriver(ChatDriver chatDriver) {

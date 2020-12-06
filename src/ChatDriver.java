@@ -7,6 +7,9 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ChatDriver
@@ -57,6 +60,10 @@ public class ChatDriver extends JComponent implements Runnable {
      */
     JButton deleteMessageButton;
 
+    JList<Message> chatPanel = new JList<>();
+
+    JList<String> groupJList = new JList<>();
+
     /**
      * An action listener for the edit and delete functionality.
      * Disables buttons if no selection; enables buttons and allows
@@ -99,6 +106,17 @@ public class ChatDriver extends JComponent implements Runnable {
         editMessageButton = new JButton("Edit");
         deleteMessageButton = new JButton("Delete");
         client.setChatDriver(this);
+        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
+        timer.scheduleAtFixedRate(() -> {
+            try {
+                refrsshMessages();
+                int temp = groupJList.getSelectedIndex();
+                groupJList.setModel(changeGroupModel());
+                groupJList.setSelectedIndex(temp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     /**
@@ -120,7 +138,8 @@ public class ChatDriver extends JComponent implements Runnable {
         southPanel.add(deleteMessageButton);
         content.add(southPanel, BorderLayout.SOUTH);
 
-        JList<Message> chatPanel = new JList<>();
+        groupJList.setModel(changeGroupModel());
+        groupJList.setSelectedIndex(0);
 
         chatPanel.setModel(changeChatModel(0));
         chatPanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -162,7 +181,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JPanel westPanel = new JPanel(new BorderLayout());
 
-        JList<String> groupJList = new JList<>(changeGroupModel());
+
 
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
@@ -222,11 +241,11 @@ public class ChatDriver extends JComponent implements Runnable {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<User> users = new ArrayList<>();
+                ArrayList<String> users = new ArrayList<>();
                 Group group;
                 int input;
 
-                users.add(clientUser);
+                users.add(clientUser.getUsername());
 
                 String name = JOptionPane.showInputDialog("Name of the group?");
 
@@ -246,21 +265,22 @@ public class ChatDriver extends JComponent implements Runnable {
                 panel.add(userJComboBox);
 
                 do {
-                    input = JOptionPane.showConfirmDialog(null,
+                    input = JOptionPane.showOptionDialog(null,
                             panel,
                             "New Group",
                             JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
+                            JOptionPane.QUESTION_MESSAGE, null, new String[]{"Add", "Create Group"}, "Add");
 
-                    if (input == JOptionPane.OK_OPTION) {
-                        users.add((User) userJComboBox.getSelectedItem());
+                    if (input == 0) {
+                        if (!users.contains((String) userJComboBox.getSelectedItem())) {
+                            users.add((String) userJComboBox.getSelectedItem());
+                        }
                     }
-                } while (input != JOptionPane.CANCEL_OPTION);
+                } while (input != 1);
 
                 System.out.println(users);
 
-                group = new Group(name, users);
-                clientUser.addGroup(group);
+                client.createGroup(name, users.toArray(new String[users.size()]));
 
                 groupJList.setModel(changeGroupModel());
             }
@@ -293,6 +313,7 @@ public class ChatDriver extends JComponent implements Runnable {
     public DefaultListModel<Message> changeChatModel(int index) {
         DefaultListModel<Message> messageListModel = new DefaultListModel<>();
         if (clientUser.getGroups() != null && clientUser.getGroups().size() > 0) {
+            client.updateCurrentUser();
             currentGroup = clientUser.getGroups().get(index);
 
             for (Message message : currentGroup.getMessages()) {
@@ -398,8 +419,13 @@ public class ChatDriver extends JComponent implements Runnable {
         }
     }
 
-    //public void refrsshMessages() {
-    //    client.refreshUsersAndGroups();
-    //    for (Message message : )
-    //}
+    public void refrsshMessages() {
+        client.refreshUsersAndGroups();
+        client.updateCurrentUser();
+        if (groupJList.getSelectedIndex() == -1) {
+            chatPanel.setModel(changeChatModel(0));
+        } else {
+            chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
+        }
+    }
 }

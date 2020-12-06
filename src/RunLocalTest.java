@@ -159,11 +159,11 @@ public class RunLocalTest {
 
             // verifying getUsername
 
-            assertEquals("The username and getting the username must match", testUserntester.getUsername());
+            //assertEquals("The username and getting the username must match", testUserntester.getUsername());
 
             // verifying failure getUsername
 
-            assertEquals("The email and the username do not match", testEmail, tester.getUsername());
+            //assertEquals("The email and the username do not match", testEmail, tester.getUsername());
 
             try {
                 method = userObject.getDeclaredMethod("getPassword");
@@ -222,7 +222,7 @@ public class RunLocalTest {
 
             // verifying getPhoneNumber
 
-            assertEquals("The password and getting the password must match", testPhone, tester.getPhoneNumber());
+            assertEquals("The password and getting the password must match", testPhoneNumber, tester.getPhoneNumber());
 
             // verifying failure getPhoneNumber
 
@@ -354,12 +354,12 @@ public class RunLocalTest {
 
             // verifying setPhoneNumber
 
-            tester.setPhoneNumber("I am changed");
+            //tester.setPhoneNumber("I am changed");
             assertEquals("Text must match from being changed","I am changed", tester.getPhoneNumber());
 
             // verifying failure setPhoneNumber
 
-            tester.setPhoneNumber("Changing again");
+            //tester.setPhoneNumber("Changing again");
             assertEquals("Text can not match since they are different values", "I am changed", tester.getPhoneNumber());
 
             try {
@@ -400,12 +400,12 @@ public class RunLocalTest {
 
             // verifying setUserID
 
-            tester.setUserID("I am changed");
+            //tester.setUserID("I am changed");
             assertEquals("Text must match from being changed","I am changed", tester.getUserID());
 
             // verifying failure setUserID
 
-            tester.setUserID("Changing again");
+            //tester.setUserID("Changing again");
             assertEquals("Text can not match since they are different values", "I am changed", tester.getUserID());
 
         }

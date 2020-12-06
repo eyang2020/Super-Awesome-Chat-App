@@ -51,7 +51,9 @@ public class ServerThread implements Runnable{
         while (true) {
             try {
                 input = (String) in.readObject();
-                System.out.println(input);
+                if (!input.equals("updateCurrentUser")) {
+                    System.out.println(input);
+                }
                 switch (input) {
                     case "createAccount" -> {
                         String username = (String) in.readObject();
@@ -62,11 +64,14 @@ public class ServerThread implements Runnable{
                         long phoneNumber = in.readLong();
                         for (User user : Server.getUsers()) {
                             if (user.getUsername().equals(username)) {
-                                out.writeObject(null);
+                                out.reset();
+                                out.writeBoolean(false);
                                 out.flush();
                                 break;
                             }
                         }
+                        out.writeBoolean(true);
+                        out.flush();
                         currentUser = new User(name, username, email, phoneNumber, password);
                         currentUser.setUserID(userID);
                         Server.getUsers().add(currentUser);
@@ -94,6 +99,7 @@ public class ServerThread implements Runnable{
                         out.flush();
                     }
                     case "createGroup" -> {
+                        System.out.println("Yo");
                         String groupName = (String) in.readObject();
                         String[] usernames = (String[]) in.readObject();
                         ArrayList<User> addedUsers = new ArrayList<>();
@@ -101,13 +107,17 @@ public class ServerThread implements Runnable{
                         for (String username : usernames) {
                             for (User user : Server.getUsers()) {
                                 if (user.getUsername().equals(username)) {
+                                    System.out.println(user.getUsername());
                                     addedUsers.add(user);
                                 }
                             }
                         }
                         newGroup = new Group(groupName, addedUsers);
+                        System.out.println(Server.getGroups());
                         Server.getGroups().add(newGroup);
+                        System.out.println(Server.getGroups());
                         for (User user : addedUsers) {
+                            System.out.println("hello");
                             user.addGroup(newGroup);
                         }
                         out.writeBoolean(true);
@@ -127,6 +137,8 @@ public class ServerThread implements Runnable{
                     }
                     case "refresh" -> {
                         out.reset();
+                        System.out.println(Server.getUsers() + " users");
+                        System.out.println(Server.getGroups() + " groups");
                         out.writeObject(Server.getUsers());
                         out.writeObject(Server.getGroups());
                         out.flush();
@@ -159,6 +171,16 @@ public class ServerThread implements Runnable{
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                    case "updateCurrentUser" -> {
+                        int userID = in.readInt();
+                        for (User user : Server.getUsers()) {
+                            if (user.getUserID() == userID) {
+                                out.reset();
+                                out.writeObject(user);
+                                out.flush();
                             }
                         }
                     }
