@@ -5,6 +5,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -46,6 +47,11 @@ public class ChatDriver extends JComponent implements Runnable {
     JButton userSettingsButton;
 
     /**
+     * A button the user can press to delete themselves from a group
+     */
+    JButton deleteGroupButton;
+
+    /**
      * A button the user can press to create a new group.
      */
     JButton createGroupButton;
@@ -60,9 +66,20 @@ public class ChatDriver extends JComponent implements Runnable {
      */
     JButton deleteMessageButton;
 
+    /**
+     * The jlist for messages
+     */
     JList<Message> chatPanel = new JList<>();
 
+    /**
+     * The jlist for groups
+     */
     JList<String> groupJList = new JList<>();
+
+    /**
+     * The jlist for users
+     */
+    JList<String> userJList = new JList<>();
 
     /**
      * An action listener for the edit and delete functionality.
@@ -102,17 +119,18 @@ public class ChatDriver extends JComponent implements Runnable {
         }
 
         userSettingsButton = new JButton("Settings");
+        deleteGroupButton = new JButton("Delete Group");
         createGroupButton = new JButton("New Group");
         editMessageButton = new JButton("Edit");
         deleteMessageButton = new JButton("Delete");
-        client.setChatDriver(this);
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
             try {
-                refrsshMessages();
+                refreshMessages();
                 int temp = groupJList.getSelectedIndex();
                 groupJList.setModel(changeGroupModel());
                 groupJList.setSelectedIndex(temp);
+                userJList.setModel(changeUserModel());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -192,6 +210,8 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JList<String> userJList = new JList<>(changeUserModel());
 
+        userJList = new JList<>(changeUserModel());
+
         JScrollPane usersPane = new JScrollPane(userJList);
         eastPanel.add(usersPane);
         content.add(eastPanel, BorderLayout.EAST);
@@ -211,7 +231,22 @@ public class ChatDriver extends JComponent implements Runnable {
             }
         });
 
+        deleteGroupButton.addActionListener(new ActionListener() {
+            /**
+             * Deletes that user from the group
+             * @param e the press of the delete group button
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.updateCurrentUser();
+                currentGroup = clientUser.getGroups().get(groupJList.getSelectedIndex());
+                client.deleteFromGroup(currentGroup);
+                groupJList.setSelectedIndex(0);
+            }
+        });
+
         northPanel.add(userSettingsButton);
+        northPanel.add(deleteGroupButton);
         content.add(northPanel, BorderLayout.NORTH);
 
         groupJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -228,10 +263,12 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 if (index != -1) {
                     chatPanel.setModel(changeChatModel(index));
-                    userJList.setModel(changeUserModel());
+                    updateUserList();
                 }
             }
         });
+
+
 
         createGroupButton.addActionListener(new ActionListener() {
             /**
@@ -315,7 +352,6 @@ public class ChatDriver extends JComponent implements Runnable {
         if (clientUser.getGroups() != null && clientUser.getGroups().size() > 0) {
             client.updateCurrentUser();
             currentGroup = clientUser.getGroups().get(index);
-
             for (Message message : currentGroup.getMessages()) {
                 messageListModel.addElement(message);
             }
@@ -373,6 +409,10 @@ public class ChatDriver extends JComponent implements Runnable {
         return message;
     }
 
+    public void updateUserList() {
+        userJList.setModel(changeUserModel());
+    }
+
     /**
      * Runs the driver on the EventDispatcher thread for stability.
      * Will eventually be called by the client-side program, as opposed to
@@ -419,8 +459,7 @@ public class ChatDriver extends JComponent implements Runnable {
         }
     }
 
-    public void refrsshMessages() {
-        client.refreshUsersAndGroups();
+    public void refreshMessages() {
         client.updateCurrentUser();
         if (groupJList.getSelectedIndex() == -1) {
             chatPanel.setModel(changeChatModel(0));

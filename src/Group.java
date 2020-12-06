@@ -91,4 +91,18 @@ public class Group implements Serializable {
     public void removeUser(User user) {
         users.remove(user);
     }
+
+    /**
+     * Checks if two group objects are equal
+     * @param o the object to be tested against
+     * @return if the objects are equal
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return Objects.equals(groupName, group.groupName) &&
+                Objects.equals(users, group.users) &&
+                Objects.equals(messages, group.messages);
+    }
 }

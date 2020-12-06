@@ -23,9 +23,8 @@ public class Client {
     ObjectOutputStream out; //The output stream for sending objects to the server
     ObjectInputStream in;   //The input stream for getting objects from the server
     User currentUser = null;       //The user that this client represents
-    ArrayList<User> users;
-    ArrayList<Group> groups;
-    ChatDriver chatDriver;
+    ArrayList<User> users;  //A client side version of the users arraylist
+    ArrayList<Group> groups;    //A client side version of the groups arraylist
 
     public static void main(String[] args) throws IOException {
         Client client1 = new Client("localhost", 4242);
@@ -33,8 +32,6 @@ public class Client {
         SwingUtilities.invokeLater(new Login(client1));
         client1.createGroup("Hello", new String[]{"Hi", "Bye"});
 
-
-        //ChatDriver.chat(client1.getCurrentUser());
     }
 
     public Client(String host, int port) {
@@ -247,7 +244,18 @@ public class Client {
         return null;
     }
 
-    public void setChatDriver(ChatDriver chatDriver) {
-        this.chatDriver = chatDriver;
+    public void deleteFromGroup(Group group) {
+        System.out.println("Yo");
+        try {
+            out.writeObject("deleteFromGroup");
+            out.writeObject(group);
+            out.writeObject(currentUser);
+            out.flush();
+            updateCurrentUser();
+            refreshUsersAndGroups();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }
