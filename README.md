@@ -31,9 +31,7 @@ This class was used frequently in the operation of the client/server and ChatDri
 
 This class servers as the representation of the client side of the messaging application. The client class is responsible for handling the initialization process when a user carries out various tasks such as signing up, loging in, creating a new group, or editing a message among other tasks.  
 
-To test this class, we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
-
-TODO: add description about testing done on class.
+To test this class we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
 
 ## ClientDriver Class
 
@@ -43,9 +41,9 @@ This class was used frequently in the operation of the client/server and ChatDri
 
 ## Server Class
 
-TODO: add description about the class.
+This class serves as the server-side representation of the project. As the main support for the backend, the Server class communicates with the Client class by receiving requests and sending updates to the Client upon completion of said requests. The server is responsible for reading in information about users and groups from our database to supply the client with a variety of data which can be used for account validation (for example, whether a username already exists in the database).
 
-TODO: add description about testing done on class.
+To test this class we used manual testing by using the client-side interface. We sent a multitude of requests to check if the server was both receiving them and correctly processing them. For example, we tested creating a new account for a user, and checked to see if the database was updated with this new information after the server processed a "new user" request. Moreover, we sent requests to the server to read the database regarding user info during login to ensure that the password used during login matched the one stored in the database during account creation.
 
 ## ServerThread Class
 
