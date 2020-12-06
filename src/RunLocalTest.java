@@ -1,23 +1,20 @@
+package src;
+
 import org.junit.Test;
 import org.junit.After;
 import java.lang.reflect.Field;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.rules.Timeout;
+
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.ThreadLocalRandom;
-import java.lang.reflect.InvocationTargetException;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -47,13 +44,12 @@ public class RunLocalTest {
      */
     public static class TestCase {
         private final PrintStream originalOutput = System.out;
-        private final InputStream originalSysin = System.in;
+        private final InputStream originalSystemin = System.in;
+        private ByteArrayOutputStream testOut;
 
         @SuppressWarnings("FieldCanBeLocal")
         private ByteArrayInputStream testIn;
 
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayOutputStream testOut;
 
         @Before
         public void outputStart() {
@@ -63,7 +59,7 @@ public class RunLocalTest {
 
         @After
         public void restoreInputAndOutput() {
-            System.setIn(originalSysin);
+            System.setIn(originalSystemin);
             System.setOut(originalOutput);
         }
 
@@ -77,7 +73,9 @@ public class RunLocalTest {
             System.setIn(testIn);
         }
 
-        // testing for User class
+        /**
+         * Testing for user class
+         */
         @Test(timeout = 1_000)
         public void userClassTest() {
             // check if User class exists
@@ -91,7 +89,8 @@ public class RunLocalTest {
             Class<?> userObject = User.class;
             // check for correct superclass
             Class<?> superclass = userObject.getSuperclass();
-            assertEquals("Ensure that your `User` class does NOT extend any other class!", superclass, Object.class);
+            assertEquals("Ensure that your `User` class does NOT extend any other class!",
+                    superclass, Object.class);
             // check if fields exist
             Field name;
             Field username;
@@ -118,29 +117,37 @@ public class RunLocalTest {
             // check fields of class for correct access modifier and data type
             modifiers = name.getModifiers();
             assertTrue("Ensure that `name` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `name` in `User` class is of type String!", String.class.isAssignableFrom(name.getType()));
+            assertTrue("Ensure that `name` in `User` class is of type String!",
+                    String.class.isAssignableFrom(name.getType()));
             modifiers = username.getModifiers();
             assertTrue("Ensure that `username` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `username` in `User` class is of type String!", String.class.isAssignableFrom(username.getType()));
+            assertTrue("Ensure that `username` in `User` class is of type String!",
+                    String.class.isAssignableFrom(username.getType()));
             modifiers = email.getModifiers();
             assertTrue("Ensure that `email` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `email` in `User` class is of type String!", String.class.isAssignableFrom(email.getType()));
+            assertTrue("Ensure that `email` in `User` class is of type String!",
+                    String.class.isAssignableFrom(email.getType()));
             modifiers = phoneNumber.getModifiers();
             assertTrue("Ensure that `phoneNumber` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `phoneNumber` in `User` class is of type String!", Long.class.isAssignableFrom(phoneNumber.getType()));
+            assertTrue("Ensure that `phoneNumber` in `User` class is of type String!",
+                    Long.class.isAssignableFrom(phoneNumber.getType()));
             modifiers = password.getModifiers();
-            assertTrue("Ensure that `password` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `password` in `User` class is of type String!", String.class.isAssignableFrom(password.getType()));
+            assertTrue("Ensure that `password` in `User` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `password` in `User` class is of type String!",
+                    String.class.isAssignableFrom(password.getType()));
             modifiers = groups.getModifiers();
-            assertTrue("Ensure that `groups` in `User` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `groups` in `User` class is of type String!", ArrayList.class.isAssignableFrom(groups.getType()));
+            assertTrue("Ensure that `groups` in `User` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groups` in `User` class is of type String!",
+                    ArrayList.class.isAssignableFrom(groups.getType()));
             
             // check if methods are implemented correctly
 
             String testName = "Ryan";
             String testUsername = "Ryan123";
             String testEmail = "Ryan111@gmail.com";
-            long testPhoneNumber = 1300443522;
+            long testPhoneNumber = 1300443522L;
             String testPassword = "NotRyan532";
             int testUserID = 23;
             User tester = new User(testName, testUsername, testEmail, testPhoneNumber, testPassword);
@@ -154,12 +161,15 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getUsername` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getUsername` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getUsername` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getUsername` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getUsername
 
-            assertEquals("The username and getting the username must match", testUserntester.getUsername());
+            assertEquals("The username and getting the username must match",
+                    testUsername, tester.getUsername());
 
             // verifying failure getUsername
 
@@ -175,12 +185,15 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getPassword` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getPassword` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getPassword` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getPassword` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getPassword
 
-            assertEquals("The password and getting the password must match", testPassword, tester.getPassword());
+            assertEquals("The password and getting the password must match", testPassword,
+                    tester.getPassword());
 
             // verifying failure getPassword
 
@@ -196,8 +209,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getName` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getName` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getName` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getName` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getName
 
@@ -217,12 +232,15 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getPhoneNumber` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getPhoneNumber` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getPhoneNumber` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getPhoneNumber` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getPhoneNumber
 
-            assertEquals("The password and getting the password must match", testPhone, tester.getPhoneNumber());
+            assertEquals("The password and getting the password must match",
+                    testPhoneNumber, tester.getPhoneNumber());
 
             // verifying failure getPhoneNumber
 
@@ -238,8 +256,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getEmail` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getEmail` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getEmail` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getEmail` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getEmail
 
@@ -259,8 +279,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `User`'s `getUserID` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `User`'s `getUserID` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `User`'s `getUserID` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `User`'s `getUserID` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getUserID
 
@@ -280,7 +302,8 @@ public class RunLocalTest {
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `User`'s `setUsername` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `User`'s `setUsername` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `User`'s `setUsername` method has the correct return type!", returnType);
 
             // verifying setUsername
@@ -291,7 +314,8 @@ public class RunLocalTest {
             // verifying failure setUsername
 
             tester.setUsername("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getUsername());
+            assertEquals("Text can not match since they are different values", "I am changed",
+                    tester.getUsername());
 
             try {
                 method = userObject.getDeclaredMethod("setName", String.class);
@@ -314,7 +338,8 @@ public class RunLocalTest {
             // verifying failure setName
 
             tester.setName("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getName());
+            assertEquals("Text can not match since they are different values", "I am changed",
+                    tester.getName());
 
             try {
                 method = userObject.getDeclaredMethod("setEmail", String.class);
@@ -326,7 +351,8 @@ public class RunLocalTest {
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `User`'s `setEmail` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `User`'s `setEmail` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `User`'s `setEmail` method has the correct return type!", returnType);
 
             // verifying setEmail
@@ -337,7 +363,8 @@ public class RunLocalTest {
             // verifying failure setEmail
 
             tester.setEmail("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getEmail());
+            assertEquals("Text can not match since they are different values", "I am changed",
+                    tester.getEmail());
 
             try {
                 method = userObject.getDeclaredMethod("setPhoneNumber", Long.class);
@@ -349,18 +376,21 @@ public class RunLocalTest {
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `User`'s `setPhoneNumber` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `User`'s `setPhoneNumber` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `User`'s `setPhoneNumber` method has the correct return type!", returnType);
 
             // verifying setPhoneNumber
 
-            tester.setPhoneNumber("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getPhoneNumber());
+            tester.setPhoneNumber(4804289202L);
+            assertEquals("Phone number must match from being changed",4804925355L,
+                    tester.getPhoneNumber());
 
             // verifying failure setPhoneNumber
 
-            tester.setPhoneNumber("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getPhoneNumber());
+            tester.setPhoneNumber(4804925355L);
+            assertEquals("Phone number can not match since they are different values", 4804925355L,
+                    tester.getPhoneNumber());
 
             try {
                 method = userObject.getDeclaredMethod("setPassword", String.class);
@@ -372,7 +402,8 @@ public class RunLocalTest {
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `User`'s `setPassword` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `User`'s `setPassword` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `User`'s `setPassword` method has the correct return type!", returnType);
 
             // verifying setPassword
@@ -383,7 +414,8 @@ public class RunLocalTest {
             // verifying failure setPassword
 
             tester.setPassword("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getPassword());
+            assertEquals("Text can not match since they are different values", "I am changed",
+                    tester.getPassword());
 
             try {
                 method = userObject.getDeclaredMethod("setUsername", Integer.class);
@@ -395,21 +427,26 @@ public class RunLocalTest {
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `User`'s `setUserID` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `User`'s `setUserID` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `User`'s `setUserID` method has the correct return type!", returnType);
 
             // verifying setUserID
 
-            tester.setUserID("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getUserID());
+            tester.setUserID(123456);
+            assertEquals("ID number must match from being changed",123456, tester.getUserID());
 
             // verifying failure setUserID
 
-            tester.setUserID("Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getUserID());
+            tester.setUserID(654321);
+            assertEquals("ID can not match since they are different values",
+                    123456, tester.getUserID());
 
         }
-        // testing for Message class
+
+        /**
+         * Testing for message class
+         */
         @Test(timeout = 1_000)
         public void messageTestClass() {
             // check if Message class exists
@@ -423,7 +460,8 @@ public class RunLocalTest {
             Class<?> messageObject = Message.class;
             // check for correct superclass
             Class<?> superclass = messageObject.getSuperclass();
-            assertEquals("Ensure that your `Message` class does NOT extend any other class!", superclass, Object.class);
+            assertEquals("Ensure that your `Message` class does NOT extend any other class!",
+                    superclass, Object.class);
 
             // defining fields and constructor
             Field author;
@@ -445,16 +483,22 @@ public class RunLocalTest {
             // check fields of class for correct access modifier and data type
             modifiers = author.getModifiers();
             assertTrue("Ensure that `author` in `Message` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `author` in `Message` class is of type User!", User.class.isAssignableFrom(author.getType()));
+            assertTrue("Ensure that `author` in `Message` class is of type User!",
+                    User.class.isAssignableFrom(author.getType()));
             modifiers = dateTime.getModifiers();
-            assertTrue("Ensure that `dateTime` in `Message` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `dateTime` in `Message` class is of type LocalDateTime!", LocalDateTime.class.isAssignableFrom(dateTime.getType()));
+            assertTrue("Ensure that `dateTime` in `Message` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `dateTime` in `Message` class is of type LocalDateTime!",
+                    LocalDateTime.class.isAssignableFrom(dateTime.getType()));
             modifiers = text.getModifiers();
-            assertTrue("Ensure that `text` in `Message` class is private!", Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `text` in `Message` class is of type String!", String.class.isAssignableFrom(text.getType()));
+            assertTrue("Ensure that `text` in `Message` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `text` in `Message` class is of type String!",
+                    String.class.isAssignableFrom(text.getType()));
 
             // check if methods are implemented correctly
-            User author1 = new User("Ryan", "Ryan123", "Ryan111@gmail.com", 1300443522, "NotRyan532");
+            User author1 = new User("Ryan", "Ryan123", "Ryan111@gmail.com",
+                    1300443522, "NotRyan532");
             LocalDateTime dateTime1 = LocalDateTime.now();
             String text1 = "Hello";
             Message tester = new Message(author1, dateTime1, text1);
@@ -469,8 +513,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = User.class;
 
-            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getAuthor
 
@@ -490,8 +536,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = LocalDateTime.class;
 
-            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getDateTime
 
@@ -511,8 +559,10 @@ public class RunLocalTest {
             returnType = method.getReturnType();
             expectedReturnType = String.class;
 
-            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`", Modifier.isPublic(modifiers));
-            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!", expectedReturnType, returnType);
+            Assert.assertTrue("Ensure that `Message`'s `getAuthor` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Message`'s `getAuthor` method has the correct return type!",
+                    expectedReturnType, returnType);
 
             // verifying getText
 
@@ -525,14 +575,16 @@ public class RunLocalTest {
             try {
                 method = messageObject.getDeclaredMethod("setMessage", LocalDateTime.class, String.class);
             } catch (NoSuchMethodException e) {
-                Assert.fail("Ensure that `Message` declares a method named `setMessage` that has two parameters of types" +
+                Assert.fail(
+                        "Ensure that `Message` declares a method named `setMessage` that has two parameters of types" +
                         "LocalDateTime and String!");
                 return;
             }
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
 
-            Assert.assertTrue("Ensure that `Message`'s `setMessage` method is `public`", Modifier.isPublic(modifiers));
+            Assert.assertTrue("Ensure that `Message`'s `setMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
             assertNull("Ensure that `Message`'s `setMessage` method has the correct return type!", returnType);
 
             // verifying setMessage
@@ -543,8 +595,317 @@ public class RunLocalTest {
             // verifying failure setMessage
 
             tester.setMessage(LocalDateTime.now(), "Changing again");
-            assertEquals("Text can not match since they are different values", "I am changed", tester.getText());
+            assertEquals("Text can not match since they are different values", "I am changed",
+                    tester.getText());
         }
+
+
+        /**
+         * Group class testing
+         */
+        @Test(timeout = 1_000)
+        public void groupTestClass() {
+            // check if Group class exists
+            User user = new User();
+            try {
+                Class.forName("Group");
+            }
+            catch(ClassNotFoundException e) {
+                System.out.println("Ensure that `Group` exists!");
+                return;
+            }
+            Class<?> groupObject = Group.class;
+            // check for correct superclass
+            Class<?> superclass = groupObject.getSuperclass();
+            assertEquals("Ensure that your `Group` class does NOT extend any other class!",
+                    superclass, Object.class);
+
+            // defining fields and constructor
+            Field groupName;
+            Field users;
+            Field messages;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            try {
+                groupName = groupObject.getField("groupName");
+                users = groupObject.getField("users");
+                messages = groupObject.getField("messages");
+            }
+            catch(NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = groupName.getModifiers();
+            assertTrue("Ensure that `groupName` in `Group` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groupName` in `Group` class is of type String!",
+                    String.class.isAssignableFrom(groupName.getType()));
+            modifiers = users.getModifiers();
+            assertTrue("Ensure that `users` in `Group` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `users` in `Group` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(users.getType()));
+            modifiers = messages.getModifiers();
+            assertTrue("Ensure that `messages` in `Group` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `messages` in `Group` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(messages.getType()));
+
+            // check if methods are implemented correctly
+            User author1 = new User("Ryan", "Ryan123",
+                    "Ryan111@gmail.com", 1300443522, "NotRyan532");
+            ArrayList<User> users1 = new ArrayList<User>();
+            users1.add(author1);
+            String testName = "test group";
+            Group testGroup = new Group(testName, users1);
+
+            try {
+                method = groupObject.getDeclaredMethod("getGroupName");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `getGroupName` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = String.class;
+
+            Assert.assertTrue("Ensure that `Group`'s `getGroupName` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Group`'s `getGroupName` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            // verifying getGroupName
+
+            assertEquals("The group name and getting the group name must match", testName,
+                    testGroup.getGroupName());
+
+            // verifying failure getGroupName
+
+            assertEquals("The test name and the retrieved group name do not match", "another name",
+                    testGroup.getGroupName());
+
+            try {
+                method = groupObject.getDeclaredMethod("getUsers");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `getUsers` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = ArrayList.class;
+
+            Assert.assertTrue("Ensure that `Group`'s `getUsers` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Group`'s `getUsers` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            // verifying getUsers
+
+            assertEquals("The returned users and getting the users must match", users1, testGroup.getUsers());
+
+            // verifying failure getUsers
+
+            assertEquals("The group name and the users do not match", testName, testGroup.getUsers());
+
+            try {
+                method = groupObject.getDeclaredMethod("getMessages");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `getMessages` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = ArrayList.class;
+
+            Assert.assertTrue("Ensure that `Group`'s `getMessages` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Group`'s `getMessages` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            // verifying getMessages
+
+            assertEquals("The messages and getting the messages must match",
+                    new ArrayList<Message>(), testGroup.getMessages());
+
+            // verifying failure getMessages
+
+            assertEquals("The messages and the messages do not match",
+                    new ArrayList<Message>(), testGroup.getMessages());
+
+            try {
+                method = groupObject.getDeclaredMethod("setGroupName", String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `setGroupName` that has one parameter of type"
+                        + " String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `setGroupName` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `setGroupName` method has the correct return type!",
+                    returnType);
+
+            // verifying setGroupName
+
+            testGroup.setGroupName("new name");
+            assertEquals("Group name must match from being changed","new name",
+                    testGroup.getGroupName());
+
+            // verifying failure setGroupName
+
+            testGroup.setGroupName("another name");
+            assertEquals("Group name can not match since they are different values", "another name",
+                    testGroup.getGroupName());
+            try {
+                method = groupObject.getDeclaredMethod("addUser", User.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `addUser` that has one parameter of type"
+                        + " User!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `addUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `addUser` method has the correct return type!",
+                    returnType);
+
+            // verifying addUser
+
+            User testUser = new User("Joy", "Joy123",
+                    "Joy111@gmail.com", 4804925355L, "JoysUser");
+            testGroup.addUser(testUser);
+            assertEquals("Users must have new user", users1.size() == 2,
+                    testGroup.getUsers().size() == 2);
+
+            // verifying failure addUser
+            User testUser1 = new User("Joy1", "Joy1231",
+                    "Joy1111@gmail.com", 4804925255L, "JoysUser1");
+            testGroup.addUser(testUser1);
+            assertEquals("Users size does not match since one was added", users1.size() == 3,
+                    testGroup.getUsers().size() == 3);
+
+            try {
+                method = groupObject.getDeclaredMethod("addMessage", Message.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `addMessage` that has one parameter of type"
+                        + " Message!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `addMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `addMessage` method has the correct return type!",
+                    returnType);
+
+            // verifying addMessage
+
+            LocalDateTime dateTime1 = LocalDateTime.now();
+            String text1 = "Hello";
+            Message tester = new Message(author1, dateTime1, text1);
+
+            testGroup.addMessage(tester);
+            assertEquals("Messages must have new messages", 1,
+                    testGroup.getMessages().size());
+
+            // verifying failure addUser
+            String text2 = "Hi";
+            Message tester1 = new Message(author1, dateTime1, text2);
+
+            testGroup.addMessage(tester1);
+            assertEquals("Messages size does not since one was added", 1,
+                    testGroup.getMessages().size());
+
+            try {
+                method = groupObject.getDeclaredMethod("editMessage", int.class, Message.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Group` declares a method named `editMessage` that has two parameters of types"
+                        + " int and Message!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `editMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `editMessage` method has the correct return type!",
+                    returnType);
+
+            // verifying editMessage
+            String text3 = "Hello again";
+            Message tester3 = new Message(author1, dateTime1, text3);
+
+            testGroup.editMessage(0, tester3);
+            assertEquals("Message must be changed", "Hello again",
+                    testGroup.getMessages().get(0));
+
+            // verifying failure editMessage
+            String text4 = "Again";
+            Message tester4 = new Message(author1, dateTime1, text4);
+
+            testGroup.editMessage(0, tester4);
+            assertEquals("Messages should not match since it was changed",
+                    "Hello again",
+                    testGroup.getMessages().get(0));
+
+            try {
+                method = groupObject.getDeclaredMethod("deleteMessage", int.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail(
+                        "Ensure that `Group` declares a method named `deleteMessage` that has one parameters of type"
+                        + " int");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `deleteMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `deleteMessage` method has the correct return type!",
+                    returnType);
+
+            // verifying deleteMessage
+            int deleted = testGroup.getMessages().size() - 1;
+            testGroup.deleteMessage(0);
+            assertEquals("Message must be deleted", deleted, testGroup.getMessages().size());
+
+            // verifying failure deleteMessage
+            testGroup.deleteMessage(0);
+            assertEquals("Messages size should not match since it was deleted", deleted,
+                    testGroup.getMessages().size());
+
+            try {
+                method = groupObject.getDeclaredMethod("removeUser", User.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail(
+                        "Ensure that `Group` declares a method named `removeUser` that has one parameters of type"
+                                + " User");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `Group`'s `removeUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Group`'s `removeUser` method has the correct return type!",
+                    returnType);
+
+            // verifying removeUser
+            deleted = users1.size() - 1;
+            testGroup.removeUser(author1);
+            assertEquals("User must be removed", deleted, testGroup.getUsers().size());
+
+            // verifying failure deleteMessage
+            testGroup.removeUser(testUser);
+            assertEquals("User size should not match since it was deleted", deleted,
+                    testGroup.getMessages().size());
+        }
+
     }
 }
  
