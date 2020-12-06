@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.After;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import org.junit.Assert;
 import org.junit.Before;
@@ -79,6 +80,32 @@ public class RunLocalTest {
         /**
          * Testing for user class
          */
+
+        @Test(timeout = 1_000)
+        public void userConstructorTest() {
+            Class<?> userClass = User.class;
+            String className = "User";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 5;
+
+            try {
+                constructor = userClass.getDeclaredConstructor(String.class, String.class, String.class, long.class,
+                        String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has five " +
+                        "parameters with type String, String, String, long, and String!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+
         @Test(timeout = 1_000)
         public void userClassTest() {
             // check if User class exists
@@ -94,6 +121,7 @@ public class RunLocalTest {
             Class<?> superclass = userObject.getSuperclass();
             assertEquals("Ensure that your `User` class does NOT extend any other class!",
                     superclass, Object.class);
+
             // check if fields exist
             Field name;
             Field username;
@@ -142,7 +170,7 @@ public class RunLocalTest {
             modifiers = groups.getModifiers();
             assertTrue("Ensure that `groups` in `User` class is private!",
                     Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `groups` in `User` class is of type String!",
+            assertTrue("Ensure that `groups` in `User` class is of type ArrayList!",
                     ArrayList.class.isAssignableFrom(groups.getType()));
             
             // check if methods are implemented correctly
@@ -451,6 +479,31 @@ public class RunLocalTest {
          * Testing for message class
          */
         @Test(timeout = 1_000)
+        public void messageConstructorTest() {
+            Class<?> messageClass = Message.class;
+            String className = "Message";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 3;
+
+            try {
+                constructor = messageClass.getDeclaredConstructor(User.class, LocalDateTime.class,
+                        String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has three" +
+                        "parameters with type User, LocalDateTime, and String!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+
+        @Test(timeout = 1_000)
         public void messageTestClass() {
             // check if Message class exists
             try {
@@ -606,6 +659,30 @@ public class RunLocalTest {
         /**
          * Group class testing
          */
+        @Test(timeout = 1_000)
+        public void groupConstructorTest() {
+            Class<?> groupClass = Group.class;
+            String className = "Group";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 3;
+
+            try {
+                constructor = groupClass.getDeclaredConstructor(String.class, ArrayList.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has two" +
+                        "parameters with type String and ArrayList!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+
         @Test(timeout = 1_000)
         public void groupTestClass() {
             // check if Group class exists
@@ -913,6 +990,29 @@ public class RunLocalTest {
          * Testing for login class
          */
         @Test(timeout = 1_000)
+        public void loginConstructorTest() {
+            Class<?> loginClass = Login.class;
+            String className = "Login";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 1;
+
+            try {
+                constructor = loginClass.getDeclaredConstructor(Client.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has " +
+                        "one parameter type Client!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+        @Test(timeout = 1_000)
         public void loginTestClass() {
             // check if Login class exists
             try {
@@ -958,6 +1058,7 @@ public class RunLocalTest {
                 panel = loginObject.getField("panel");
                 panel1 = loginObject.getField("panel1");
                 panel2 = loginObject.getField("panel2");
+                content = loginObject.getField("content");
                 name = loginObject.getField("name");
                 username = loginObject.getField("username");
                 email = loginObject.getField("email");
@@ -971,6 +1072,138 @@ public class RunLocalTest {
                 System.out.println(e.toString());
                 return;
             }
+            // check fields of class for correct access modifier and data type
+            modifiers = login.getModifiers();
+            assertTrue("Ensure that `login` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `login` in `Login` class is of type JButton!",
+                    JButton.class.isAssignableFrom(login.getType()));
+            modifiers = createUser.getModifiers();
+            assertTrue("Ensure that `createUser` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `createUSer` in `Login` class is of type JButton!",
+                    JButton.class.isAssignableFrom(createUser.getType()));
+            modifiers = login1.getModifiers();
+            assertTrue("Ensure that `login1` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `login1` in `Login` class is of type JButton!",
+                    JButton.class.isAssignableFrom(login1.getType()));
+            modifiers = create.getModifiers();
+            assertTrue("Ensure that `create` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `create` in `Login` class is of type JButton!",
+                    JButton.class.isAssignableFrom(create.getType()));
+            modifiers = frame.getModifiers();
+            assertTrue("Ensure that `frame` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `frame` in `Login` class is of type JFrame!",
+                    JFrame.class.isAssignableFrom(frame.getType()));
+            modifiers = panel.getModifiers();
+            assertTrue("Ensure that `panel` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `panel` in `Login` class is of type JPanel!",
+                    JPanel.class.isAssignableFrom(panel.getType()));
+            modifiers = panel1.getModifiers();
+            assertTrue("Ensure that `panel1` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `panel1` in `Login` class is of type JPanel!",
+                    JPanel.class.isAssignableFrom(panel1.getType()));
+            modifiers = panel2.getModifiers();
+            assertTrue("Ensure that `panel2` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `panel2` in `Login` class is of type JPanel!",
+                    JPanel.class.isAssignableFrom(panel2.getType()));
+            modifiers = content.getModifiers();
+            assertTrue("Ensure that `content` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `content` in `Login` class is of type Container!",
+                    Container.class.isAssignableFrom(content.getType()));
+            modifiers = name.getModifiers();
+            assertTrue("Ensure that `name` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `name` in `Login` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(name.getType()));
+            modifiers = username.getModifiers();
+            assertTrue("Ensure that `username` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `username` in `Login` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(username.getType()));
+            modifiers = email.getModifiers();
+            assertTrue("Ensure that `email` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `email` in `Login` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(email.getType()));
+            modifiers = phoneNumber.getModifiers();
+            assertTrue("Ensure that `phoneNumber` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `phoneNumber` in `Login` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(phoneNumber.getType()));
+            modifiers = password.getModifiers();
+            assertTrue("Ensure that `password` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `password` in `Login` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(password.getType()));
+            modifiers = client.getModifiers();
+            assertTrue("Ensure that `client` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `client` in `Login` class is of type Client!",
+                    Client.class.isAssignableFrom(client.getType()));
+            modifiers = user.getModifiers();
+            assertTrue("Ensure that `user` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `user` in `Login` class is of type User!",
+                    User.class.isAssignableFrom(user.getType()));
+            modifiers = actionListener.getModifiers();
+            assertTrue("Ensure that `actionListener` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `actionListener` in `Login` class is of type ActionLister!",
+                    ActionListener.class.isAssignableFrom(actionListener.getType()));
+
+            // check if methods are implemented correctly
+            try {
+                method = loginObject.getDeclaredMethod("run");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Login` declares a method named `run` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = void.class;
+
+            Assert.assertTrue("Ensure that `Login`'s `run` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Login`'s `run` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            try {
+                method = loginObject.getDeclaredMethod("loginUser", String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Login` declares a method named `loginUser` that has two String parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = boolean.class;
+
+            Assert.assertTrue("Ensure that `Login`'s `loginUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Login`'s `loginUser` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            try {
+                method = loginObject.getDeclaredMethod("userCreation", String.class, String.class,
+                        String.class, long.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Login` declares a method named `userCreation` that has five parameters with "
+                        + "type String, String, String, long, and String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = boolean.class;
+
+            Assert.assertTrue("Ensure that `Login`'s `userCreation` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Login`'s `userCreation` method has the correct return type!",
+                    expectedReturnType, returnType);
+
+            try {
+                method = loginObject.getDeclaredMethod("getUser");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Login` declares a method named ` that has no parameters");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = User.class;
+
+            Assert.assertTrue("Ensure that `Login`'s `getUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Login`'s `getUser` method has the correct return type!",
+                    expectedReturnType, returnType);
         }
 
 
