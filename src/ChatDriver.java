@@ -85,6 +85,8 @@ public class ChatDriver extends JComponent implements Runnable {
      * An action listener for the edit and delete functionality.
      * Disables buttons if no selection; enables buttons and allows
      * button press action
+     *
+     * TODO: THIS
      */
     ActionListener editDeleteListener;
 
@@ -166,7 +168,7 @@ public class ChatDriver extends JComponent implements Runnable {
         chatPanel.setCellRenderer(renderer);
 
         client.refreshUsersAndGroups();
-
+        chatPanel.setModel(changeChatModel(clientUser.getGroups().indexOf(currentGroup)));
 
         sendMessageButton.addActionListener(new ActionListener() {
             /**
@@ -268,8 +270,6 @@ public class ChatDriver extends JComponent implements Runnable {
             }
         });
 
-
-
         createGroupButton.addActionListener(new ActionListener() {
             /**
              * Prompts the user to create a new group.
@@ -352,9 +352,8 @@ public class ChatDriver extends JComponent implements Runnable {
         if (clientUser.getGroups() != null && clientUser.getGroups().size() > 0) {
             client.updateCurrentUser();
             currentGroup = clientUser.getGroups().get(index);
-            for (Message message : currentGroup.getMessages()) {
-                messageListModel.addElement(message);
-            }
+
+            messageListModel.addAll(currentGroup.getMessages());
         }
 
         return messageListModel;
