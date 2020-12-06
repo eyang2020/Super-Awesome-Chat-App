@@ -13,7 +13,7 @@ Code repository for Option 3 of Project 5.
 
 The User class creates a user object that has the users personal information as the parameters. Each user object has an ArrayList of chat groups they are apart of. This class also contains setters and getters for each parameter.
 
-TODO: add description about testing done on class.
+This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist, set/get the correct values, and have correct return types.
 
 ## Message Class
 
@@ -25,13 +25,19 @@ This class was tested by checking every field and method and making sure that al
 
 This class is used to represent a group conversation including two or more users. Each instance of the group class keeps track of the users that make up the group and the messages that have been sent within the group. It also maintains a title which acts as the nickname of the conversation for all the users in that group.
 
-TODO: add description about testing done on class.
+This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist, set/get the correct values, and have correct return types.
 
 ## Client Class
 
 TODO: add description about the class.
 
 TODO: add description about testing done on class.
+
+## ClientDriver Class
+
+This class functions as a helper class for the Client class. It is used to run the client side of the chat application by initilizing a new client with a set address and port.
+
+This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
 
 ## Server Class
 
@@ -41,27 +47,27 @@ TODO: add description about testing done on class.
 
 ## ServerThread Class
 
-TODO: add description about the class.
+This class acts as a helper class for the Server class in order to support multiple clients simultaneously. It dedicates a socket to each client that connects to the server and acts as the support for communication between clients and the server.
 
-TODO: add description about testing done on class.
+To test this class we ran the server and tested connecting multiple clients to the server at the same time. We also made sure to check if multithreading support was working correctly by sending multiple requests from two clients and ensuring that both requests were processed together, rather than one by one.
 
 ## ChatDriver Class
 
-TODO: add description about the class.
+This class servers as the chat panel which takes user input (such as a new message) and sends it to the server to be processed and delivered to other members of the respective group.
 
-TODO: add description about testing done on class.
+To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested by ensuring that their action listeners were applied correctly.  
 
 ## Login Class
 
 This class includes the GUI for the user to either login to their account or create an account. It takes the information it is given and sends it to the client to log the user in or create their account. If a user creates an account a new User object is created.
 
-TODO:To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options
+To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
 
 ## ManageProfile Class
 
 This class includes the GUI for the user to view their current information and edit it if they so choose. The user can also delete their account. When the user selects an option for what information to edit, it opens a text box for them to input their new information and edits it where the current information is displayed. It also changes the information kept in all other classes where it is kept.
 
-TODO:To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options
+To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

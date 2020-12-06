@@ -16,25 +16,27 @@ import java.io.IOException;
  */
 
 public class Login implements Runnable {
-    JButton login; //the option to login
-    JButton createUser; //the option to create a user
-    JButton login1; //confirm login
-    JButton create; //confirm create
+    private JButton login; //the option to login
+    private JButton createUser; //the option to create a user
+    private JButton login1; //confirm login
+    private JButton create; //confirm create
 
-    JFrame frame = new JFrame("Super Awesome Chat App");
-    JPanel panel = new JPanel(); //welcome panel
-    JPanel panel1 = new JPanel(); //login panel
-    JPanel panel2 = new JPanel(); //user creation panel
-    Container content = frame.getContentPane();
+    private JFrame frame = new JFrame("Super Awesome Chat App");
 
-    JTextField username = new JTextField(15); //username the user inputs
-    JTextField password = new JTextField(15); //password the user inputs
-    JTextField email = new JTextField(15); //email the user inputs
-    JTextField name = new JTextField(15); //name the user inputs
-    JTextField phoneNumber = new JTextField(15); //phone number the user inputs
+    private JPanel panel = new JPanel(); //welcome panel
+    private JPanel panel1 = new JPanel(); //login panel
+    private JPanel panel2 = new JPanel(); //user creation panel
 
-    Client client;
-    User user = new User(); //new user to be created
+    private Container content = frame.getContentPane();
+
+    private JTextField username = new JTextField(15); //username the user inputs
+    private JTextField password = new JTextField(15); //password the user inputs
+    private JTextField email = new JTextField(15); //email the user inputs
+    private JTextField name = new JTextField(15); //name the user inputs
+    private JTextField phoneNumber = new JTextField(15); //phone number the user inputs
+
+    private Client client;
+    private User user = new User(); //new user to be created
 
     public Login(Client client) {
         this.client = client;
@@ -187,18 +189,22 @@ public class Login implements Runnable {
                             usersPhoneNumber = Long.parseLong(phoneNumber.getText());
                         }
                     } catch (NumberFormatException exception) {
-                        JOptionPane.showMessageDialog(null, "Make sure that your phonenumber only has numbers in it!", "Errors", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "Make sure that your phonenumber only has numbers in it!",
+                                "Errors", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
                 try {
                     if (username.getText() != null && password.getText() != null
                             && name.getText() != null && email.getText() != null) {
-                        if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber, password.getText())) {
+                        if (!userCreation(name.getText(), username.getText(), email.getText(), usersPhoneNumber,
+                                password.getText())) {
                             return;
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Make sure that you fill out everything!", "Errors", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "Make sure that you fill out everything!", "Errors", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException exception) {
                     exception.printStackTrace();
@@ -223,7 +229,8 @@ public class Login implements Runnable {
             SwingUtilities.invokeLater(new ChatDriver(client));
             return true;
         }
-        JOptionPane.showMessageDialog(null, "Either username or password didn't match, please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Either username or password didn't match, " +
+                "please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
@@ -235,10 +242,14 @@ public class Login implements Runnable {
      * @param usersPhoneNumber the phone number for the account
      * @param usersPassword the password for the account
      */
-    public boolean userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber, String usersPassword) throws IOException {
-        user = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
-        if (user == null) {
-            JOptionPane.showMessageDialog(null, "An account with that username already exists, please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
+    public boolean userCreation(String usersName, String usersUsername, String usersEmail, long usersPhoneNumber,
+                                String usersPassword) throws IOException {
+        boolean created = false;
+        created = client.createAccount(usersUsername, usersPassword, usersName, usersEmail, usersPhoneNumber);
+        user = client.getCurrentUser();
+        if (!created) {
+            JOptionPane.showMessageDialog(null, "An account with that username already exists," +
+                    " please try again!", "Errors", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         SwingUtilities.invokeLater(new ChatDriver(client));
@@ -253,9 +264,9 @@ public class Login implements Runnable {
         return this.user;
     }
 
-    public static void main(String[] args) {
-        Client client = new Client("localhost", 4242);
+    //public static void main(String[] args) {
+      //  Client client = new Client("localhost", 4242);
         //client.createAccount("RedJyve", "12345", "Ian", "iblacklo@purdue.edu", Long.parseLong("9258859123"));
-        SwingUtilities.invokeLater(new Login(client));
-    }
+        //SwingUtilities.invokeLater(new Login(client));
+    //}
 }

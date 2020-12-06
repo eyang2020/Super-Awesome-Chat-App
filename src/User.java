@@ -163,7 +163,15 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
-    @Override
+    /**
+     * Sets the groups arraylist
+     * @param groups1 an arraylist of groups
+     */
+    public void setGroups(ArrayList<Group> groups1) {
+        groups = groups1;
+    }
+
+
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
