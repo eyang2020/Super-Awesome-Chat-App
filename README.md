@@ -35,7 +35,7 @@ TODO: add description about testing done on class.
 
 ## ClientDriver Class
 
-TODO: add description about the class.
+This class functions as a helper class for the Client class. It is used to run the client side of the chat application by initilizing a new client with a set address and port.
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
 
@@ -55,7 +55,7 @@ To test this class we ran the server and tested connecting multiple clients to t
 
 This class servers as the chat panel which takes user input (such as a new message) and sends it to the server to be processed and delivered to other members of the respective group.
 
-To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested to ensure that their action listeners were applied correctly.  
+To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested by ensuring that their action listeners were applied correctly.  
 
 ## Login Class
 
