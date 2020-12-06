@@ -127,7 +127,6 @@ public class ChatDriver extends JComponent implements Runnable {
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
 
-        sendMessageToServer("testing1");
         client.refreshUsersAndGroups();
         //for (int i = 0; i < currentGroup.getMessages().size(); i++) {
         //    ( (DefaultListModel<Message>) chatPanel.getModel()).addElement(currentGroup.getMessages().get(i));

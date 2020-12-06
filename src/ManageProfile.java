@@ -152,7 +152,7 @@ public class ManageProfile {
                             cUsername = new JLabel(user.getUsername());
                             panel.add(cUsername);
                             System.out.println(user);
-                            client.updateUser(user);
+                            client.updateServerUser(user);
                         }
                         break;
                     case 2:
@@ -161,7 +161,7 @@ public class ManageProfile {
                             panel.remove(cPassword);
                             cPassword = new JLabel(user.getPassword());
                             panel.add(cPassword);
-                            client.updateUser(user);
+                            client.updateServerUser(user);
                         }
                         break;
                     case 3:
@@ -170,7 +170,7 @@ public class ManageProfile {
                             panel.remove(cName);
                             cName = new JLabel(user.getName());
                             panel.add(cName);
-                            client.updateUser(user);
+                            client.updateServerUser(user);
                         }
                         break;
                     case 4:
@@ -179,7 +179,7 @@ public class ManageProfile {
                             panel.remove(cEmail);
                             cEmail = new JLabel(user.getEmail());
                             panel.add(cEmail);
-                            client.updateUser(user);
+                            client.updateServerUser(user);
                         }
                         break;
                     case 5:
@@ -189,7 +189,7 @@ public class ManageProfile {
                             panel.remove(cPhoneNumber);
                             cPhoneNumber = new JLabel(String.valueOf(user.getPhoneNumber()));
                             panel.add(cPhoneNumber);
-                            client.updateUser(user);
+                            client.updateServerUser(user);
                         }
                         break;
                 }

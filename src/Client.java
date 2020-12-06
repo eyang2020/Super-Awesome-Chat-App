@@ -163,9 +163,9 @@ public class Client {
         }
     }
 
-    public void updateUser(User user) {
+    public void updateServerUser(User user) {
         try {
-            out.writeObject("updateUser");
+            out.writeObject("updateServerUser");
             out.reset();
             out.writeObject(user);
             out.flush();
@@ -196,5 +196,29 @@ public class Client {
      */
     public ArrayList<Group> getGroups() {
         return groups;
+    }
+    
+    public void updateClientUser() {
+        try {
+            out.writeObject("updateClientUser");
+            User user = (User) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editMessage(Message message, String newMessage, Group group, boolean delete) {
+        try {
+            out.writeObject("editMessage");
+            out.writeBoolean(delete);
+            out.writeObject(group.getGroupName());
+            out.writeObject(message);
+            if (!delete) {
+                out.writeObject(newMessage);
+            }
+            refreshUsersAndGroups();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

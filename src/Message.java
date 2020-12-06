@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author AJ Wheatley
@@ -53,4 +54,14 @@ public class Message implements Serializable {
         this.dateTime = dateTime;
         this.text = text;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return Objects.equals(author, message.author) &&
+                Objects.equals(dateTime, message.dateTime) &&
+                Objects.equals(text, message.text);
+    }
+
 }
