@@ -246,14 +246,11 @@ public class ChatDriver extends JComponent implements Runnable {
                 panel.add(userJComboBox);
 
                 do {
-                    input = JOptionPane.showOptionDialog(null,
+                    input = JOptionPane.showConfirmDialog(null,
                             panel,
                             "New Group",
                             JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            client.getUsers().toArray(),
-                            client.getUsers().toArray()[0]);
+                            JOptionPane.QUESTION_MESSAGE);
 
                     if (input == JOptionPane.OK_OPTION) {
                         users.add((User) userJComboBox.getSelectedItem());
