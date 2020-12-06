@@ -98,6 +98,7 @@ public class ChatDriver extends JComponent implements Runnable {
         createGroupButton = new JButton("New Group");
         editMessageButton = new JButton("Edit");
         deleteMessageButton = new JButton("Delete");
+        client.setChatDriver(this);
     }
 
     /**
@@ -128,9 +129,7 @@ public class ChatDriver extends JComponent implements Runnable {
         chatPanel.setCellRenderer(renderer);
 
         client.refreshUsersAndGroups();
-        //for (int i = 0; i < currentGroup.getMessages().size(); i++) {
-        //    ( (DefaultListModel<Message>) chatPanel.getModel()).addElement(currentGroup.getMessages().get(i));
-        //}
+
 
         sendMessageButton.addActionListener(new ActionListener() {
             /**
@@ -163,7 +162,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JPanel westPanel = new JPanel(new BorderLayout());
 
-        JList<Group> groupJList = new JList<>(changeGroupModel());
+        JList<String> groupJList = new JList<>(changeGroupModel());
 
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
@@ -231,9 +230,12 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 String name = JOptionPane.showInputDialog("Name of the group?");
 
-                JComboBox<User> userJComboBox = new JComboBox<>();
-                DefaultComboBoxModel<User> userListModel = new DefaultComboBoxModel<>();
-                userListModel.addAll(client.getUsers());
+                JComboBox<String> userJComboBox = new JComboBox<>();
+                DefaultComboBoxModel<String> userListModel = new DefaultComboBoxModel<>();
+                client.refreshUsersAndGroups();
+                for (User user : client.getUsers()) {
+                    userListModel.addElement(user.getName());
+                }
                 userJComboBox.setModel(userListModel);
 
                 JLabel comboBoxLabel = new JLabel("Select a user and OK to add to group.");
@@ -321,11 +323,11 @@ public class ChatDriver extends JComponent implements Runnable {
      *
      * @return a list model containing the groups
      */
-    public DefaultListModel<Group> changeGroupModel() {
-        DefaultListModel<Group> groupListModel = new DefaultListModel<>();
+    public DefaultListModel<String> changeGroupModel() {
+        DefaultListModel<String> groupListModel = new DefaultListModel<>();
 
         for (Group group : clientUser.getGroups()) {
-            groupListModel.addElement(group);
+            groupListModel.addElement(group.getGroupName());
         }
 
         return groupListModel;
@@ -339,14 +341,11 @@ public class ChatDriver extends JComponent implements Runnable {
      * @return a new Message object
      */
     public Message sendMessageToServer(String text){
-        System.out.println("????");
         LocalDateTime dateTime = LocalDateTime.now();
 
 
         Message message = new Message(clientUser, dateTime, text);
 
-        // when I commented this out it worked, i have no idea what's up
-        // TODO: ian
         client.addMessage(message, currentGroup);
 
 
@@ -398,4 +397,9 @@ public class ChatDriver extends JComponent implements Runnable {
             return this;
         }
     }
+
+    //public void refrsshMessages() {
+    //    client.refreshUsersAndGroups();
+    //    for (Message message : )
+    //}
 }

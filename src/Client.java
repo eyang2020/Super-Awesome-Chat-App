@@ -25,6 +25,7 @@ public class Client {
     User currentUser = null;       //The user that this client represents
     ArrayList<User> users;
     ArrayList<Group> groups;
+    ChatDriver chatDriver;
 
     public static void main(String[] args) throws IOException {
         Client client1 = new Client("localhost", 4242);
@@ -220,5 +221,9 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setChatDriver(ChatDriver chatDriver) {
+        this.chatDriver = chatDriver;
     }
 }
