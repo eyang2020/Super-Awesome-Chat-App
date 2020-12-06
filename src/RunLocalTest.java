@@ -1519,6 +1519,144 @@ public class RunLocalTest {
             gui interactions. The ServerThread class in particular was tested by
             ensuring that each client was indeed dedicated a socket to operate on. */
         }
+        @Test(timeout = 1_000)
+        public void serverTestClass() {
+            // check if Server class exists
+            try {
+                Class.forName("Server");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Ensure that `Server` exists!");
+                return;
+            }
+            Class<?> serverObject = Server.class;
+            // check for correct superclass
+            Class<?> superclass = serverObject.getSuperclass();
+            assertEquals("Ensure that your `Server` class does NOT extend any other class!",
+                    superclass, Object.class);
+            // check if fields exist
+            Field groups;
+            Field users;
+            Field port;
+            Field serverSocket;
+            Field userIDCounter;
+            int modifiers;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            try {
+                groups = serverObject.getField("groups");
+                users = serverObject.getField("users");
+                port = serverObject.getField("port");
+                serverSocket = serverObject.getField("serverSocket");
+                userIDCounter = serverObject.getField("userIDCounter");
+            } catch (NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = groups.getModifiers();
+            assertTrue("Ensure that `groups` in `Server` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groups` in `Server` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(groups.getType()));
+            modifiers = users.getModifiers();
+            assertTrue("Ensure that `users` in `Server` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `users` in `Server` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(users.getType()));
+            modifiers = port.getModifiers();
+            assertTrue("Ensure that `port` in `Server` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `port` in `Server` class is of type int!",
+                    int.class.isAssignableFrom(port.getType()));
+            modifiers = serverSocket.getModifiers();
+            assertTrue("Ensure that `serverSocket` in `Server` class is protected!", Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `serverSocket` in `Server` class is of type ServerSocket!",
+                    ServerSocket.class.isAssignableFrom(serverSocket.getType()));
+            modifiers = userIDCounter.getModifiers();
+            assertTrue("Ensure that `userIDCounter` in `Server` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `userIDCounter` in `Server` class is of type int!",
+                    int.class.isAssignableFrom(userIDCounter.getType()));
+            // verify methods of Server class
+            try {
+                method = serverObject.getDeclaredMethod("acceptor");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `acceptor` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Server`'s `acceptor` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Server`'s `acceptor` method has the correct return type!",
+                    returnType);
+            try {
+                method = serverObject.getDeclaredMethod("readInUsersAndGroups", String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `readInUsersAndGroups` that takes two parameters of type String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Server`'s `readInUsersAndGroups` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Server`'s `readInUsersAndGroups` method has the correct return type!",
+                    returnType);
+            try {
+                method = serverObject.getDeclaredMethod("writeUsersAndGroups", String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `writeUsersAndGroups` that takes two parameters of type String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Server`'s `writeUsersAndGroups` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Server`'s `writeUsersAndGroups` method has the correct return type!",
+                    returnType);
+            try {
+                method = serverObject.getDeclaredMethod("getUsers");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `getUsers` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = User.class;
+            Assert.assertTrue("Ensure that `Server`'s `getUsers` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Server`'s `getUsers` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = serverObject.getDeclaredMethod("getGroups");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `getGroups` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = Group.class;
+            Assert.assertTrue("Ensure that `Server`'s `getUsers` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Server`'s `getUsers` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = serverObject.getDeclaredMethod("getUserIDCounter");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a method " +
+                        "named `getGroups` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = int.class;
+            Assert.assertTrue("Ensure that `Server`'s `getUserIDCounter` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Server`'s `getUserIDCounter` method has the correct return type!",
+                    expectedReturnType, returnType);
+        }
     }
 }
  
