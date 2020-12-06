@@ -29,7 +29,9 @@ This class was used frequently in the operation of the client/server and ChatDri
 
 ## Client Class
 
-TODO: add description about the class.
+This class servers as the representation of the client side of the messaging application. The client class is responsible for handling the initialization process when a user carries out various tasks such as signing up, loging in, creating a new group, or editing a message among other tasks.  
+
+To test this class, we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
 
 TODO: add description about testing done on class.
 
