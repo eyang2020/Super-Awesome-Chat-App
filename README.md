@@ -37,7 +37,7 @@ TODO: add description about testing done on class.
 
 TODO: add description about the class.
 
-TODO: add description about testing done on class.
+This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
 
 ## Server Class
 
