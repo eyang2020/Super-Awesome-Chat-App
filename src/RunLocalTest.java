@@ -17,6 +17,7 @@ import org.junit.runner.notification.Failure;
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -1137,8 +1138,6 @@ public class RunLocalTest {
             assertTrue("Ensure that `user` in `Login` class is private!", Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `user` in `Login` class is of type User!",
                     User.class.isAssignableFrom(user.getType()));
-            modifiers = actionListener.getModifiers();
-            assertTrue("Ensure that `actionListener` in `Login` class is private!", Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `actionListener` in `Login` class is of type ActionLister!",
                     ActionListener.class.isAssignableFrom(actionListener.getType()));
 
@@ -1203,6 +1202,241 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `Login`'s `getUser` method is `public`",
                     Modifier.isPublic(modifiers));
             Assert.assertEquals("Ensure that `Login`'s `getUser` method has the correct return type!",
+                    expectedReturnType, returnType);
+        }
+
+        @Test(timeout = 1_000)
+        public void manageProfileConstructorTest() {
+            Class<?> manageProfileClass = ManageProfile.class;
+            String className = "Manage Profile";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 1;
+
+            try {
+                constructor = manageProfileClass.getDeclaredConstructor(Client.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has " +
+                        "one parameter type Client!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+
+        @Test(timeout = 1_000)
+        public void manageProfileTestClass() {
+            // check if Manage Profile class exists
+            try {
+                Class.forName("ManageProfile");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Ensure that `ManageProfile` exists!");
+                return;
+            }
+            Class<?> manageProfileObject = ManageProfile.class;
+            // check for correct superclass
+            Class<?> superclass = manageProfileObject.getSuperclass();
+            assertEquals("Ensure that your `ManageProfile` class does NOT extend any other class!",
+                    superclass, Object.class);
+            // check if fields exist
+            Field editUsername;
+            Field editPassword;
+            Field editEmail;
+            Field editName;
+            Field editPhoneNumber;
+            Field change;
+            Field deleteAccount;
+            Field newUsername;
+            Field newPassword;
+            Field newEmail;
+            Field newName;
+            Field newPhoneNumber;
+            Field cUsername;
+            Field cPassword;
+            Field cEmail;
+            Field cName;
+            Field cPhoneNumber;
+            Field frame;
+            Field panel;
+            Field content;
+            Field selection;
+            Field client;
+            Field user;
+            Field actionListener;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            try {
+                editUsername = manageProfileObject.getField("editUsername");
+                editName = manageProfileObject.getField("editName");
+                editEmail = manageProfileObject.getField("editEmail");
+                editPhoneNumber = manageProfileObject.getField("editPhoneNumber");
+                editPassword = manageProfileObject.getField("editPassword");
+                change = manageProfileObject.getField("change");
+                deleteAccount = manageProfileObject.getField("deleteAccount");
+                newName = manageProfileObject.getField("newName");
+                newUsername = manageProfileObject.getField("newUsername");
+                newEmail = manageProfileObject.getField("newEmail");
+                newPhoneNumber = manageProfileObject.getField("newPhoneNumber");
+                newPassword = manageProfileObject.getField("newPassword");
+                cName = manageProfileObject.getField("cName");
+                cUsername = manageProfileObject.getField("cUsername");
+                cEmail = manageProfileObject.getField("cEmail");
+                cPhoneNumber = manageProfileObject.getField("cPhoneNumber");
+                cPassword = manageProfileObject.getField("cPassword");
+                selection = manageProfileObject.getField("selection");
+                frame = manageProfileObject.getField("frame");
+                panel = manageProfileObject.getField("panel");
+                content = manageProfileObject.getField("content");
+                client = manageProfileObject.getField("client");
+                user = manageProfileObject.getField("user");
+                actionListener = manageProfileObject.getField("actionListener");
+            } catch (NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = editName.getModifiers();
+            assertTrue("Ensure that `editName` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `editName` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editName.getType()));
+            modifiers = editUsername.getModifiers();
+            assertTrue("Ensure that `editUsername` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `editUsername` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editUsername.getType()));
+            modifiers = editEmail.getModifiers();
+            assertTrue("Ensure that `editEmail` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `editEmail` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editEmail.getType()));
+            modifiers = editPassword.getModifiers();
+            assertTrue("Ensure that `editPassword` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `editPassword` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editPassword.getType()));
+            modifiers = editPhoneNumber.getModifiers();
+            assertTrue("Ensure that `editPhoneNumber` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `editPhoneNumber` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editPhoneNumber.getType()));
+            modifiers = change.getModifiers();
+            assertTrue("Ensure that `change` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `change` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(change.getType()));
+            modifiers = deleteAccount.getModifiers();
+            assertTrue("Ensure that `deleteAccount` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `deleteAccount` in `ManageProfile` class is of type JButton!",
+                    JButton.class.isAssignableFrom(deleteAccount.getType()));
+
+            modifiers = newName.getModifiers();
+            assertTrue("Ensure that `newName` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `newName` in `ManageProfile` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(newName.getType()));
+            modifiers = newUsername.getModifiers();
+            assertTrue("Ensure that `newUsername` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `newUsername` in `ManageProfile` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(newUsername.getType()));
+            modifiers = newEmail.getModifiers();
+            assertTrue("Ensure that `newEmail` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `newEmail` in `ManageProfile` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(newEmail.getType()));
+            modifiers = newPhoneNumber.getModifiers();
+            assertTrue("Ensure that `newPhoneNumber` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `newPhoneNumber` in `ManageProfile` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(newPhoneNumber.getType()));
+            modifiers = newPassword.getModifiers();
+            assertTrue("Ensure that `newPassword` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `newPassword` in `ManageProfile` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(newPassword.getType()));
+
+            modifiers = cName.getModifiers();
+            assertTrue("Ensure that `cName` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `cName` in `ManageProfile` class is of type JLabel!",
+                    JLabel.class.isAssignableFrom(cName.getType()));
+            modifiers = cUsername.getModifiers();
+            assertTrue("Ensure that `cUsername` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `cUsername` in `ManageProfile` class is of type JLabel!",
+                    JLabel.class.isAssignableFrom(cUsername.getType()));
+            modifiers = cEmail.getModifiers();
+            assertTrue("Ensure that `cEmail` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `cEmail` in `ManageProfile` class is of type JLabel!",
+                    JLabel.class.isAssignableFrom(cEmail.getType()));
+            modifiers = cPhoneNumber.getModifiers();
+            assertTrue("Ensure that `cPhoneNumber` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `cPhoneNumber` in `ManageProfile` class is of type JLabel!",
+                    JLabel.class.isAssignableFrom(cPhoneNumber.getType()));
+            modifiers = cPassword.getModifiers();
+            assertTrue("Ensure that `cPassword` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `cPassword` in `ManageProfile` class is of type JLabel!",
+                    JLabel.class.isAssignableFrom(cPassword.getType()));
+
+            modifiers = panel.getModifiers();
+            assertTrue("Ensure that `panel` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `panel` in `ManageProfile` class is of type JPanel!",
+                    JPanel.class.isAssignableFrom(panel.getType()));
+            modifiers = frame.getModifiers();
+            assertTrue("Ensure that `frame` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `frame` in `ManageProfile` class is of type JFrame!",
+                    JFrame.class.isAssignableFrom(frame.getType()));
+            modifiers = content.getModifiers();
+            assertTrue("Ensure that `content` in `Login` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `content` in `Login` class is of type Container!",
+                    Container.class.isAssignableFrom(content.getType()));
+
+            modifiers = client.getModifiers();
+            assertTrue("Ensure that `client` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `client` in `ManageProfile` class is of type Client!",
+                    Client.class.isAssignableFrom(client.getType()));
+            modifiers = user.getModifiers();
+            assertTrue("Ensure that `user` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `user` in `ManageProfile` class is of type User!",
+                    User.class.isAssignableFrom(user.getType()));
+            modifiers = selection.getModifiers();
+            assertTrue("Ensure that `selection` in `ManageProfile` class is private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `selection` in `ManageProfile` class is of type int!",
+                    int.class.isAssignableFrom(selection.getType()));
+            assertTrue("Ensure that `actionListener` in `ManageProfile` class is of type ActionLister!",
+                    ActionListener.class.isAssignableFrom(actionListener.getType()));
+
+            // check if methods are implemented correctly
+            try {
+                method = manageProfileObject.getDeclaredMethod("run");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ManageProfile` declares a method named `run` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = void.class;
+
+            Assert.assertTrue("Ensure that `ManageProfile`'s `run` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `ManageProfile`'s `run` method has the correct return type!",
                     expectedReturnType, returnType);
         }
 
