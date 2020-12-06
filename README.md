@@ -41,9 +41,9 @@ TODO: add description about testing done on class.
 
 ## ServerThread Class
 
-TODO: add description about the class.
+This class acts as a helper class for the Server class in order to support multiple clients simultaneously. It dedicates a socket to each client that connects to the server and acts as the support for communication between clients and the server.
 
-TODO: add description about testing done on class.
+To test this class we ran the server and tested connecting multiple clients to the server at the same time. We also made sure to check if multithreading support was working correctly by sending multiple requests from two clients and ensuring that both requests were processed together, rather than one by one.
 
 ## ChatDriver Class
 
