@@ -367,6 +367,12 @@ public class ChatDriver extends JComponent implements Runnable {
     public DefaultListModel<String> changeUserModel() {
         DefaultListModel<String> userListModel = new DefaultListModel<>();
 
+        if (groupJList.getSelectedIndex() == -1) {
+            currentGroup = clientUser.getGroups().get(0);
+        } else {
+            currentGroup = clientUser.getGroups().get(groupJList.getSelectedIndex());
+        }
+
         for (User user : currentGroup.getUsers()) {
             userListModel.addElement(user.getName());
         }

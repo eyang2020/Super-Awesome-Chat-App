@@ -193,6 +193,7 @@ public class ServerThread implements Runnable{
                                 for (User user1 : group1.getUsers()) {
                                     if (user1.getUserID() == user.getUserID()) {
                                         group1.removeUser(user1);
+                                        break;
                                     }
                                 }
                             }
