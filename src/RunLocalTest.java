@@ -2,6 +2,8 @@ package src;
 
 import org.junit.Test;
 import org.junit.After;
+
+import java.awt.*;
 import java.lang.reflect.Field;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +13,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.time.LocalDateTime;
@@ -905,6 +908,71 @@ public class RunLocalTest {
             assertEquals("User size should not match since it was deleted", deleted,
                     testGroup.getMessages().size());
         }
+
+        /**
+         * Testing for login class
+         */
+        @Test(timeout = 1_000)
+        public void loginTestClass() {
+            // check if Login class exists
+            try {
+                Class.forName("Login");
+            }
+            catch(ClassNotFoundException e) {
+                System.out.println("Ensure that `Login` exists!");
+                return;
+            }
+            Class<?> loginObject = Login.class;
+            // check for correct superclass
+            Class<?> superclass = loginObject.getSuperclass();
+            assertEquals("Ensure that your `Login` class does NOT extend any other class!",
+                    superclass, Object.class);
+            // check if fields exist
+            Field login;
+            Field createUser;
+            Field login1;
+            Field create;
+            Field frame;
+            Field panel;
+            Field panel1;
+            Field panel2;
+            Field content;
+            Field username;
+            Field password;
+            Field email;
+            Field name;
+            Field phoneNumber;
+            Field client;
+            Field user;
+            Field actionListener;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            try {
+                login = loginObject.getField("login");
+                createUser = loginObject.getField("createUser");
+                login1 = loginObject.getField("login1");
+                create = loginObject.getField("create");
+                frame = loginObject.getField("frame");
+                panel = loginObject.getField("panel");
+                panel1 = loginObject.getField("panel1");
+                panel2 = loginObject.getField("panel2");
+                name = loginObject.getField("name");
+                username = loginObject.getField("username");
+                email = loginObject.getField("email");
+                phoneNumber = loginObject.getField("phoneNumber");
+                password = loginObject.getField("password");
+                client = loginObject.getField("client");
+                user = loginObject.getField("user");
+                actionListener = loginObject.getField("actionListener");
+            }
+            catch(NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+        }
+
 
     }
 }
