@@ -1675,6 +1675,214 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `Server`'s `getUserIDCounter` method has the correct return type!",
                     expectedReturnType, returnType);
         }
+        /**
+         * Testing for ChatDriver class
+         */
+        @Test(timeout = 1_000)
+        public void chatDriverConstructorTest() {
+            Class<?> chatDriverClass = ChatDriver.class;
+            String className = "ChatDriver";
+
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 1;
+
+            try {
+                constructor = chatDriverClass.getDeclaredConstructor(Client.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has " +
+                        "one parameter type Client!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+        @Test(timeout = 1_000)
+        public void chatDriverTestClass() {
+            // check if ChatDriver class exists
+            try {
+                Class.forName("ChatDriver");
+            }
+            catch(ClassNotFoundException e) {
+                System.out.println("Ensure that `ChatDriver` exists!");
+                return;
+            }
+            Class<?> chatDriverObject = ChatDriver.class;
+            // check for correct superclass
+            Class<?> superclass = serverThreadObject.getSuperclass();
+            assertEquals("Ensure that your `ChatDriver` extends class JComponent!",
+                    superclass, JComponent.class);
+            // defining fields and constructor
+            Field messageTextField;
+            Field sendMessageButton;
+            Field userSettingsButton;
+            Field createGroupButton;
+            Field editMessageButton;
+            Field deleteMessageButton;
+            Field editDeleteListener;
+            Field clientUser;
+            Field client;
+            Field currentGroup;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            try {
+                messageTextField = chatDriverObject.getField("messageTextField");
+                sendMessageButton = chatDriverObject.getField("sendMessageButton");
+                userSettingsButton = chatDriverObject.getField("userSettingsButton");
+                createGroupButton = chatDriverObject.getField("createGroupButton");
+                editMessageButton = chatDriverObject.getField("editMessageButton");
+                deleteMessageButton = chatDriverObject.getField("deleteMessageButton");
+                editDeleteListener = chatDriverObject.getField("editDeleteListener");
+                clientUser = chatDriverObject.getField("clientUser");
+                client = chatDriverObject.getField("client");
+                currentGroup = chatDriverObject.getField("currentGroup");
+            }
+            catch(NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = messageTextField.getModifiers();
+            assertTrue("Ensure that `messageTextField` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `messageTextField` in `ChatDriver` class is of type JTextField!",
+                    JTextField.class.isAssignableFrom(messageTextField.getType()));
+            modifiers = sendMessageButton.getModifiers();
+            assertTrue("Ensure that `sendMessageButton` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `sendMessageButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(messageTextField.getType()));
+            modifiers = userSettingsButton.getModifiers();
+            assertTrue("Ensure that `userSettingsButton` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `userSettingsButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(userSettingsButton.getType()));
+            modifiers = createGroupButton.getModifiers();
+            assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(createGroupButton.getType()));
+            modifiers = editMessageButton.getModifiers();
+            assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(editMessageButton.getType()));
+            modifiers = deleteMessageButton.getModifiers();
+            assertTrue("Ensure that `deleteMessageButton` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `deleteMessageButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(deleteMessageButton.getType()));
+            modifiers = editDeleteListener.getModifiers();
+            assertTrue("Ensure that `editDeleteListener` in `ChatDriver` class is package-private!", 
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `editDeleteListener` in `ChatDriver` class is of type ActionListener!",
+                    ActionListener.class.isAssignableFrom(editDeleteListener.getType()));
+            modifiers = clientUser.getModifiers();
+            assertTrue("Ensure that `clientUser` in `ChatDriver` class is private!", 
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `clientUser` in `ChatDriver` class is of type User!",
+                    User.class.isAssignableFrom(clientUser.getType()));
+            modifiers = client.getModifiers();
+            assertTrue("Ensure that `client` in `ChatDriver` class is private!", 
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `client` in `ChatDriver` class is of type Client!",
+                    Client.class.isAssignableFrom(client.getType()));
+            modifiers = currentGroup.getModifiers();
+            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is private!", 
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type Group!",
+                    Group.class.isAssignableFrom(currentGroup.getType()));
+            // verify methods of ChatDriver class
+
+            // run method
+            try {
+                method = chatDriverObject.getDeclaredMethod("run");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                    "named `run` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `run` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `run` method has the correct return type!",
+                    returnType);   
+            /* run method was tested using manual testing when we tested networking and
+            gui interactions. The ChatDriver class in particular was tested by
+            ensuring that each client's chats were initiated and handled by ChatDriver. */
+
+            // changeChatModel method
+            try {
+                method = chatDriverObject.getDeclaredMethod("changeChatModel", int.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                    "named `changeChatModel` that has a parameter of type int!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `changeChatModel` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `changeChatModel` method has the correct return type!",
+                    returnType);   
+
+            // changeUserModel method
+            try {
+                method = chatDriverObject.getDeclaredMethod("changeUserModel");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                    "named `changeUserModel` that nas no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `changeUserModel` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `changeUserModel` method has the correct return type!",
+                    returnType);   
+
+            // changeGroupModel method
+            try {
+                method = chatDriverObject.getDeclaredMethod("changeGroupModel");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                    "named `changeGroupModel` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `changeGroupModel` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `changeGroupModel` method has the correct return type!",
+                    returnType);   
+
+            // sendMessageToServer method            
+            try {
+                method = chatDriverObject.getDeclaredMethod("sendMessageToServer", String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                    "named `sendMessageToServer` that has a parameter of type String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `sendMessageToServer` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `sendMessageToServer` method has the correct return type!",
+                    returnType);      
+        }
     }
 }
  
