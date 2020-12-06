@@ -1206,7 +1206,85 @@ public class RunLocalTest {
                     expectedReturnType, returnType);
         }
 
+        /**
+         * Testing for ServerThread class
+         */
+        @Test(timeout = 1_000)
+        public void serverThreadConstructorTest() {
+            Class<?> loginClass = ServerThread.class;
+            String className = "ServerThread";
 
+            Constructor<?> constructor;
+            int modifiers;
+            Class<?>[] exceptions;
+            int expectedLength = 1;
+
+            try {
+                constructor = loginClass.getDeclaredConstructor(Socket.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has " +
+                        "one parameter type Socket!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+        @Test(timeout = 1_000)
+        public void serverThreadTestClass() {
+            // check if ServerThread class exists
+            try {
+                Class.forName("ServerThread");
+            }
+            catch(ClassNotFoundException e) {
+                System.out.println("Ensure that `ServerThread` exists!");
+                return;
+            }
+            Class<?> loginObject = ServerThread.class;
+            // check for correct superclass
+            Class<?> superclass = serverThreadObject.getSuperclass();
+            assertEquals("Ensure that your `ServerThread` class does NOT extend any other class!",
+                    superclass, Object.class);
+            // defining fields and constructor
+            Field socket;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            try {
+                socket = serverThreadObject.getField("socket");
+            }
+            catch(NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = socket.getModifiers();
+            assertTrue("Ensure that `groupName` in `ServerThread` class is private!", 
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groupName` in `ServerThread` class is of type Socket!",
+                    String.class.isAssignableFrom(socket.getType()));
+            // verify methods of ServerThread class
+            try {
+                method = groupObject.getDeclaredMethod("run");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ServerThread` declares a method " +
+                    "named `run` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ServerThread`'s `run` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ServerThread`'s `run` method has the correct return type!",
+                    returnType);   
+            /* run method was tested using manual testing when we tested networking and
+            gui interactions. The ServerThread class in particular was tested by
+            ensuring that each client was indeed dedicated a socket to operate on. */
+        }
     }
 }
  
