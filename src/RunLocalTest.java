@@ -1468,6 +1468,23 @@ public class RunLocalTest {
                     " `public`!", Modifier.isPublic(modifiers));
         }
         @Test(timeout = 1_000)
+        public void serverConstructorTest() {
+            Class<?> serverClass = Server.class;
+            Constructor<?> constructor;
+            int modifiers;
+            try {
+                constructor = serverClass.getDeclaredConstructor();
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a constructor that is `public` and has no parameters");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `Server`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+            }
+        @Test(timeout = 1_000)
         public void serverThreadTestClass() {
             // check if ServerThread class exists
             try {
