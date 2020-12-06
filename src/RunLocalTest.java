@@ -1915,6 +1915,283 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `ClientDriver`'s `main` method has the correct return type!",
                     void.class, returnType);
         }
+        @Test(timeout = 1_000)
+        public void clientConstructorTest() {
+            Class<?> clientClass = Client.class;
+            Constructor<?> constructor;
+            int modifiers;
+            try {
+                constructor = clientClass.getDeclaredConstructor(String.class, int.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Server` declares a constructor that is `public` takes two parameters of" +
+                        "types String and int!");
+                return;
+            } //end try catch
+
+            modifiers = constructor.getModifiers();
+
+            Assert.assertTrue("Ensure that `Server`'s parameterized constructor is" +
+                    " `public`!", Modifier.isPublic(modifiers));
+        }
+        @Test(timeout = 1_000)
+        public void clientTest() {
+            // check if Client class exists
+            try {
+                Class.forName("Client");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Ensure that `Client` exists!");
+                return;
+            }
+            Class<?> clientObject = Client.class;
+            // check for correct superclass
+            Class<?> superclass = clientObject.getSuperclass();
+            assertEquals("Ensure that your `Client` class does NOT extend any other class!",
+                    superclass, Object.class);
+            // check if fields exist
+            Field port;
+            Field host;
+            Field socket;
+            Field out;
+            Field in;
+            Field currentUser;
+            Field users;
+            Field groups;
+            Field chatDriver;
+            int modifiers;
+            Method method;
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            try {
+                port = clientObject.getField("port");
+                host = clientObject.getField("host");
+                socket = clientObject.getField("socket");
+                out = clientObject.getField("out");
+                in = clientObject.getField("in");
+                currentUser = clientObject.getField("currentUser");
+                users = clientObject.getField("users");
+                groups = clientObject.getField("groups");
+                chatDriver = clientObject.getField("chatDriver");
+            } catch (NoSuchFieldException e) {
+                System.out.println(e.toString());
+                return;
+            }
+            // check fields of class for correct access modifier and data type
+            modifiers = port.getModifiers();
+            assertTrue("Ensure that `port` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `port` in `Client` class is of type int!",
+                    int.class.isAssignableFrom(port.getType()));
+            modifiers = host.getModifiers();
+            assertTrue("Ensure that `host` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `host` in `Client` class is of type String!",
+                    String.class.isAssignableFrom(host.getType()));
+            modifiers = socket.getModifiers();
+            assertTrue("Ensure that `socket` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `socket` in `Client` class is of type Socket!",
+                    Socket.class.isAssignableFrom(socket.getType()));
+            modifiers = out.getModifiers();
+            assertTrue("Ensure that `out` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `out` in `Client` class is of type ObjectOutputStream!",
+                    ObjectOutputStream.class.isAssignableFrom(out.getType()));
+            modifiers = in.getModifiers();
+            assertTrue("Ensure that `in` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `in` in `Client` class is of type ObjectInputStream!",
+                    ObjectInputStream.class.isAssignableFrom(in.getType()));
+            modifiers = currentUser.getModifiers();
+            assertTrue("Ensure that `currentUser` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `currentUser` in `Client` class is of type User!",
+                    User.class.isAssignableFrom(currentUser.getType()));
+            modifiers = users.getModifiers();
+            assertTrue("Ensure that `users` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `users` in `Client` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(users.getType()));
+            modifiers = groups.getModifiers();
+            assertTrue("Ensure that `groups` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groups` in `Client` class is of type ArrayList!",
+                    ArrayList.class.isAssignableFrom(groups.getType()));
+            modifiers = chatDriver.getModifiers();
+            assertTrue("Ensure that `chatDriver` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `chatDriver` in `Client` class is of type ChatDriver!",
+                    ChatDriver.class.isAssignableFrom(chatDriver.getType()));
+            // verify methods of Client class
+            try {
+                method = clientObject.getDeclaredMethod("connectToServer");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `connectToServer` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `connectToServer` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `connectToServer` method has the correct return type!",
+                    returnType);
+            try {
+                method = clientObject.getDeclaredMethod("createAccount", String.class, String.class,
+                        String.class, String.class, long.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `createAccount` that has 5 parameters of types String, String, String, String, Long!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = User.class;
+            Assert.assertTrue("Ensure that `Client`'s `createAccount` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `createAccount` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("login", String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `login` that has 2 parameters of types String, String!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = boolean.class;
+            Assert.assertTrue("Ensure that `Client`'s `login` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `login` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("createGroup", String.class, String[].class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `createGroup` that has 2 parameters of types String, String[]!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = boolean.class;
+            Assert.assertTrue("Ensure that `Client`'s `createGroup` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `createGroup` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("addMessage", Message.class, Group.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `addMessage` that has 2 parameters of types Message, Group!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = boolean.class;
+            Assert.assertTrue("Ensure that `Client`'s `addMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `addMessage` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("refreshUsersAndGroups");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `refreshUsersAndGroups` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `refreshUsersAndGroups` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `refreshUsersAndGroups` method has the correct return type!",
+                    returnType);
+            try {
+                method = clientObject.getDeclaredMethod("updateServerUser", User.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `updateServerUser` that has 1 parameter of type User!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `updateServerUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `updateServerUser` method has the correct return type!",
+                    returnType);
+            try {
+                method = clientObject.getDeclaredMethod("getCurrentUser");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `getCurrentUser` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = User.class;
+            Assert.assertTrue("Ensure that `Client`'s `getCurrentUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `getCurrentUser` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("getUsers");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `getUsers` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = ArrayList.class;
+            Assert.assertTrue("Ensure that `Client`'s `getUsers` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `getUsers` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("getGroups");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `getGroups` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            expectedReturnType = ArrayList.class;
+            Assert.assertTrue("Ensure that `Client`'s `getGroups` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `Client`'s `getGroups` method has the correct return type!",
+                    expectedReturnType, returnType);
+            try {
+                method = clientObject.getDeclaredMethod("updateClientUser");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `updateClientUser` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `updateClientUser` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `updateClientUser` method has the correct return type!",
+                    returnType);
+            try {
+                method = clientObject.getDeclaredMethod("editMessage", Message.class, String.class,
+                        Group.class, boolean.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `editMessage` that has 4 parameters of types Message, String, Group, boolean!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `editMessage` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `editMessage` method has the correct return type!",
+                    returnType);
+            try {
+                method = clientObject.getDeclaredMethod("setChatDriver", ChatDriver.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `setChatDriver` that has 1 parameter of type ChatDriver!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `setChatDriver` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `setChatDriver` method has the correct return type!",
+                    returnType);
+        }
     }
 }
  
