@@ -1211,7 +1211,7 @@ public class RunLocalTest {
          */
         @Test(timeout = 1_000)
         public void serverThreadConstructorTest() {
-            Class<?> loginClass = ServerThread.class;
+            Class<?> serverThreadClass = ServerThread.class;
             String className = "ServerThread";
 
             Constructor<?> constructor;
@@ -1220,7 +1220,7 @@ public class RunLocalTest {
             int expectedLength = 1;
 
             try {
-                constructor = loginClass.getDeclaredConstructor(Socket.class);
+                constructor = serverThreadClass.getDeclaredConstructor(Socket.class);
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `" + className + "` declares a constructor that is `public` and has " +
                         "one parameter type Socket!");
@@ -1242,7 +1242,7 @@ public class RunLocalTest {
                 System.out.println("Ensure that `ServerThread` exists!");
                 return;
             }
-            Class<?> loginObject = ServerThread.class;
+            Class<?> serverThreadObject = ServerThread.class;
             // check for correct superclass
             Class<?> superclass = serverThreadObject.getSuperclass();
             assertEquals("Ensure that your `ServerThread` class does NOT extend any other class!",
@@ -1262,13 +1262,13 @@ public class RunLocalTest {
             }
             // check fields of class for correct access modifier and data type
             modifiers = socket.getModifiers();
-            assertTrue("Ensure that `groupName` in `ServerThread` class is private!", 
+            assertTrue("Ensure that `socket` in `ServerThread` class is private!", 
                     Modifier.isPrivate(modifiers));
-            assertTrue("Ensure that `groupName` in `ServerThread` class is of type Socket!",
+            assertTrue("Ensure that `socket` in `ServerThread` class is of type Socket!",
                     String.class.isAssignableFrom(socket.getType()));
             // verify methods of ServerThread class
             try {
-                method = groupObject.getDeclaredMethod("run");
+                method = serverThreadObject.getDeclaredMethod("run");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ServerThread` declares a method " +
                     "named `run` that has no parameters!");
