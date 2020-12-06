@@ -1713,7 +1713,7 @@ public class RunLocalTest {
             }
             Class<?> chatDriverObject = ChatDriver.class;
             // check for correct superclass
-            Class<?> superclass = serverThreadObject.getSuperclass();
+            Class<?> superclass = chatDriverObject.getSuperclass();
             assertEquals("Ensure that your `ChatDriver` extends class JComponent!",
                     superclass, JComponent.class);
             // defining fields and constructor
