@@ -400,8 +400,8 @@ public class RunLocalTest {
             try {
                 method = userObject.getDeclaredMethod("setPhoneNumber", Long.class);
             } catch (NoSuchMethodException e) {
-                Assert.fail("Ensure that `User` declares a method named `setPhoneNumber` that has one parameter of type" +
-                        "Long!");
+                Assert.fail("Ensure that `User` declares a method named `setPhoneNumber` that has one parameter of type"
+                        + "Long!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1579,11 +1579,13 @@ public class RunLocalTest {
             assertTrue("Ensure that `port` in `Server` class is of type int!",
                     int.class.isAssignableFrom(port.getType()));
             modifiers = serverSocket.getModifiers();
-            assertTrue("Ensure that `serverSocket` in `Server` class is protected!", Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `serverSocket` in `Server` class is protected!",
+                    Modifier.isProtected(modifiers));
             assertTrue("Ensure that `serverSocket` in `Server` class is of type ServerSocket!",
                     ServerSocket.class.isAssignableFrom(serverSocket.getType()));
             modifiers = userIDCounter.getModifiers();
-            assertTrue("Ensure that `userIDCounter` in `Server` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `userIDCounter` in `Server` class is private!",
+                    Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `userIDCounter` in `Server` class is of type int!",
                     int.class.isAssignableFrom(userIDCounter.getType()));
             // verify methods of Server class
@@ -1997,7 +1999,8 @@ public class RunLocalTest {
             assertTrue("Ensure that `in` in `Client` class is of type ObjectInputStream!",
                     ObjectInputStream.class.isAssignableFrom(in.getType()));
             modifiers = currentUser.getModifiers();
-            assertTrue("Ensure that `currentUser` in `Client` class is private!", Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `currentUser` in `Client` class is private!",
+                    Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `currentUser` in `Client` class is of type User!",
                     User.class.isAssignableFrom(currentUser.getType()));
             modifiers = users.getModifiers();
