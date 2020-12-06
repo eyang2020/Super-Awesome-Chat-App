@@ -1635,7 +1635,7 @@ public class RunLocalTest {
             }
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
-            expectedReturnType = User.class;
+            expectedReturnType = ArrayList.class;
             Assert.assertTrue("Ensure that `Server`'s `getUsers` method is `public`",
                     Modifier.isPublic(modifiers));
             Assert.assertEquals("Ensure that `Server`'s `getUsers` method has the correct return type!",
@@ -1649,7 +1649,7 @@ public class RunLocalTest {
             }
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
-            expectedReturnType = Group.class;
+            expectedReturnType = ArrayList.class;
             Assert.assertTrue("Ensure that `Server`'s `getUsers` method is `public`",
                     Modifier.isPublic(modifiers));
             Assert.assertEquals("Ensure that `Server`'s `getUsers` method has the correct return type!",
