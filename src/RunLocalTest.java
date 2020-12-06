@@ -1499,7 +1499,7 @@ public class RunLocalTest {
             assertTrue("Ensure that `socket` in `ServerThread` class is private!", 
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `socket` in `ServerThread` class is of type Socket!",
-                    String.class.isAssignableFrom(socket.getType()));
+                    Socket.class.isAssignableFrom(socket.getType()));
             // verify methods of ServerThread class
             try {
                 method = serverThreadObject.getDeclaredMethod("run");
