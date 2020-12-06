@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -14,34 +14,36 @@ import java.awt.event.ActionListener;
  * @version November 27, 2020
  */
 public class ManageProfile {
-    JButton editUsername; //edit username option
-    JButton editPassword; //edit password option
-    JButton editName; //edit name option
-    JButton editEmail; //edit email option
-    JButton editPhoneNumber; //edit phone number option
-    JButton change; //the button that confirms the change to their information
-    JButton deleteAccount; //delete account option
+    private JButton editUsername; //edit username option
+    private JButton editPassword; //edit password option
+    private JButton editName; //edit name option
+    private JButton editEmail; //edit email option
+    private JButton editPhoneNumber; //edit phone number option
+    private JButton change; //the button that confirms the change to their information
+    private JButton deleteAccount; //delete account option
 
-    JTextField newUsername; //the new username they choose
-    JTextField newPassword; //the new password they choose
-    JTextField newName; //the new name they choose
-    JTextField newEmail; //the new email they choose
-    JTextField newPhoneNumber; //the new phone number they choose
+    private JTextField newUsername; //the new username they choose
+    private JTextField newPassword; //the new password they choose
+    private JTextField newName; //the new name they choose
+    private JTextField newEmail; //the new email they choose
+    private JTextField newPhoneNumber; //the new phone number they choose
 
-    JLabel cUsername; //the current username
-    JLabel cPassword; //the current password
-    JLabel cName; //the current name
-    JLabel cEmail; //the current email
-    JLabel cPhoneNumber; //the current phone number
+    private JLabel cUsername; //the current username
+    private JLabel cPassword; //the current password
+    private JLabel cName; //the current name
+    private JLabel cEmail; //the current email
+    private JLabel cPhoneNumber; //the current phone number
 
-    JFrame frame = new JFrame("Super Awesome Chat App");
-    JPanel panel = new JPanel();
-    Container content = frame.getContentPane();
+    private JFrame frame = new JFrame("Super Awesome Chat App");
 
-    int selection = 0;
+    private JPanel panel = new JPanel();
 
-    Client client;
-    User user;
+    private Container content = frame.getContentPane();
+
+    private int selection = 0; //identifies what the user wants to change
+
+    private Client client;
+    private User user;
 
     public ManageProfile(Client client) {
         this.client = client;
