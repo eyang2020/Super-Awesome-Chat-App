@@ -113,8 +113,7 @@ public class RunLocalTest {
             // check if User class exists
             try {
                 Class.forName("User");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `User` exists!");
                 return;
             }
@@ -142,8 +141,7 @@ public class RunLocalTest {
                 phoneNumber = userObject.getField("phoneNumber");
                 password = userObject.getField("password");
                 groups = userObject.getField("groups");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
@@ -174,7 +172,7 @@ public class RunLocalTest {
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `groups` in `User` class is of type ArrayList!",
                     ArrayList.class.isAssignableFrom(groups.getType()));
-            
+
             // check if methods are implemented correctly
 
             String testName = "Ryan";
@@ -342,7 +340,7 @@ public class RunLocalTest {
             // verifying setUsername
 
             tester.setUsername("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getUsername());
+            assertEquals("Text must match from being changed", "I am changed", tester.getUsername());
 
             // verifying failure setUsername
 
@@ -366,7 +364,7 @@ public class RunLocalTest {
             // verifying setName
 
             tester.setName("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getName());
+            assertEquals("Text must match from being changed", "I am changed", tester.getName());
 
             // verifying failure setName
 
@@ -391,7 +389,7 @@ public class RunLocalTest {
             // verifying setEmail
 
             tester.setEmail("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getEmail());
+            assertEquals("Text must match from being changed", "I am changed", tester.getEmail());
 
             // verifying failure setEmail
 
@@ -416,7 +414,7 @@ public class RunLocalTest {
             // verifying setPhoneNumber
 
             tester.setPhoneNumber(4804289202L);
-            assertEquals("Phone number must match from being changed",4804925355L,
+            assertEquals("Phone number must match from being changed", 4804925355L,
                     tester.getPhoneNumber());
 
             // verifying failure setPhoneNumber
@@ -442,7 +440,7 @@ public class RunLocalTest {
             // verifying setPassword
 
             tester.setPassword("I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getPassword());
+            assertEquals("Text must match from being changed", "I am changed", tester.getPassword());
 
             // verifying failure setPassword
 
@@ -467,7 +465,7 @@ public class RunLocalTest {
             // verifying setUserID
 
             tester.setUserID(123456);
-            assertEquals("ID number must match from being changed",123456, tester.getUserID());
+            assertEquals("ID number must match from being changed", 123456, tester.getUserID());
 
             // verifying failure setUserID
 
@@ -510,8 +508,7 @@ public class RunLocalTest {
             // check if Message class exists
             try {
                 Class.forName("Message");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `Message` exists!");
                 return;
             }
@@ -533,8 +530,7 @@ public class RunLocalTest {
                 author = messageObject.getField("author");
                 dateTime = messageObject.getField("dateTime");
                 text = messageObject.getField("text");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
@@ -635,7 +631,7 @@ public class RunLocalTest {
             } catch (NoSuchMethodException e) {
                 Assert.fail(
                         "Ensure that `Message` declares a method named `setMessage` that has two parameters of types" +
-                        "LocalDateTime and String!");
+                                "LocalDateTime and String!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -648,7 +644,7 @@ public class RunLocalTest {
             // verifying setMessage
 
             tester.setMessage(LocalDateTime.now(), "I am changed");
-            assertEquals("Text must match from being changed","I am changed", tester.getText());
+            assertEquals("Text must match from being changed", "I am changed", tester.getText());
 
             // verifying failure setMessage
 
@@ -691,8 +687,7 @@ public class RunLocalTest {
             User user = new User();
             try {
                 Class.forName("Group");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `Group` exists!");
                 return;
             }
@@ -714,8 +709,7 @@ public class RunLocalTest {
                 groupName = groupObject.getField("groupName");
                 users = groupObject.getField("users");
                 messages = groupObject.getField("messages");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
@@ -832,7 +826,7 @@ public class RunLocalTest {
             // verifying setGroupName
 
             testGroup.setGroupName("new name");
-            assertEquals("Group name must match from being changed","new name",
+            assertEquals("Group name must match from being changed", "new name",
                     testGroup.getGroupName());
 
             // verifying failure setGroupName
@@ -940,7 +934,7 @@ public class RunLocalTest {
             } catch (NoSuchMethodException e) {
                 Assert.fail(
                         "Ensure that `Group` declares a method named `deleteMessage` that has one parameters of type"
-                        + " int");
+                                + " int");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1014,13 +1008,13 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
                     " `public`!", Modifier.isPublic(modifiers));
         }
+
         @Test(timeout = 1_000)
         public void loginTestClass() {
             // check if Login class exists
             try {
                 Class.forName("Login");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `Login` exists!");
                 return;
             }
@@ -1069,8 +1063,7 @@ public class RunLocalTest {
                 client = loginObject.getField("client");
                 user = loginObject.getField("user");
                 actionListener = loginObject.getField("actionListener");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
@@ -1467,6 +1460,7 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
                     " `public`!", Modifier.isPublic(modifiers));
         }
+
         @Test(timeout = 1_000)
         public void serverConstructorTest() {
             Class<?> serverClass = Server.class;
@@ -1483,14 +1477,14 @@ public class RunLocalTest {
 
             Assert.assertTrue("Ensure that `Server`'s parameterized constructor is" +
                     " `public`!", Modifier.isPublic(modifiers));
-            }
+        }
+
         @Test(timeout = 1_000)
         public void serverThreadTestClass() {
             // check if ServerThread class exists
             try {
                 Class.forName("ServerThread");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `ServerThread` exists!");
                 return;
             }
@@ -1507,14 +1501,13 @@ public class RunLocalTest {
             int modifiers;
             try {
                 socket = serverThreadObject.getField("socket");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
             // check fields of class for correct access modifier and data type
             modifiers = socket.getModifiers();
-            assertTrue("Ensure that `socket` in `ServerThread` class is private!", 
+            assertTrue("Ensure that `socket` in `ServerThread` class is private!",
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `socket` in `ServerThread` class is of type Socket!",
                     Socket.class.isAssignableFrom(socket.getType()));
@@ -1523,7 +1516,7 @@ public class RunLocalTest {
                 method = serverThreadObject.getDeclaredMethod("run");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ServerThread` declares a method " +
-                    "named `run` that has no parameters!");
+                        "named `run` that has no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1537,6 +1530,7 @@ public class RunLocalTest {
             gui interactions. The ServerThread class in particular was tested by
             ensuring that each client was indeed dedicated a socket to operate on. */
         }
+
         @Test(timeout = 1_000)
         public void serverTestClass() {
             // check if Server class exists
@@ -1675,6 +1669,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `Server`'s `getUserIDCounter` method has the correct return type!",
                     expectedReturnType, returnType);
         }
+
         /**
          * Testing for ChatDriver class
          */
@@ -1701,13 +1696,13 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `" + className + "`'s parameterized constructor is" +
                     " `public`!", Modifier.isPublic(modifiers));
         }
+
         @Test(timeout = 1_000)
         public void chatDriverTestClass() {
             // check if ChatDriver class exists
             try {
                 Class.forName("ChatDriver");
-            }
-            catch(ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Ensure that `ChatDriver` exists!");
                 return;
             }
@@ -1742,59 +1737,58 @@ public class RunLocalTest {
                 clientUser = chatDriverObject.getField("clientUser");
                 client = chatDriverObject.getField("client");
                 currentGroup = chatDriverObject.getField("currentGroup");
-            }
-            catch(NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
                 return;
             }
             // check fields of class for correct access modifier and data type
             modifiers = messageTextField.getModifiers();
-            assertTrue("Ensure that `messageTextField` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `messageTextField` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `messageTextField` in `ChatDriver` class is of type JTextField!",
                     JTextField.class.isAssignableFrom(messageTextField.getType()));
             modifiers = sendMessageButton.getModifiers();
-            assertTrue("Ensure that `sendMessageButton` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `sendMessageButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `sendMessageButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(messageTextField.getType()));
             modifiers = userSettingsButton.getModifiers();
-            assertTrue("Ensure that `userSettingsButton` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `userSettingsButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `userSettingsButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(userSettingsButton.getType()));
             modifiers = createGroupButton.getModifiers();
-            assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(createGroupButton.getType()));
             modifiers = editMessageButton.getModifiers();
-            assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(editMessageButton.getType()));
             modifiers = deleteMessageButton.getModifiers();
-            assertTrue("Ensure that `deleteMessageButton` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `deleteMessageButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `deleteMessageButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(deleteMessageButton.getType()));
             modifiers = editDeleteListener.getModifiers();
-            assertTrue("Ensure that `editDeleteListener` in `ChatDriver` class is package-private!", 
+            assertTrue("Ensure that `editDeleteListener` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `editDeleteListener` in `ChatDriver` class is of type ActionListener!",
                     ActionListener.class.isAssignableFrom(editDeleteListener.getType()));
             modifiers = clientUser.getModifiers();
-            assertTrue("Ensure that `clientUser` in `ChatDriver` class is private!", 
+            assertTrue("Ensure that `clientUser` in `ChatDriver` class is private!",
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `clientUser` in `ChatDriver` class is of type User!",
                     User.class.isAssignableFrom(clientUser.getType()));
             modifiers = client.getModifiers();
-            assertTrue("Ensure that `client` in `ChatDriver` class is private!", 
+            assertTrue("Ensure that `client` in `ChatDriver` class is private!",
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `client` in `ChatDriver` class is of type Client!",
                     Client.class.isAssignableFrom(client.getType()));
             modifiers = currentGroup.getModifiers();
-            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is private!", 
+            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is private!",
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type Group!",
                     Group.class.isAssignableFrom(currentGroup.getType()));
@@ -1805,7 +1799,7 @@ public class RunLocalTest {
                 method = chatDriverObject.getDeclaredMethod("run");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ChatDriver` declares a method " +
-                    "named `run` that has no parameters!");
+                        "named `run` that has no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1824,7 +1818,7 @@ public class RunLocalTest {
                 method = chatDriverObject.getDeclaredMethod("changeChatModel", int.class);
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ChatDriver` declares a method " +
-                    "named `changeChatModel` that has a parameter of type int!");
+                        "named `changeChatModel` that has a parameter of type int!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1833,14 +1827,14 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `changeChatModel` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `changeChatModel` method has the correct return type!",
-                    returnType);   
+                    returnType);
 
             // changeUserModel method
             try {
                 method = chatDriverObject.getDeclaredMethod("changeUserModel");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ChatDriver` declares a method " +
-                    "named `changeUserModel` that nas no parameters!");
+                        "named `changeUserModel` that nas no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1849,14 +1843,14 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `changeUserModel` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `changeUserModel` method has the correct return type!",
-                    returnType);   
+                    returnType);
 
             // changeGroupModel method
             try {
                 method = chatDriverObject.getDeclaredMethod("changeGroupModel");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ChatDriver` declares a method " +
-                    "named `changeGroupModel` that has no parameters!");
+                        "named `changeGroupModel` that has no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1865,14 +1859,14 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `changeGroupModel` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `changeGroupModel` method has the correct return type!",
-                    returnType);   
+                    returnType);
 
             // sendMessageToServer method            
             try {
                 method = chatDriverObject.getDeclaredMethod("sendMessageToServer", String.class);
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `ChatDriver` declares a method " +
-                    "named `sendMessageToServer` that has a parameter of type String!");
+                        "named `sendMessageToServer` that has a parameter of type String!");
                 return;
             }
             modifiers = method.getModifiers();
@@ -1881,7 +1875,45 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `sendMessageToServer` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `sendMessageToServer` method has the correct return type!",
-                    returnType);      
+                    returnType);
+        }
+
+        /**
+         * Testing for ClientDriver
+         */
+        @Test(timeout = 1_000)
+        public void clientDriverTestClass() {
+            // check if Client Driver class exists
+            try {
+                Class.forName("ClientDriver");
+            } catch (ClassNotFoundException e) {
+                System.out.println("Ensure that `ClientDriver` exists!");
+                return;
+            }
+            Class<?> clientDriverObject = ManageProfile.class;
+            // check for correct superclass
+            Class<?> superclass = clientDriverObject.getSuperclass();
+            assertEquals("Ensure that your `ClientDriver` class does NOT extend any other class!",
+                    superclass, Object.class);
+            //check for methods
+            Method method;
+            try {
+                method = clientDriverObject.getDeclaredMethod("main", String[].class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ClientMethod` declares a method " +
+                        "named `main` that has a parameter of type String[]!");
+                return;
+            }
+            Class<?> returnType;
+            Class<?> expectedReturnType;
+            int modifiers;
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ClientDriver`'s `main` method is `public`",
+                    Modifier.isPublic(modifiers));
+            Assert.assertEquals("Ensure that `ClientDriver`'s `main` method has the correct return type!",
+                    void.class, returnType);
         }
     }
 }
