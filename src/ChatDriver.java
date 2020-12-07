@@ -1,3 +1,5 @@
+package src;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -303,7 +305,8 @@ public class ChatDriver extends JComponent implements Runnable {
                             panel,
                             "New Group",
                             JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE, null, new String[]{"Add", "Create Group"}, "Add");
+                            JOptionPane.QUESTION_MESSAGE, null, new String[]{"Add", "Create Group"},
+                            "Add");
 
                     if (input == 0) {
                         if (!users.contains((String) userJComboBox.getSelectedItem())) {
