@@ -21,6 +21,18 @@ This class creates a message object that takes in specific information from that
 
 This class was tested by checking every field and method and making sure that all of them exist, have correct accessors, correct type / return type, and successful and unsuccessful implementation.
 
+Method Description:
+
+getAuthor: Takes no parameters and returns the user that sends the corresponding message
+
+getDateTime: Takes no parameters and returns the date that the corresponding message was sent at
+
+getText: Takes no parameters and returns the corresponding message
+
+setMessage: Takes two parameters of types LocalDateTime and String that creates a new message with these values
+
+equals: Takes a message object as a parameter and compares it to the current message object to check if they equal each other
+
 ## Group Class
 
 This class is used to represent a group conversation including two or more users. Each instance of the group class keeps track of the users that make up the group and the messages that have been sent within the group. It also maintains a title which acts as the nickname of the conversation for all the users in that group.
