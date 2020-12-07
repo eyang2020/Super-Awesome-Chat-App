@@ -109,32 +109,6 @@ This class servers as the representation of the client side of the messaging app
 
 To test this class we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
 
-Methods:
-
-connectToServer: Takes no parameters and connects the client to a server given a specific port and host from the constructor
-
-createAccount(String username, String password, String name, String email, long phoneNumber): Takes in 5 parameters of types string, string, string, string, long and sends this information to the server to create an account. Returns true if the user was created, and false if not
-
-login(String username, String password): Takes in two parameters of type string, string and sends it to the server to try and log in. Returns true if the user was logged in, and false if not
-
-createGroup(String groupName, String[] usernames): Takes in two parameters of type string, string[] and sends it to the server to create a new group. Returns true if the group was created, and false if not 
-
-addMessage(Message message, Group group): Takes in two parameters of type message, group and sends it to the server to add the given message to the given group. Returns true if the message was created, and false if not
-
-updateServerUser(User user): Takes in one parameter of type user and sends that user to the server to be updated
-
-getCurrentUser: Takes in no parameters and returns the current user
-
-getUsers: Takes in no parameters and returns the arraylist of users
-
-getGroups: Takes in no parameters and returns the arraylist of groups
-
-editMessage(Message message, String newMessage, Group group, boolean delete): Takes in 4 parameters of types message, string, group, boolean and either edits or deletes the given message in the given group based off of if the boolean delete is true or false
-
-updateCurrentUser: Takes in no parameters and updates the groups arraylist for the client
-
-deleteFromGroup(Group group): Takes in one parameter of type group and removes the current user from that group
-
 ## ClientDriver Class
 
 Class Description:
@@ -142,10 +116,6 @@ Class Description:
 This class functions as a helper class for the Client class. It is used to run the client side of the chat application by initilizing a new client with a set address and port.
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
-
-Methods:
-
-main: creates a new instance of the Client class, passing it the address of the server and its respective port. Also invokes the EDT thread to prevent deadlock.
 
 ## Server Class
 
@@ -210,7 +180,6 @@ To test this class manual testing was used to ensure that when a user sent a mes
 ## Login Class
 
 Class Description:
-
 This class includes the GUI for the user to either login to their account or create an account. It takes the information it is given and sends it to the client to log the user in or create their account. If a user creates an account a new User object is created.
 
 To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
@@ -218,8 +187,16 @@ To test this class a main method was run to ensure the formatting was done corre
 ## ManageProfile Class
 
 Class Description:
-
 This class includes the GUI for the user to view their current information and edit it if they so choose. The user can also delete their account. When the user selects an option for what information to edit, it opens a text box for them to input their new information and edits it where the current information is displayed. It also changes the information kept in all other classes where it is kept.
+
+Constructor:
+The constructor connects the GUI to the client so they can access necessary information as needed.
+
+Action Listener:
+There is an action listener for each edit information option that the user has. When the user selects the edit button they choose it opens a text box where they can enter their new information. They can confirm this change with a change button next to the text box that also has a listener. When selected, a switch statement in the listener for the change button gets the int value corresponding to their selection and edits the information that was changed across the classes that store it and updates the GUI with the new information.
+
+Run:
+The run method creates the frame that has the panel with the labels and buttons corresponding to the information they can edit. It also gives them the option to delete their account if they choose. This window is updated when the user selects one of the edit information buttons to include a text box where they put the new information this operation was described previously.
 
 To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
 
