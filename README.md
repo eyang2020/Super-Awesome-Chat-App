@@ -177,6 +177,10 @@ This class servers as the chat panel which takes user input (such as a new messa
 
 To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested by ensuring that their action listeners were applied correctly.  
 
+Methods:
+
+main: creates a new instance of the Client class, passing it the address of the server and its respective port. Also invokes the EDT thread to prevent deadlock.
+
 ## Login Class
 
 Class Description:
