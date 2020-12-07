@@ -43,14 +43,23 @@ This class was used frequently in the operation of the client/server and ChatDri
 
 Methods:
 getGroupName: returns the name of the current group
+
 getUsers: returns the ArrayList of users in the current group
+
 getMessages: returns the ArrayList of messages in the current group
+
 setGroupName(String): sets the current name of the group to given string
+
 addUser(User): appends a new given user to the ArrayList of users
+
 addMessage(Message): appends a new given message to the ArrayList of messages
+
 editMessage(int, Message): edits the message to the passed message at the given index
+
 deleteMessage(int): deletes the message at given index of ArrayList of messages
+
 removeUser(User): removes the user passed in from ArrayList of users
+
 equals(Object): checks if two groups are equal using the group name, its users, and its messages
 
 ## Client Class
