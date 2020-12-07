@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import org.junit.Test;
 import org.junit.After;
@@ -1739,9 +1739,13 @@ public class RunLocalTest {
                 createGroupButton = chatDriverObject.getField("createGroupButton");
                 editMessageButton = chatDriverObject.getField("editMessageButton");
                 deleteMessageButton = chatDriverObject.getField("deleteMessageButton");
+                deleteGroupButton = chatDriverObject.getField("deleteGroupButton");
                 editDeleteListener = chatDriverObject.getField("editDeleteListener");
                 clientUser = chatDriverObject.getField("clientUser");
                 client = chatDriverObject.getField("client");
+                chatPanel = chatDriverObject.getField("chatPanel");
+                userJList = chatDriverObject.getField("userJList");
+                groupJList = chatDriverObject.getField("groupJList");
                 currentGroup = chatDriverObject.getField("currentGroup");
             } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
@@ -1815,7 +1819,7 @@ public class RunLocalTest {
                     JList.class.isAssignableFrom(groupJList.getType()));
             modifiers = userJList.getModifiers();
             assertTrue("Ensure that `userJList` in `ChatDriver` class is package-private!",
-                    Modifier.isPrivatuserJList);
+                    Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type JList!",
                     JList.class.isAssignableFrom(userJList.getType()));
             // verify methods of ChatDriver class
