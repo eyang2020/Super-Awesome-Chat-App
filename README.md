@@ -17,6 +17,40 @@ The User class creates a user object that has the users personal information as 
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist, set/get the correct values, and have correct return types.
 
+Methods:
+
+setName(String name): Takes one parameter of type string and changes the user's name to the given value
+
+setEmail(String email): Takes one parameter of type string and changes the user's email to the given value
+
+setUsername(String newUsername): Takes one parameter of type string and changes the user's username to the given value
+
+setPassword(String newPassword): Takes one parameter of type string and changes the user's password to the given value
+
+setPhoneNumber(long phoneNumber): Takes one parameter of type string and changes the user's phone number to the given value
+
+getUsername: Takes no parameters and returns the username of the user
+
+getPassword: Takes no parameters and returns the password of the user
+
+addGroup(Group group): Takes one parameter of type group that adds that group to the groups arraylist
+
+getGroups: Takes no parameters and returns the groups that the user is a part of
+
+getName: Takes no parameters and returns the name of the user
+
+getEmail: Takes no parameters and returns the email of the user
+
+getPhoneNumber: Takes no parameters and returns the phone number of the user
+
+getUserID: Takes no parameters and returns the ID of the user
+
+setUserID(int userID): Takes one parameter of type int and changes the user's ID to the given value 
+
+setGroups(ArrayList<Group> groups1): Takes one parameter of type ArrayList<Group> and changes the groups arraylist to the given value
+  
+toString: Returns a string that includes the user's name, username, email, phone number, password, ID, and groups that they are a part of
+
 ## Message Class
 
 Class Description:
