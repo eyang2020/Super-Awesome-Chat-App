@@ -1,5 +1,3 @@
-//package src;
-
 import org.junit.Test;
 import org.junit.After;
 
@@ -1718,12 +1716,16 @@ public class RunLocalTest {
             Field sendMessageButton;
             Field userSettingsButton;
             Field createGroupButton;
+            Field deleteGroupButton;
             Field editMessageButton;
             Field deleteMessageButton;
             Field editDeleteListener;
             Field clientUser;
             Field client;
             Field currentGroup;
+            Field chatPanel;
+            Field groupJList;
+            Field userJList;
             Method method;
             Class<?> returnType;
             Class<?> expectedReturnType;
@@ -1735,9 +1737,13 @@ public class RunLocalTest {
                 createGroupButton = chatDriverObject.getField("createGroupButton");
                 editMessageButton = chatDriverObject.getField("editMessageButton");
                 deleteMessageButton = chatDriverObject.getField("deleteMessageButton");
+                deleteGroupButton = chatDriverObject.getField("deleteGroupButton");
                 editDeleteListener = chatDriverObject.getField("editDeleteListener");
                 clientUser = chatDriverObject.getField("clientUser");
                 client = chatDriverObject.getField("client");
+                chatPanel = chatDriverObject.getField("chatPanel");
+                userJList = chatDriverObject.getField("userJList");
+                groupJList = chatDriverObject.getField("groupJList");
                 currentGroup = chatDriverObject.getField("currentGroup");
             } catch (NoSuchFieldException e) {
                 System.out.println(e.toString());
@@ -1763,6 +1769,11 @@ public class RunLocalTest {
             assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(createGroupButton.getType()));
+            modifiers = deleteGroupButton.getModifiers();
+            assertTrue("Ensure that `deleteGroupButton` in `ChatDriver` class is package-private!",
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `deleteGroupButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(createGroupButton.getType()));
             modifiers = editMessageButton.getModifiers();
             assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is package-private!",
@@ -1794,6 +1805,21 @@ public class RunLocalTest {
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type Group!",
                     Group.class.isAssignableFrom(currentGroup.getType()));
+            modifiers = chatPanel.getModifiers();
+            assertTrue("Ensure that  chatPanel` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that  chatPanel` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(chatPanel.getType()));
+            modifiers = groupJList.getModifiers();
+            assertTrue("Ensure that `groupJList` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groupJList` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(groupJList.getType()));
+            modifiers = userJList.getModifiers();
+            assertTrue("Ensure that `userJList` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(userJList.getType()));
             // verify methods of ChatDriver class
 
             // run method
@@ -1877,6 +1903,22 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `sendMessageToServer` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `sendMessageToServer` method has the correct return type!",
+                    returnType);
+
+            // refreshMessages method            
+            try {
+                method = chatDriverObject.getDeclaredMethod("refreshMessages");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                        "named `refreshMessages` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `refreshMessages` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `refreshMessages` method has the correct return type!",
                     returnType);
         }
 
@@ -2153,19 +2195,8 @@ public class RunLocalTest {
                     Modifier.isPublic(modifiers));
             Assert.assertEquals("Ensure that `Client`'s `getGroups` method has the correct return type!",
                     expectedReturnType, returnType);
-            try {
-                method = clientObject.getDeclaredMethod("updateClientUser");
-            } catch (NoSuchMethodException e) {
-                Assert.fail("Ensure that `Client` declares a method " +
-                        "named `updateClientUser` that has no parameters!");
-                return;
-            }
-            modifiers = method.getModifiers();
-            returnType = method.getReturnType();
-            Assert.assertTrue("Ensure that `Client`'s `updateClientUser` method is `public`",
-                    Modifier.isPublic(modifiers));
-            assertNull("Ensure that `Client`'s `updateClientUser` method has the correct return type!",
-                    returnType);
+
+
             try {
                 method = clientObject.getDeclaredMethod("editMessage", Message.class, String.class,
                         Group.class, boolean.class);
@@ -2180,18 +2211,33 @@ public class RunLocalTest {
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `Client`'s `editMessage` method has the correct return type!",
                     returnType);
+
             try {
-                method = clientObject.getDeclaredMethod("setChatDriver", ChatDriver.class);
+                method = clientObject.getDeclaredMethod("updateCurrentUser");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `Client` declares a method " +
-                        "named `setChatDriver` that has 1 parameter of type ChatDriver!");
+                        "named `updateClientUser` that has no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
-            Assert.assertTrue("Ensure that `Client`'s `setChatDriver` method is `public`",
+            Assert.assertTrue("Ensure that `Client`'s `updateCurrentUser` method is `public`",
                     Modifier.isPublic(modifiers));
-            assertNull("Ensure that `Client`'s `setChatDriver` method has the correct return type!",
+            assertNull("Ensure that `Client`'s `updateCurrentUser` method has the correct return type!",
+                    returnType);
+
+            try {
+                method = clientObject.getDeclaredMethod("deleteFromGroup", Group.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `deleteFromGroup` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `deleteFromGroup` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `deleteFromGroup` method has the correct return type!",
                     returnType);
         }
     }
