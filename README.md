@@ -41,6 +41,18 @@ This class is used to represent a group conversation including two or more users
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist, set/get the correct values, and have correct return types.
 
+Methods:
+getGroupName: returns the name of the current group
+getUsers: returns the ArrayList of users in the current group
+getMessages: returns the ArrayList of messages in the current group
+setGroupName(String): sets the current name of the group to given string
+addUser(User): appends a new given user to the ArrayList of users
+addMessage(Message): appends a new given message to the ArrayList of messages
+editMessage(int, Message): edits the message to the passed message at the given index
+deleteMessage(int): deletes the message at given index of ArrayList of messages
+removeUser(User): removes the user passed in from ArrayList of users
+equals(Object): checks if two groups are equal using the group name, its users, and its messages
+
 ## Client Class
 
 This class servers as the representation of the client side of the messaging application. The client class is responsible for handling the initialization process when a user carries out various tasks such as signing up, loging in, creating a new group, or editing a message among other tasks.  
