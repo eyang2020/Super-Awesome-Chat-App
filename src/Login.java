@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -204,7 +204,8 @@ public class Login implements Runnable {
                         }
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "Make sure that you fill out everything!", "Errors", JOptionPane.ERROR_MESSAGE);
+                                "Make sure that you fill out everything!", "Errors",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException exception) {
                     exception.printStackTrace();

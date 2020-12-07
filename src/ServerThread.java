@@ -184,6 +184,31 @@ public class ServerThread implements Runnable{
                             }
                         }
                     }
+                    case "deleteFromGroup" -> {
+                        Group group = (Group) in.readObject();
+                        User user = (User) in.readObject();
+                        System.out.println("Ye");
+                        for (Group group1 : Server.getGroups()) {
+                            if (group.getGroupName().equals(group1.getGroupName())) {
+                                for (User user1 : group1.getUsers()) {
+                                    if (user1.getUserID() == user.getUserID()) {
+                                        group1.removeUser(user1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        for (User user1 : Server.getUsers()) {
+                            if (user1.getUserID() == user.getUserID()) {
+                                for (Group group1 : user1.getGroups()) {
+                                    if (group.getGroupName().equals(group1.getGroupName())) {
+                                        user1.getGroups().remove(group1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } catch (EOFException | SocketException e) {
                 break;
