@@ -149,6 +149,26 @@ This class acts as a helper class for the Server class in order to support multi
 
 To test this class we ran the server and tested connecting multiple clients to the server at the same time. We also made sure to check if multithreading support was working correctly by sending multiple requests from two clients and ensuring that both requests were processed together, rather than one by one.
 
+Methods:
+
+run: this method is responsible for handling requests from the client to carry out various tasks. 
+
+"createAccount" request: it will read in a username, password, name, email, user ID, and phone number. It then checks if the username is valid by checking if the server-side database already contains said username. If successful, the new user will be created, and its info will be written into the database. Otherwise, the user will not be able to create this account. 
+
+"login" request: this method will check if the passed username and password are equal to those stored in the database according to the given username. 
+
+"createGroup" request: the method will initialize a new Group object and add users to it according to the usernames passed by the client. Upon an "addMethod" request, the method searches all groups for the desired group and adds the message to the group's list of messages. 
+
+"refresh" request: the method will write write all of the data contained within the server's current ArrayList of users and groups through its output stream. 
+
+"updateServerUser" request: the method will read in the passed user object and update the user's contents on the server-side, including the name, email, password, phone number, and username.
+
+"editMessage" request: the method will search for the correct group and find the respective message to be edited, changing its contents from there.
+
+"updateCurrentUser" request: given a userID, the method will search for the respective user and write his or her data through the output stream.
+
+"deleteFromGroup" request: the method will search for the correct group and find the respective user to be removed from the group. Note that this does not delete the group, it only removes the passed user.
+
 ## ChatDriver Class
 
 Class Description:
