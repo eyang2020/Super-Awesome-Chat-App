@@ -144,6 +144,10 @@ This class functions as a helper class for the Client class. It is used to run t
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
 
+Methods:
+
+main: creates a new instance of the Client class, passing it the address of the server and its respective port. Also invokes the EDT thread to prevent deadlock.
+
 ## Server Class
 
 Class Description:
