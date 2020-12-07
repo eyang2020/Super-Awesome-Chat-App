@@ -1,5 +1,3 @@
-//package src;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -137,13 +135,9 @@ public class ManageProfile {
                 selection = 5;
             }
             if (e.getSource() == deleteAccount) {
-                try {
-                    throw new Exception("Uncomment");
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-                //Server.getUsers().remove(user);
+                client.deleteAccount(user);
                 frame.dispose();
+                return;
             }
             if (e.getSource() == change) {
                 switch (selection) {
@@ -159,10 +153,13 @@ public class ManageProfile {
                         break;
                     case 2:
                         if (newPassword.getText() != null) {
+                            System.out.println("Yess");
+                            System.out.println(newPassword.getText());
                             user.setPassword(newPassword.getText());
                             panel.remove(cPassword);
                             cPassword = new JLabel(user.getPassword());
                             panel.add(cPassword);
+                            System.out.println(user.getPassword());
                             client.updateServerUser(user);
                         }
                         break;
@@ -275,7 +272,7 @@ public class ManageProfile {
     }
 
     //public static void main(String[] args) {
-      //  ManageProfile mP = new ManageProfile();
-        //mP.run();
+    //  ManageProfile mP = new ManageProfile();
+    //mP.run();
     //}
 }

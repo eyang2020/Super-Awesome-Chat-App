@@ -1,10 +1,7 @@
-//package src;
-
 import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * ServerThread
@@ -16,7 +13,7 @@ import java.util.Arrays;
  * @author Ian Blacklock B11
  * @version 11/23/20
  */
-public class ServerThread implements Runnable{
+public class ServerThread implements Runnable {
     private Socket socket;          //The socket that connects the client and the server
 
     /**
@@ -30,13 +27,13 @@ public class ServerThread implements Runnable{
     /**
      * The method that is run when ever a client connects to the server
      */
-    public void run(){
+    public void run() {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         String input;
         User currentUser = null;
 
-        try{
+        try {
             out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
             out.flush();
             in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -53,8 +50,6 @@ public class ServerThread implements Runnable{
         while (true) {
             try {
                 input = (String) in.readObject();
-                if (!input.equals("updateCurrentUser") && !input.equals("refresh")) {
-                }
                 switch (input) {
                     case "createAccount" -> {
                         String username = (String) in.readObject();
@@ -131,10 +126,12 @@ public class ServerThread implements Runnable{
                         out.writeBoolean(true);
                         out.flush();
                     }
-                    case "refresh" -> {
-                        out.reset();
-                        out.writeObject(Server.getUsers());
-                        out.writeObject(Server.getGroups());
+                    case "getAllUsers" -> {
+                        String[] usernames = new String[Server.getUsers().size()];
+                        for (int i = 0; i < Server.getUsers().size(); i++) {
+                            usernames[i] = Server.getUsers().get(i).getUsername();
+                        }
+                        out.writeObject(usernames);
                         out.flush();
                     }
                     case "updateServerUser" -> {
@@ -156,7 +153,8 @@ public class ServerThread implements Runnable{
                         for (Group group : Server.getGroups()) {
                             if (group.getGroupName().equals(groupName)) {
                                 for (Message message1 : group.getMessages()) {
-                                    if (message1.getText().equals(message.getText()) && message1.getDateTime().equals(message.getDateTime())) {
+                                    if (message1.getText().equals(message.getText())
+                                            && message1.getDateTime().equals(message.getDateTime())) {
                                         if (delete) {
                                             group.getMessages().remove(message1);
                                             break;
@@ -203,13 +201,21 @@ public class ServerThread implements Runnable{
                             }
                         }
                     }
+                    case "deleteAccount" -> {
+                        User user = (User) in.readObject();
+                        for (User user1 : Server.getUsers()) {
+                            if (user.getUserID() == user1.getUserID()) {
+                                Server.getUsers().remove(user1);
+                            }
+                        }
+                    }
                 }
             } catch (EOFException | SocketException e) {
                 break;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            Server.writeUsersAndGroups("src/users.txt", "src/groups.txt");
+            Server.writeUsersAndGroups("users.txt", "groups.txt");
         }
     }
 }

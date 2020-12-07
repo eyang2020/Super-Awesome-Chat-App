@@ -1,5 +1,3 @@
-//package src;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -41,7 +39,8 @@ public class User implements Serializable {
         groups = new ArrayList<>();
     }
 
-    public User() {}
+    public User() {
+    }
     /**
      *
      * @param usernameToFind the username of the user looking to log in
@@ -79,9 +78,9 @@ public class User implements Serializable {
 
     /**
      * Allows the user to change their password
-     * @param newPassword the new password of the user
+     * @param password the new password of the user
      */
-    public void setPassword(String newPassword) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

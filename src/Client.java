@@ -1,10 +1,7 @@
-//package src;
-
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 
 /**
  * ClientSocket
@@ -23,10 +20,8 @@ public class Client {
     ObjectOutputStream out; //The output stream for sending objects to the server
     ObjectInputStream in;   //The input stream for getting objects from the server
     User currentUser = null;       //The user that this client represents
-    ArrayList<User> users;  //A client side version of the users arraylist
-    ArrayList<Group> groups;    //A client side version of the groups arraylist
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Client client1 = new Client("localhost", 4242);
         client1.connectToServer();
         SwingUtilities.invokeLater(new Login(client1));
@@ -37,10 +32,7 @@ public class Client {
     public Client(String host, int port) {
         this.host = host;
         this.port = port;
-        users = new ArrayList<>();
-        groups = new ArrayList<>();
         connectToServer();
-        refreshUsersAndGroups();
     }
 
     /**
@@ -70,25 +62,27 @@ public class Client {
      * @param phoneNumber the phone number for the account
      * @return the user that is created
      */
-    public boolean createAccount(String username, String password, String name, String email, long phoneNumber)
-            throws IOException {
+    public boolean createAccount(String username, String password, String name, String email, long phoneNumber) {
         boolean created = false;
-        out.writeObject("createAccount");
-        out.writeObject(username);
-        out.writeObject(password);
-        out.writeObject(name);
-        out.writeObject(email);
-        out.writeLong(phoneNumber);
-        out.flush();
+        try {
+            out.writeObject("createAccount");
+            out.writeObject(username);
+            out.writeObject(password);
+            out.writeObject(name);
+            out.writeObject(email);
+            out.writeLong(phoneNumber);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             created = in.readBoolean();
             if (created) {
                 currentUser = (User) in.readObject();
             }
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
-        //refreshUsersAndGroups();
         return created;
     }
 
@@ -99,12 +93,16 @@ public class Client {
      * @return a boolean telling if the login was successfully
      */
     public boolean login(String username, String password) throws IOException {
-        boolean loggedin;
-        out.writeObject("login");
-        out.writeObject(username);
-        out.writeObject(password);
-        out.flush();
-        loggedin = in.readBoolean();
+        boolean loggedin = false;
+        try {
+            out.writeObject("login");
+            out.writeObject(username);
+            out.writeObject(password);
+            out.flush();
+            loggedin = in.readBoolean();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             currentUser = (User) in.readObject();
         } catch (ClassNotFoundException e) {
@@ -119,7 +117,7 @@ public class Client {
      * @param usernames The usernames of the people to be added to the group
      * @return Whether or not the group was created successfully
      */
-    public boolean createGroup(String groupName, String[] usernames){
+    public boolean createGroup(String groupName, String[] usernames) {
         boolean created = false;
         try {
             out.writeObject("createGroup");
@@ -140,7 +138,7 @@ public class Client {
      * @param group The group the message is to be added to
      * @return Whether or not the message was created successfully
      */
-    public boolean addMessage(Message message, Group group){
+    public boolean addMessage(Message message, Group group) {
         boolean added = false;
         group.addMessage(message);
         try {
@@ -149,26 +147,34 @@ public class Client {
             out.writeObject(group);
             out.flush();
             added = in.readBoolean();
-            refreshUsersAndGroups();
+            updateCurrentUser();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return added;
     }
 
-    public void refreshUsersAndGroups(){
+    /**
+     * Gets the usernames of all of the users from the server
+     * @return the usernames of all of the users from the server
+     */
+    public String[] getAllUsers() {
         try {
-            out.writeObject("refresh");
+            out.writeObject("getAllUsers");
             out.flush();
 
-            Object rando = in.read();
-            users = (ArrayList<User>) in.readObject();
-            groups = (ArrayList<Group>) in.readObject();
+            String[] usernames = (String[]) in.readObject();
+            return usernames;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
+    /**
+     * Updates the Servers version of the current user
+     * @param user The user to update the server with
+     */
     public void updateServerUser(User user) {
         try {
             out.writeObject("updateServerUser");
@@ -189,22 +195,6 @@ public class Client {
     }
 
     /**
-     *
-     * @return the users arraylist
-     */
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
-    /**
-     *
-     * @return the groups arraylist
-     */
-    public ArrayList<Group> getGroups() {
-        return groups;
-    }
-
-    /**
      * Edits or deletes a message
      * @param message The message to be edited or deleted
      * @param newMessage The new message
@@ -220,7 +210,7 @@ public class Client {
             if (!delete) {
                 out.writeObject(newMessage);
             }
-            refreshUsersAndGroups();
+            updateCurrentUser();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -256,10 +246,21 @@ public class Client {
             out.writeObject(currentUser);
             out.flush();
             updateCurrentUser();
-            refreshUsersAndGroups();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Deletes the user's account
+     * @param user The user to be delete
+     */
+    public void deleteAccount(User user) {
+        try {
+            out.writeObject("deleteAccount");
+            out.writeObject(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,3 @@
-//package src;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -42,7 +40,7 @@ public class Login implements Runnable {
         this.client = client;
     }
 
-    public void run () {
+    public void run() {
         user = new User();
         content.setLayout(new BorderLayout());
         login = new JButton("Login");
@@ -105,7 +103,7 @@ public class Login implements Runnable {
                 login1 = new JButton("Login");
                 login1.addActionListener(actionListener);
                 login1.setBorder(new LineBorder(Color.BLACK));
-                login1.setBackground(Color.decode("#C4E9E7"));;
+                login1.setBackground(Color.decode("#C4E9E7"));
                 panel1.add(login1);
                 panel1.setBackground(Color.decode("#98DE7B"));
                 content.add(panel1, BorderLayout.CENTER);
@@ -161,7 +159,7 @@ public class Login implements Runnable {
                 create = new JButton("Create User");
                 create.addActionListener(actionListener);
                 create.setBorder(new LineBorder(Color.BLACK));
-                create.setBackground(Color.decode("#C4E9E7"));;
+                create.setBackground(Color.decode("#C4E9E7"));
                 panel2.add(create);
                 panel2.setBackground(Color.decode("#98DE7B"));
                 content.add(panel2, BorderLayout.CENTER);
@@ -172,7 +170,7 @@ public class Login implements Runnable {
             if (e.getSource() == login1) {
                 try {
                     if (username.getText() != null && password.getText() != null) {
-                        if(!loginUser(username.getText(), password.getText())) {
+                        if (!loginUser(username.getText(), password.getText())) {
                             return;
                         }
                     }
@@ -226,7 +224,7 @@ public class Login implements Runnable {
         boolean success = client.login(usernameToFind, passwordToCheck);
         if (success == true) {
             user = client.getCurrentUser();
-            client.refreshUsersAndGroups();
+            client.updateCurrentUser();
             SwingUtilities.invokeLater(new ChatDriver(client));
             return true;
         }
@@ -266,8 +264,8 @@ public class Login implements Runnable {
     }
 
     //public static void main(String[] args) {
-      //  Client client = new Client("localhost", 4242);
-        //client.createAccount("RedJyve", "12345", "Ian", "iblacklo@purdue.edu", Long.parseLong("9258859123"));
-        //SwingUtilities.invokeLater(new Login(client));
+    //  Client client = new Client("localhost", 4242);
+    //client.createAccount("RedJyve", "12345", "Ian", "iblacklo@purdue.edu", Long.parseLong("9258859123"));
+    //SwingUtilities.invokeLater(new Login(client));
     //}
 }

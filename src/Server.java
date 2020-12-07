@@ -1,9 +1,6 @@
-//package src;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * ServerSocket
@@ -24,7 +21,7 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         Server server = new Server();
-        try{
+        try {
             server.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,7 +35,7 @@ public class Server {
         groups = new ArrayList<>();
         users = new ArrayList<>();
         userIDCounter = 0;
-        readInUsersAndGroups("src/users.txt", "src/groups.txt");
+        readInUsersAndGroups("users.txt", "groups.txt");
     }
 
     /**
@@ -46,7 +43,7 @@ public class Server {
      */
     public void acceptor() {
         ServerThread thread;
-        try{
+        try {
             thread = new ServerThread(serverSocket.accept());
             Thread t = new Thread(thread);
             t.start();

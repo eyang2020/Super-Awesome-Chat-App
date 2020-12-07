@@ -1,13 +1,11 @@
-//package src;
-
 import javax.swing.*;
 import java.io.IOException;
 
 /**
  * ClientDriver
- * 
+ *
  * To be run on the client and used to execute the methods needed for the client
- * 
+ *
  * No help
  *
  * @author Ian Blacklock B11
@@ -21,7 +19,6 @@ public class ClientDriver {
      */
     public static void main(String[] args) throws IOException {
         Client client = new Client("localhost", 4242);
-        //client.createAccount("RedJyve", "12345", "Ian", "iblacklo@purdue.edu", Long.parseLong("9258859123"));");
         SwingUtilities.invokeLater(new Login(client));
 
     }

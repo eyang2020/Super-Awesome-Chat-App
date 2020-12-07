@@ -1,5 +1,3 @@
-//package src;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -7,7 +5,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -177,7 +174,8 @@ public class ChatDriver extends JComponent implements Runnable {
                 int index = e.getFirstIndex();
                 Message messageToEditDelete = currentGroup.getMessages().get(index);
 
-                if (index != -1 && messageToEditDelete.getAuthor().getUsername().equals(client.getCurrentUser().getUsername())) {
+                if (index != -1 && messageToEditDelete.getAuthor().getUsername()
+                        .equals(client.getCurrentUser().getUsername())) {
                     editDeleteMessageIndex[0] = index;
                     String text = currentGroup.getMessages().get(index).getText();
                     messageTextField.setText(text);
@@ -196,8 +194,14 @@ public class ChatDriver extends JComponent implements Runnable {
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
 
-        client.refreshUsersAndGroups();
-        chatPanel.setModel(changeChatModel(clientUser.getGroups().indexOf(currentGroup)));
+        client.updateCurrentUser();
+        int index = 0;
+        for (int i = 0; i < clientUser.getGroups().size(); i++) {
+            if (clientUser.getGroups().get(i).getGroupName().equals(currentGroup.getGroupName())) {
+                index = i;
+            }
+        }
+        chatPanel.setModel(changeChatModel(index));
 
         sendMessageButton.addActionListener(new ActionListener() {
             /**
@@ -230,9 +234,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 if (e.getSource() == editMessageButton) {
                     String text = messageTextField.getText();
-                    //messageToEditDelete.setMessage(LocalDateTime.now(), text);
                     client.editMessage(messageToEditDelete, text, currentGroup, false);
-                    System.out.println("hello");
 
                     chatPanel.setSelectedIndex(-1);
                     editMessageButton.setEnabled(false);
@@ -240,12 +242,15 @@ public class ChatDriver extends JComponent implements Runnable {
                     sendMessageButton.setEnabled(true);
                     messageTextField.setText("");
                 } else if (e.getSource() == deleteMessageButton) {
-                    //currentGroup.getMessages().remove(index);
                     client.editMessage(messageToEditDelete, "", currentGroup, true);
 
-                    chatPanel.setModel(changeChatModel(
-                            clientUser.getGroups().indexOf(currentGroup)
-                    ));
+                    index = 0;
+                    for (int i = 0; i < clientUser.getGroups().size(); i++) {
+                        if (clientUser.getGroups().get(i).getGroupName().equals(currentGroup.getGroupName())) {
+                            index = i;
+                        }
+                    }
+                    chatPanel.setModel(changeChatModel(index));
 
                     chatPanel.setSelectedIndex(-1);
                     editMessageButton.setEnabled(false);
@@ -355,9 +360,9 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 JComboBox<String> userJComboBox = new JComboBox<>();
                 DefaultComboBoxModel<String> userListModel = new DefaultComboBoxModel<>();
-                client.refreshUsersAndGroups();
-                for (User user : client.getUsers()) {
-                    userListModel.addElement(user.getName());
+                String[] usernames = client.getAllUsers();
+                for (String username : usernames) {
+                    userListModel.addElement(username);
                 }
                 userJComboBox.setModel(userListModel);
 
@@ -417,6 +422,7 @@ public class ChatDriver extends JComponent implements Runnable {
         DefaultListModel<Message> messageListModel = new DefaultListModel<>();
         if (clientUser.getGroups() != null && clientUser.getGroups().size() > 0) {
             client.updateCurrentUser();
+
             currentGroup = clientUser.getGroups().get(index);
 
             messageListModel.addAll(currentGroup.getMessages());
@@ -434,10 +440,11 @@ public class ChatDriver extends JComponent implements Runnable {
         DefaultListModel<String> userListModel = new DefaultListModel<>();
 
         client.updateCurrentUser();
-        client.refreshUsersAndGroups();
 
         if (groupJList.getSelectedIndex() == -1) {
-            currentGroup = clientUser.getGroups().get(0);
+            if (!(clientUser.getGroups().size() == 0)) {
+                currentGroup = clientUser.getGroups().get(0);
+            }
         } else {
             currentGroup = clientUser.getGroups().get(groupJList.getSelectedIndex());
         }
@@ -471,7 +478,7 @@ public class ChatDriver extends JComponent implements Runnable {
      * @param text the text of the message
      * @return a new Message object
      */
-    public Message sendMessageToServer(String text){
+    public Message sendMessageToServer(String text) {
         LocalDateTime dateTime = LocalDateTime.now();
 
 
@@ -545,13 +552,12 @@ public class ChatDriver extends JComponent implements Runnable {
      * Refreshes the messages on the chat panel
      */
     public void refreshMessages() {
-        client.refreshUsersAndGroups();
         client.updateCurrentUser();
 
         if (groupJList.getSelectedIndex() == -1) {
-                chatPanel.setModel(changeChatModel(0));
+            chatPanel.setModel(changeChatModel(0));
         } else {
-                chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
+            chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
         }
     }
 }
