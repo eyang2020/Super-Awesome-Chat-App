@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import javax.swing.*;
 import java.io.*;
@@ -70,7 +70,8 @@ public class Client {
      * @param phoneNumber the phone number for the account
      * @return the user that is created
      */
-    public boolean createAccount(String username, String password, String name, String email, long phoneNumber) throws IOException {
+    public boolean createAccount(String username, String password, String name, String email, long phoneNumber)
+            throws IOException {
         boolean created = false;
         out.writeObject("createAccount");
         out.writeObject(username);
