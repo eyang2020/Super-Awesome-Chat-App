@@ -31,9 +31,9 @@ getDateTime: Takes no parameters and returns the date that the corresponding mes
 
 getText: Takes no parameters and returns the corresponding message
 
-setMessage: Takes two parameters of types LocalDateTime and String that creates a new message with these values
+setMessage(LocalDateTime dateTime, String text): Takes two parameters of types LocalDateTime and String that creates a new message with these values
 
-equals: Takes a message object as a parameter and compares it to the current message object to check if they equal each other
+equals(Object o): Takes a message object as a parameter and compares it to the current message object to check if they equal each other
 
 ## Group Class
 
