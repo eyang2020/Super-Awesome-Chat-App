@@ -1,10 +1,7 @@
-//package src;
-
 import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * ServerThread
@@ -209,7 +206,7 @@ public class ServerThread implements Runnable{
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            Server.writeUsersAndGroups("src/users.txt", "src/groups.txt");
+            Server.writeUsersAndGroups("users.txt", "groups.txt");
         }
     }
 }

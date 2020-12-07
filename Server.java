@@ -1,9 +1,6 @@
-//package src;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * ServerSocket
@@ -38,7 +35,7 @@ public class Server {
         groups = new ArrayList<>();
         users = new ArrayList<>();
         userIDCounter = 0;
-        readInUsersAndGroups("src/users.txt", "src/groups.txt");
+        readInUsersAndGroups("users.txt", "groups.txt");
     }
 
     /**
