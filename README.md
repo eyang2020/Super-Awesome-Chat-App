@@ -117,6 +117,10 @@ This class functions as a helper class for the Client class. It is used to run t
 
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists and the methods exist with correct return types.
 
+Methods:
+
+main: creates a new instance of the Client class, passing it the address of the server and its respective port. Also invokes the EDT thread to prevent deadlock.
+
 ## Server Class
 
 Class Description:
@@ -176,10 +180,6 @@ Class Description:
 This class servers as the chat panel which takes user input (such as a new message) and sends it to the server to be processed and delivered to other members of the respective group.
 
 To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested by ensuring that their action listeners were applied correctly.  
-
-Methods:
-
-main: creates a new instance of the Client class, passing it the address of the server and its respective port. Also invokes the EDT thread to prevent deadlock.
 
 ## Login Class
 
