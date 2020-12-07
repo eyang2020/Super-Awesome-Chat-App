@@ -2153,19 +2153,8 @@ public class RunLocalTest {
                     Modifier.isPublic(modifiers));
             Assert.assertEquals("Ensure that `Client`'s `getGroups` method has the correct return type!",
                     expectedReturnType, returnType);
-            try {
-                method = clientObject.getDeclaredMethod("updateClientUser");
-            } catch (NoSuchMethodException e) {
-                Assert.fail("Ensure that `Client` declares a method " +
-                        "named `updateClientUser` that has no parameters!");
-                return;
-            }
-            modifiers = method.getModifiers();
-            returnType = method.getReturnType();
-            Assert.assertTrue("Ensure that `Client`'s `updateClientUser` method is `public`",
-                    Modifier.isPublic(modifiers));
-            assertNull("Ensure that `Client`'s `updateClientUser` method has the correct return type!",
-                    returnType);
+
+
             try {
                 method = clientObject.getDeclaredMethod("editMessage", Message.class, String.class,
                         Group.class, boolean.class);
@@ -2180,18 +2169,33 @@ public class RunLocalTest {
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `Client`'s `editMessage` method has the correct return type!",
                     returnType);
+
             try {
-                method = clientObject.getDeclaredMethod("setChatDriver", ChatDriver.class);
+                method = clientObject.getDeclaredMethod("updateCurrentUser");
             } catch (NoSuchMethodException e) {
                 Assert.fail("Ensure that `Client` declares a method " +
-                        "named `setChatDriver` that has 1 parameter of type ChatDriver!");
+                        "named `updateClientUser` that has no parameters!");
                 return;
             }
             modifiers = method.getModifiers();
             returnType = method.getReturnType();
-            Assert.assertTrue("Ensure that `Client`'s `setChatDriver` method is `public`",
+            Assert.assertTrue("Ensure that `Client`'s `updateCurrentUser` method is `public`",
                     Modifier.isPublic(modifiers));
-            assertNull("Ensure that `Client`'s `setChatDriver` method has the correct return type!",
+            assertNull("Ensure that `Client`'s `updateCurrentUser` method has the correct return type!",
+                    returnType);
+
+            try {
+                method = clientObject.getDeclaredMethod("deleteFromGroup", Group.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `Client` declares a method " +
+                        "named `deleteFromGroup` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+            Assert.assertTrue("Ensure that `Client`'s `deleteFromGroup` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `Client`'s `deleteFromGroup` method has the correct return type!",
                     returnType);
         }
     }
