@@ -109,6 +109,32 @@ This class servers as the representation of the client side of the messaging app
 
 To test this class we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
 
+Methods:
+
+connectToServer: Takes no parameters and connects the client to a server given a specific port and host from the constructor
+
+createAccount(String username, String password, String name, String email, long phoneNumber): Takes in 5 parameters of types string, string, string, string, long and sends this information to the server to create an account. Returns true if the user was created, and false if not
+
+login(String username, String password): Takes in two parameters of type string, string and sends it to the server to try and log in. Returns true if the user was logged in, and false if not
+
+createGroup(String groupName, String[] usernames): Takes in two parameters of type string, string[] and sends it to the server to create a new group. Returns true if the group was created, and false if not 
+
+addMessage(Message message, Group group): Takes in two parameters of type message, group and sends it to the server to add the given message to the given group. Returns true if the message was created, and false if not
+
+updateServerUser(User user): Takes in one parameter of type user and sends that user to the server to be updated
+
+getCurrentUser: Takes in no parameters and returns the current user
+
+getUsers: Takes in no parameters and returns the arraylist of users
+
+getGroups: Takes in no parameters and returns the arraylist of groups
+
+editMessage(Message message, String newMessage, Group group, boolean delete): Takes in 4 parameters of types message, string, group, boolean and either edits or deletes the given message in the given group based off of if the boolean delete is true or false
+
+updateCurrentUser: Takes in no parameters and updates the groups arraylist for the client
+
+deleteFromGroup(Group group): Takes in one parameter of type group and removes the current user from that group
+
 ## ClientDriver Class
 
 Class Description:
