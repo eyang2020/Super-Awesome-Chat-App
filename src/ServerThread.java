@@ -107,7 +107,6 @@ public class ServerThread implements Runnable{
                         for (String username : usernames) {
                             for (User user : Server.getUsers()) {
                                 if (user.getUsername().equals(username)) {
-                                    System.out.println(user.getUsername());
                                     addedUsers.add(user);
                                 }
                             }
@@ -137,8 +136,6 @@ public class ServerThread implements Runnable{
                     }
                     case "refresh" -> {
                         out.reset();
-                        System.out.println(Server.getUsers() + " users");
-                        System.out.println(Server.getGroups() + " groups");
                         out.writeObject(Server.getUsers());
                         out.writeObject(Server.getGroups());
                         out.flush();
@@ -192,7 +189,9 @@ public class ServerThread implements Runnable{
                             if (group.getGroupName().equals(group1.getGroupName())) {
                                 for (User user1 : group1.getUsers()) {
                                     if (user1.getUserID() == user.getUserID()) {
+                                        System.out.println(group1);
                                         group1.removeUser(user1);
+                                        System.out.println(group1);
                                         break;
                                     }
                                 }

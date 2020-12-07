@@ -260,8 +260,6 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JPanel eastPanel = new JPanel();
 
-        JList<String> userJList = new JList<>(changeUserModel());
-
         userJList = new JList<>(changeUserModel());
 
         JScrollPane usersPane = new JScrollPane(userJList);
@@ -420,6 +418,9 @@ public class ChatDriver extends JComponent implements Runnable {
     public DefaultListModel<String> changeUserModel() {
         DefaultListModel<String> userListModel = new DefaultListModel<>();
 
+        client.updateCurrentUser();
+        client.refreshUsersAndGroups();
+
         if (groupJList.getSelectedIndex() == -1) {
             currentGroup = clientUser.getGroups().get(0);
         } else {
@@ -467,10 +468,6 @@ public class ChatDriver extends JComponent implements Runnable {
         return message;
     }
 
-    public void updateUserList() {
-        userJList.setModel(changeUserModel());
-    }
-
     /**
      * Runs the driver on the EventDispatcher thread for stability.
      * Will eventually be called by the client-side program, as opposed to
@@ -510,6 +507,14 @@ public class ChatDriver extends JComponent implements Runnable {
             setText(String.format("<html><span style='color: grey;'>%s</span><br>%s</html>",
                     username, text));
 
+            if (cellHasFocus) {
+                setOpaque(true);
+                setBackground(Color.BLUE);
+                System.out.println(value.getText());
+            } else {
+                setBackground(Color.WHITE);
+            }
+
             // Adds margins
             setBorder(new EmptyBorder(10, 10, 3, 10));
 
@@ -525,10 +530,20 @@ public class ChatDriver extends JComponent implements Runnable {
     public void refreshMessages() {
         client.refreshUsersAndGroups();
         client.updateCurrentUser();
+        System.out.println(chatPanel.getModel().getSize());
+
         if (groupJList.getSelectedIndex() == -1) {
-            chatPanel.setModel(changeChatModel(0));
+            if (!(chatPanel.getModel().getSize() == clientUser.getGroups().get(0).getMessages().size())) {
+                System.out.println("yep");
+                System.out.println(chatPanel.getModel().getSize());
+                chatPanel.setModel(changeChatModel(0));
+            }
         } else {
-            chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
+            if (!(chatPanel.getModel().getSize() == clientUser.getGroups().get(groupJList.getSelectedIndex()).getMessages().size())) {
+                System.out.println("yup");
+                System.out.println(chatPanel.getModel().getSize());
+                chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
+            }
         }
     }
 }
