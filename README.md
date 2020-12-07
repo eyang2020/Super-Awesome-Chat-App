@@ -91,6 +91,20 @@ This class serves as the server-side representation of the project. As the main 
 
 To test this class we used manual testing by using the client-side interface. We sent a multitude of requests to check if the server was both receiving them and correctly processing them. For example, we tested creating a new account for a user, and checked to see if the database was updated with this new information after the server processed a "new user" request. Moreover, we sent requests to the server to read the database regarding user info during login to ensure that the password used during login matched the one stored in the database during account creation.
 
+main: creates a new Server object and sets it to a deticated ServerSocket. While the server runs, it waits for clients to connect to be given a new thread.
+
+acceptor: dedicates a thread for when a new client connects to the server
+
+readInUsersAndGroups(String, String): given where the list of users and groups are stored, fill the current ArrayList of users and groups with the data from said file
+
+writeUsersAndGroups(String, String): given where the list of users and groups are stored, use the data from the current ArrayList of users and groups and fill the files with current data about the users and groups respectively
+
+getUsers: returns the current ArrayList of users
+
+getGroups: returns the current ArrayList of groups
+
+getUserIDCounter: increments the count of users and returns the new count
+
 ## ServerThread Class
 
 Class Description:
