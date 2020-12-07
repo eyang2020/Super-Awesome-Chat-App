@@ -60,16 +60,20 @@ public class ChatDriver extends JComponent implements Runnable {
      */
     JButton deleteMessageButton;
 
+    /**
+     * The JList that displays the chat messages.
+     */
     JList<Message> chatPanel = new JList<>();
 
+    /**
+     * The JList that displays the groups.
+     */
     JList<String> groupJList = new JList<>();
 
     /**
      * An action listener for the edit and delete functionality.
      * Disables buttons if no selection; enables buttons and allows
      * button press action
-     *
-     * TODO: THIS
      */
     ActionListener editDeleteListener;
 
@@ -111,7 +115,7 @@ public class ChatDriver extends JComponent implements Runnable {
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(() -> {
             try {
-                refrsshMessages();
+                refreshMessages();
                 int temp = groupJList.getSelectedIndex();
                 groupJList.setModel(changeGroupModel());
                 groupJList.setSelectedIndex(temp);
@@ -145,6 +149,32 @@ public class ChatDriver extends JComponent implements Runnable {
 
         chatPanel.setModel(changeChatModel(0));
         chatPanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        final int[] editDeleteMessageIndex = new int[1];
+
+        chatPanel.addListSelectionListener(new ListSelectionListener() {
+            /**
+             * ListSelectionListener for editing/deleting messages.
+             * @param e the selection of messages in the list.
+             */
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int index = e.getFirstIndex();
+
+                if (index != -1) {
+                    editDeleteMessageIndex[0] = index;
+                    String text = currentGroup.getMessages().get(index).getText();
+                    messageTextField.setText(text);
+                    sendMessageButton.setEnabled(false);
+                    editMessageButton.setEnabled(true);
+                    deleteMessageButton.setEnabled(true);
+                } else {
+                    editMessageButton.setEnabled(false);
+                    deleteMessageButton.setEnabled(false);
+                    sendMessageButton.setEnabled(true);
+                    messageTextField.setText("");
+                }
+            }
+        });
 
         MessageRenderer renderer = new MessageRenderer();
         chatPanel.setCellRenderer(renderer);
@@ -163,13 +193,39 @@ public class ChatDriver extends JComponent implements Runnable {
                 Message message = sendMessageToServer(messageTextField.getText());
 
                 // Message display on GUI
-                // todo: add edit/delete buttons
                 ( (DefaultListModel<Message>) chatPanel.getModel()).addElement(message);
 
                 messageTextField.setText("");
                 messageTextField.requestFocusInWindow();
             }
         });
+
+        editDeleteListener = new ActionListener() {
+            /**
+             * ActionListener for the editing and deleting buttons.
+             * @param e press of one of the two buttons
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = editDeleteMessageIndex[0];
+                Message messageToEditDelete = currentGroup.getMessages().get(index);
+
+                if (e.getSource() == editMessageButton) {
+                    String text = messageTextField.getText();
+                    messageToEditDelete.setMessage(LocalDateTime.now(), text);
+
+                    chatPanel.setSelectedIndex(-1);
+                } else if (e.getSource() == deleteMessageButton) {
+                    currentGroup.getMessages().remove(index);
+
+                    chatPanel.setModel(changeChatModel(
+                            clientUser.getGroups().indexOf(currentGroup)
+                    ));
+
+                    chatPanel.setSelectedIndex(-1);
+                }
+            }
+        };
 
         JScrollPane centerPanel = new JScrollPane(chatPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -229,8 +285,10 @@ public class ChatDriver extends JComponent implements Runnable {
                 int index = groupJList.getSelectedIndex();
 
                 if (index != -1) {
+                    currentGroup = clientUser.getGroups().get(index);
                     chatPanel.setModel(changeChatModel(index));
                     userJList.setModel(changeUserModel());
+                    ((JLabel) northPanel.getComponent(0)).setText(currentGroup.getGroupName());
                 }
             }
         });
@@ -274,7 +332,7 @@ public class ChatDriver extends JComponent implements Runnable {
                             JOptionPane.QUESTION_MESSAGE, null, new String[]{"Add", "Create Group"}, "Add");
 
                     if (input == 0) {
-                        if (!users.contains((String) userJComboBox.getSelectedItem())) {
+                        if (!users.contains(userJComboBox.getSelectedItem())) {
                             users.add((String) userJComboBox.getSelectedItem());
                         }
                     }
@@ -282,7 +340,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 System.out.println(users);
 
-                client.createGroup(name, users.toArray(new String[users.size()]));
+                client.createGroup(name, users.toArray(new String[0]));
 
                 groupJList.setModel(changeGroupModel());
             }
@@ -382,7 +440,7 @@ public class ChatDriver extends JComponent implements Runnable {
      */
     public static void main(String[] args) throws IOException {
         Client client = new Client("localhost", 4242);
-        client.createAccount("boles2", "12345", "cam",
+        client.createAccount("fren", "12345", "cam",
                 "boles2@purdue.edu", Long.parseLong("1234567890"));
         SwingUtilities.invokeLater(new ChatDriver(client));
     }
@@ -415,11 +473,16 @@ public class ChatDriver extends JComponent implements Runnable {
             // Adds margins
             setBorder(new EmptyBorder(10, 10, 3, 10));
 
+            if (isSelected) {
+                setOpaque(true);
+                setBackground(new Color(135, 183, 213));
+            }
+
             return this;
         }
     }
 
-    public void refrsshMessages() {
+    public void refreshMessages() {
         client.refreshUsersAndGroups();
         client.updateCurrentUser();
         if (groupJList.getSelectedIndex() == -1) {
