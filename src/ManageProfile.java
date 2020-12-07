@@ -46,8 +46,6 @@ public class ManageProfile {
     public ManageProfile(Client client) {
         this.client = client;
         user = client.getCurrentUser();
-        System.out.println(user);
-        System.out.println(user.getName());
     }
 
     /**
@@ -57,7 +55,6 @@ public class ManageProfile {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == editUsername) {
-                System.out.println("test1");
                 JLabel usernameLabel = new JLabel("New Username:");
                 usernameLabel.setFont( new Font("Comic Sans", Font.PLAIN, 14));
                 change = new JButton("Change");
@@ -147,19 +144,15 @@ public class ManageProfile {
                             panel.remove(cUsername);
                             cUsername = new JLabel(user.getUsername());
                             panel.add(cUsername);
-                            System.out.println(user);
                             client.updateServerUser(user);
                         }
                         break;
                     case 2:
                         if (newPassword.getText() != null) {
-                            System.out.println("Yess");
-                            System.out.println(newPassword.getText());
                             user.setPassword(newPassword.getText());
                             panel.remove(cPassword);
                             cPassword = new JLabel(user.getPassword());
                             panel.add(cPassword);
-                            System.out.println(user.getPassword());
                             client.updateServerUser(user);
                         }
                         break;
