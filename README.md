@@ -109,32 +109,6 @@ This class servers as the representation of the client side of the messaging app
 
 To test this class we used manual testing to test all aspects of user interaction with the program through the interface supported by the client. Among the tasks tested were creating a new group, sending a message into a group and ensuring all other users of that group receive it, and the account creation/validation process. 
 
-Methods:
-
-connectToServer: Takes no parameters and connects the client to a server given a specific port and host from the constructor
-
-createAccount(String username, String password, String name, String email, long phoneNumber): Takes in 5 parameters of types string, string, string, string, long and sends this information to the server to create an account. Returns true if the user was created, and false if not
-
-login(String username, String password): Takes in two parameters of type string, string and sends it to the server to try and log in. Returns true if the user was logged in, and false if not
-
-createGroup(String groupName, String[] usernames): Takes in two parameters of type string, string[] and sends it to the server to create a new group. Returns true if the group was created, and false if not 
-
-addMessage(Message message, Group group): Takes in two parameters of type message, group and sends it to the server to add the given message to the given group. Returns true if the message was created, and false if not
-
-updateServerUser(User user): Takes in one parameter of type user and sends that user to the server to be updated
-
-getCurrentUser: Takes in no parameters and returns the current user
-
-getUsers: Takes in no parameters and returns the arraylist of users
-
-getGroups: Takes in no parameters and returns the arraylist of groups
-
-editMessage(Message message, String newMessage, Group group, boolean delete): Takes in 4 parameters of types message, string, group, boolean and either edits or deletes the given message in the given group based off of if the boolean delete is true or false
-
-updateCurrentUser: Takes in no parameters and updates the groups arraylist for the client
-
-deleteFromGroup(Group group): Takes in one parameter of type group and removes the current user from that group
-
 ## ClientDriver Class
 
 Class Description:
@@ -207,6 +181,18 @@ To test this class manual testing was used to ensure that when a user sent a mes
 
 Class Description:
 This class includes the GUI for the user to either login to their account or create an account. It takes the information it is given and sends it to the client to log the user in or create their account. If a user creates an account a new User object is created.
+
+Constructor:
+The constructor connects the GUI to the client so they can access necessary information as needed.
+
+Action Listener:
+The action listener senses when the login or create account is selected. When the user selects either option, it closes the welcome window and opens a new one corresponding to their selected option. The user will then be prompted with labels and text fields to enter their information. If login is selected the username and password prompts are displayed and if create account is displayed it prompts for the same information as well as their personal information. When the user confirms their information with a button labeled by whichever option they chose it is sensed by the listener and sends the information enetered to either loginUser or createUser. The window is then closed and the chat app opens.
+
+loginUser:
+This method accepts the information sent in with the confirmation of login and calls the clients method to login the user. If its successful the current user is set to whoever logged in and if there is an error with an incorrect username or password it provides an error message.
+
+createUser:
+This method accepts the information sent in with the confirmation of account creation and calls the clients method to create a user. The current user is then set to the user created and if there is an error with an existing username being entered it provides an error message.
 
 To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
 
