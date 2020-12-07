@@ -1718,12 +1718,16 @@ public class RunLocalTest {
             Field sendMessageButton;
             Field userSettingsButton;
             Field createGroupButton;
+            Field deleteGroupButton;
             Field editMessageButton;
             Field deleteMessageButton;
             Field editDeleteListener;
             Field clientUser;
             Field client;
             Field currentGroup;
+            Field chatPanel;
+            Field groupJList;
+            Field userJList;
             Method method;
             Class<?> returnType;
             Class<?> expectedReturnType;
@@ -1764,6 +1768,11 @@ public class RunLocalTest {
                     Modifier.isProtected(modifiers));
             assertTrue("Ensure that `createGroupButton` in `ChatDriver` class is of type JButton!",
                     JButton.class.isAssignableFrom(createGroupButton.getType()));
+            modifiers = deleteGroupButton.getModifiers();
+            assertTrue("Ensure that `deleteGroupButton` in `ChatDriver` class is package-private!",
+                    Modifier.isProtected(modifiers));
+            assertTrue("Ensure that `deleteGroupButton` in `ChatDriver` class is of type JButton!",
+                    JButton.class.isAssignableFrom(createGroupButton.getType()));
             modifiers = editMessageButton.getModifiers();
             assertTrue("Ensure that `editMessageButton` in `ChatDriver` class is package-private!",
                     Modifier.isProtected(modifiers));
@@ -1794,6 +1803,21 @@ public class RunLocalTest {
                     Modifier.isPrivate(modifiers));
             assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type Group!",
                     Group.class.isAssignableFrom(currentGroup.getType()));
+            modifiers = chatPanel.getModifiers();
+            assertTrue("Ensure that  chatPanel` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that  chatPanel` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(chatPanel.getType()));
+            modifiers = groupJList.getModifiers();
+            assertTrue("Ensure that `groupJList` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivate(modifiers));
+            assertTrue("Ensure that `groupJList` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(groupJList.getType()));
+            modifiers = userJList.getModifiers();
+            assertTrue("Ensure that `userJList` in `ChatDriver` class is package-private!",
+                    Modifier.isPrivatuserJList);
+            assertTrue("Ensure that `currentGroup` in `ChatDriver` class is of type JList!",
+                    JList.class.isAssignableFrom(userJList.getType()));
             // verify methods of ChatDriver class
 
             // run method
@@ -1877,6 +1901,22 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `sendMessageToServer` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `sendMessageToServer` method has the correct return type!",
+                    returnType);
+
+            // refreshMessages method            
+            try {
+                method = chatDriverObject.getDeclaredMethod("refreshMessages");
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `ChatDriver` declares a method " +
+                        "named `refreshMessages` that has no parameters!");
+                return;
+            }
+            modifiers = method.getModifiers();
+            returnType = method.getReturnType();
+
+            Assert.assertTrue("Ensure that `ChatDriver`'s `refreshMessages` method is `public`",
+                    Modifier.isPublic(modifiers));
+            assertNull("Ensure that `ChatDriver`'s `refreshMessages` method has the correct return type!",
                     returnType);
         }
 
