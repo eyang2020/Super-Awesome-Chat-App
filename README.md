@@ -2,6 +2,9 @@
 
 Code repository for Option 3 of Project 5.
 
+## How to Run
+Start Server.java and once it has initialized, to connect to the server start ClientDriver.java. If you want multiple people at once to connect to the Server, just run multiple instances of ClientDriver.java
+
 ## Team Members
 * AJ
 * Camber
@@ -260,6 +263,14 @@ Run:
 The run method creates the frame that has the panel with the labels and buttons corresponding to the information they can edit. It also gives them the option to delete their account if they choose. This window is updated when the user selects one of the edit information buttons to include a text box where they put the new information this operation was described previously.
 
 To test this class a main method was run to ensure the formatting was done correctly and displayed the correct information/options and was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist and have correct return types.
+
+## Testing the GUI
+
+To test the GUI you start by running Server.java and then running ClientDriver.java. The first check is making sure that the login screen pops up. Once the login screen pops up you click on create account and enter random test information, then press the create account button. You then make sure that that the chat screen pops up. Once the chat screen pops up enter a message into the message text box and click send, make sure that the message shows up in the chat window with your username above it. Next, to check the edit and delete functionality click on your message, it should turn blue and the message text box should fill with the message. Change the message in the message text box in some way and then press the edit button. Confirm that the edit shows on screen. Next, click on the message again and click the delete button, confirm that the message disapears. Enter a few more messages for a future test.
+
+Now, click on the create group button in the bottom left. Enter a name for the group and then choose your name from the drop down list and press add. Once you have done this press the create group button. Confirm that the group has shown up in the groups list on the left. Click on the newly created group, confirm that your previous messages from the first group disapeared. Add a few messages to this new group, then, click the delete group button on the top of the window and confirm that the group disapears.
+
+Next, click on the settings button and click change username. Change the username. Now close the window. Restart ClientDriver.java, click on login and confirm that you can login with the new username and your original password. Then, click the settings button, click delete account and close the window. Restart ClientDriver.java, click on login and confirm you can no longer login. That is all of the testing.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
