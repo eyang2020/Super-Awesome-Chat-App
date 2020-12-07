@@ -42,6 +42,7 @@ This class is used to represent a group conversation including two or more users
 This class was used frequently in the operation of the client/server and ChatDriver so it was tested with an operating client/server to test the actual functionality. There was also a testing done to make sure the class exists, the constructor is correct, the fields exist, and the methods exist, set/get the correct values, and have correct return types.
 
 Methods:
+
 getGroupName: returns the name of the current group
 
 getUsers: returns the ArrayList of users in the current group
