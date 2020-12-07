@@ -1525,7 +1525,7 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ServerThread`'s `run` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ServerThread`'s `run` method has the correct return type!",
-                    returnType);   
+                    returnType);
             /* run method was tested using manual testing when we tested networking and
             gui interactions. The ServerThread class in particular was tested by
             ensuring that each client was indeed dedicated a socket to operate on. */
@@ -1836,7 +1836,7 @@ public class RunLocalTest {
             Assert.assertTrue("Ensure that `ChatDriver`'s `run` method is `public`",
                     Modifier.isPublic(modifiers));
             assertNull("Ensure that `ChatDriver`'s `run` method has the correct return type!",
-                    returnType);   
+                    returnType);
             /* run method was tested using manual testing when we tested networking and
             gui interactions. The ChatDriver class in particular was tested by
             ensuring that each client's chats were initiated and handled by ChatDriver. */
@@ -1889,7 +1889,7 @@ public class RunLocalTest {
             assertNull("Ensure that `ChatDriver`'s `changeGroupModel` method has the correct return type!",
                     returnType);
 
-            // sendMessageToServer method            
+            // sendMessageToServer method
             try {
                 method = chatDriverObject.getDeclaredMethod("sendMessageToServer", String.class);
             } catch (NoSuchMethodException e) {
@@ -1905,7 +1905,7 @@ public class RunLocalTest {
             assertNull("Ensure that `ChatDriver`'s `sendMessageToServer` method has the correct return type!",
                     returnType);
 
-            // refreshMessages method            
+            // refreshMessages method
             try {
                 method = chatDriverObject.getDeclaredMethod("refreshMessages");
             } catch (NoSuchMethodException e) {
@@ -1934,7 +1934,7 @@ public class RunLocalTest {
                 System.out.println("Ensure that `ClientDriver` exists!");
                 return;
             }
-            Class<?> clientDriverObject = ManageProfile.class;
+            Class<?> clientDriverObject = ClientDriver.class;
             // check for correct superclass
             Class<?> superclass = clientDriverObject.getSuperclass();
             assertEquals("Ensure that your `ClientDriver` class does NOT extend any other class!",
