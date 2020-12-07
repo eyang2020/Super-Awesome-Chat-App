@@ -115,7 +115,9 @@ public class ChatDriver extends JComponent implements Runnable {
         this.client = client;
         clientUser = client.getCurrentUser();
         if (clientUser.getGroups() == null || clientUser.getGroups().size() == 0) {
-            currentGroup = new Group("Create your first Group!", new ArrayList<>());
+            client.createGroup("Create your first Group!", new String[]{client.getCurrentUser().getUsername()});
+            client.updateCurrentUser();
+            currentGroup = client.getCurrentUser().getGroups().get(0);
         } else {
             currentGroup = clientUser.getGroups().get(0);
         }
@@ -173,8 +175,9 @@ public class ChatDriver extends JComponent implements Runnable {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int index = e.getFirstIndex();
+                Message messageToEditDelete = currentGroup.getMessages().get(index);
 
-                if (index != -1) {
+                if (index != -1 && messageToEditDelete.getAuthor().getUsername().equals(client.getCurrentUser().getUsername())) {
                     editDeleteMessageIndex[0] = index;
                     String text = currentGroup.getMessages().get(index).getText();
                     messageTextField.setText(text);
@@ -214,6 +217,7 @@ public class ChatDriver extends JComponent implements Runnable {
             }
         });
 
+
         editDeleteListener = new ActionListener() {
             /**
              * ActionListener for the editing and deleting buttons.
@@ -226,17 +230,28 @@ public class ChatDriver extends JComponent implements Runnable {
 
                 if (e.getSource() == editMessageButton) {
                     String text = messageTextField.getText();
-                    messageToEditDelete.setMessage(LocalDateTime.now(), text);
+                    //messageToEditDelete.setMessage(LocalDateTime.now(), text);
+                    client.editMessage(messageToEditDelete, text, currentGroup, false);
+                    System.out.println("hello");
 
                     chatPanel.setSelectedIndex(-1);
+                    editMessageButton.setEnabled(false);
+                    deleteMessageButton.setEnabled(false);
+                    sendMessageButton.setEnabled(true);
+                    messageTextField.setText("");
                 } else if (e.getSource() == deleteMessageButton) {
-                    currentGroup.getMessages().remove(index);
+                    //currentGroup.getMessages().remove(index);
+                    client.editMessage(messageToEditDelete, "", currentGroup, true);
 
                     chatPanel.setModel(changeChatModel(
                             clientUser.getGroups().indexOf(currentGroup)
                     ));
 
                     chatPanel.setSelectedIndex(-1);
+                    editMessageButton.setEnabled(false);
+                    deleteMessageButton.setEnabled(false);
+                    sendMessageButton.setEnabled(true);
+                    messageTextField.setText("");
                 }
             }
         };
@@ -253,7 +268,8 @@ public class ChatDriver extends JComponent implements Runnable {
 
         JPanel westPanel = new JPanel(new BorderLayout());
 
-
+        editMessageButton.addActionListener(editDeleteListener);
+        deleteMessageButton.addActionListener(editDeleteListener);
 
         JScrollPane groupsPane = new JScrollPane(groupJList);
         westPanel.add(groupsPane, BorderLayout.CENTER);
@@ -317,7 +333,6 @@ public class ChatDriver extends JComponent implements Runnable {
                     currentGroup = clientUser.getGroups().get(index);
                     chatPanel.setModel(changeChatModel(index));
                     ((JLabel) northPanel.getComponent(0)).setText(currentGroup.getGroupName());
-                    updateUserList();
                 }
             }
         });
@@ -367,8 +382,6 @@ public class ChatDriver extends JComponent implements Runnable {
                         }
                     }
                 } while (input != 1);
-
-                System.out.println(users);
 
                 client.createGroup(name, users.toArray(new String[0]));
 
@@ -511,8 +524,7 @@ public class ChatDriver extends JComponent implements Runnable {
 
             if (cellHasFocus) {
                 setOpaque(true);
-                setBackground(Color.BLUE);
-                System.out.println(value.getText());
+                setBackground(new Color(135, 183, 213));
             } else {
                 setBackground(Color.WHITE);
             }
@@ -529,23 +541,17 @@ public class ChatDriver extends JComponent implements Runnable {
         }
     }
 
+    /**
+     * Refreshes the messages on the chat panel
+     */
     public void refreshMessages() {
         client.refreshUsersAndGroups();
         client.updateCurrentUser();
-        System.out.println(chatPanel.getModel().getSize());
 
         if (groupJList.getSelectedIndex() == -1) {
-            if (!(chatPanel.getModel().getSize() == clientUser.getGroups().get(0).getMessages().size())) {
-                System.out.println("yep");
-                System.out.println(chatPanel.getModel().getSize());
                 chatPanel.setModel(changeChatModel(0));
-            }
         } else {
-            if (!(chatPanel.getModel().getSize() == clientUser.getGroups().get(groupJList.getSelectedIndex()).getMessages().size())) {
-                System.out.println("yup");
-                System.out.println(chatPanel.getModel().getSize());
                 chatPanel.setModel(changeChatModel(groupJList.getSelectedIndex()));
-            }
         }
     }
 }

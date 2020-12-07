@@ -53,8 +53,7 @@ public class ServerThread implements Runnable{
         while (true) {
             try {
                 input = (String) in.readObject();
-                if (!input.equals("updateCurrentUser")) {
-                    System.out.println(input);
+                if (!input.equals("updateCurrentUser") && !input.equals("refresh")) {
                 }
                 switch (input) {
                     case "createAccount" -> {
@@ -101,7 +100,6 @@ public class ServerThread implements Runnable{
                         out.flush();
                     }
                     case "createGroup" -> {
-                        System.out.println("Yo");
                         String groupName = (String) in.readObject();
                         String[] usernames = (String[]) in.readObject();
                         ArrayList<User> addedUsers = new ArrayList<>();
@@ -114,11 +112,8 @@ public class ServerThread implements Runnable{
                             }
                         }
                         newGroup = new Group(groupName, addedUsers);
-                        System.out.println(Server.getGroups());
                         Server.getGroups().add(newGroup);
-                        System.out.println(Server.getGroups());
                         for (User user : addedUsers) {
-                            System.out.println("hello");
                             user.addGroup(newGroup);
                         }
                         out.writeBoolean(true);
@@ -161,9 +156,10 @@ public class ServerThread implements Runnable{
                         for (Group group : Server.getGroups()) {
                             if (group.getGroupName().equals(groupName)) {
                                 for (Message message1 : group.getMessages()) {
-                                    if (message1.equals(message)) {
+                                    if (message1.getText().equals(message.getText()) && message1.getDateTime().equals(message.getDateTime())) {
                                         if (delete) {
                                             group.getMessages().remove(message1);
+                                            break;
                                         } else {
                                             String newMessage = (String) in.readObject();
                                             message1.setMessage(LocalDateTime.now(), newMessage);
@@ -186,14 +182,11 @@ public class ServerThread implements Runnable{
                     case "deleteFromGroup" -> {
                         Group group = (Group) in.readObject();
                         User user = (User) in.readObject();
-                        System.out.println("Ye");
                         for (Group group1 : Server.getGroups()) {
                             if (group.getGroupName().equals(group1.getGroupName())) {
                                 for (User user1 : group1.getUsers()) {
                                     if (user1.getUserID() == user.getUserID()) {
-                                        System.out.println(group1);
                                         group1.removeUser(user1);
-                                        System.out.println(group1);
                                         break;
                                     }
                                 }

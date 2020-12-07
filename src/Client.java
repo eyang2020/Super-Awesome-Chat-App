@@ -127,9 +127,7 @@ public class Client {
             out.writeObject(usernames);
             out.flush();
             created = in.readBoolean();
-            System.out.println("Created");
             updateCurrentUser();
-            System.out.println("hel");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,22 +203,20 @@ public class Client {
     public ArrayList<Group> getGroups() {
         return groups;
     }
-    
-    public void updateClientUser() {
-        try {
-            out.writeObject("updateClientUser");
-            User user = (User) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
+    /**
+     * Edits or deletes a message
+     * @param message The message to be edited or deleted
+     * @param newMessage The new message
+     * @param group The group the message is in
+     * @param delete Whether or not a message should be deleted
+     */
     public void editMessage(Message message, String newMessage, Group group, boolean delete) {
         try {
             out.writeObject("editMessage");
             out.writeBoolean(delete);
-            out.writeObject(group.getGroupName());
             out.writeObject(message);
+            out.writeObject(group.getGroupName());
             if (!delete) {
                 out.writeObject(newMessage);
             }
@@ -230,6 +226,10 @@ public class Client {
         }
     }
 
+    /**
+     * Updates the groups arraylist for the client
+     * @return The updated user
+     */
     public User updateCurrentUser() {
         try {
             User user;
@@ -245,8 +245,11 @@ public class Client {
         return null;
     }
 
+    /**
+     * Deletes a user from a group
+     * @param group The group the the current user should be removed from
+     */
     public void deleteFromGroup(Group group) {
-        System.out.println("Yo");
         try {
             out.writeObject("deleteFromGroup");
             out.writeObject(group);

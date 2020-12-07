@@ -24,18 +24,6 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         Server server = new Server();
-        users.add(new User("1234", "1234", "1234", 1234, "1234"));
-        users.get(0).setUserID(1);
-        users.add(new User("asdf", "asdf", "asdf", 1234, "asdf"));
-        users.get(1).setUserID(2);
-        userIDCounter = 2;
-        ArrayList<User> blah = new ArrayList<>();
-        blah.add(users.get(0));
-        blah.add(users.get(1));
-        Group group = new Group("Testing1", blah);
-        groups.add(group);
-        users.get(0).addGroup(group);
-        users.get(1).addGroup(group);
         try{
             server.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -50,7 +38,7 @@ public class Server {
         groups = new ArrayList<>();
         users = new ArrayList<>();
         userIDCounter = 0;
-        //readInUsersAndGroups("src/users.txt", "src/groups.txt");
+        readInUsersAndGroups("src/users.txt", "src/groups.txt");
     }
 
     /**
@@ -149,7 +137,7 @@ public class Server {
     }
 
     /**
-     *
+     *  Returns the userIDCounter
      * @return The userIDCounter
      */
     public static int getUserIDCounter() {
