@@ -121,7 +121,7 @@ createGroup(String groupName, String[] usernames): Takes in two parameters of ty
 
 addMessage(Message message, Group group): Takes in two parameters of type message, group and sends it to the server to add the given message to the given group. Returns true if the message was created, and false if not
 
-updateServerUser(User user): Takes in one paramter of type user and sends that user to the server to be updated
+updateServerUser(User user): Takes in one parameter of type user and sends that user to the server to be updated
 
 getCurrentUser: Takes in no parameters and returns the current user
 
