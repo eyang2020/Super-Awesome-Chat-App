@@ -208,6 +208,24 @@ This class servers as the chat panel which takes user input (such as a new messa
 
 To test this class manual testing was used to ensure that when a user sent a message from the client-side, the server would receive said message and act from there. Furthermore, features such as scrolling and buttons were also tested by ensuring that their action listeners were applied correctly.  
 
+Methods:
+
+run: initializes the JFrame and container. Then, all the panels are are created using BorderLayout. The left panel is the list of group chats, the right panel is the list of current users in that group, the top panel is the nickname of the current group along with the settings button regarding the user's information, the bottom panel includes the textfield and three buttons to send, edit, and delete messages. Lastly, the central panel contains the message panel which displays all the messages of the current group. 
+
+ActionListener: action listeners were created and added to buttons in order to add edit and delete functionality. Tied to the edit and delete button for messages, they allow the author of a particular message to edit a message or to delete it for the group as a whole, as long as they are the author. An action listener was also added to the setttings button which initiates a new instance of "ManageProfile", allowing the user to edit their information from there. Lastly, the send button was tied with an action listener which added support for sending a message to the server. From there, the message would be sent back to the group to each of its participants.
+
+changeChatModel(int): initializes the current message list model to a new default model. For the current user, this method will update the user and get the current group that the user is in. Then, this method updates the message list model by adding all of the current group's messages within it.
+
+changeUserModel: for each group that the user using the client is part of, we add the model that supplies the list of the group's current users' usernames to the chat panel.
+
+changeGroupModel: for each group that the user using the client is part of, we add the model that supplies the group nickname to each group panel.
+
+sendMessageToServer(String): given a string servering as the new message to be sent to the server, this method creates a new message with the said string and passes it to the client, adding it to the current group.
+
+main: creates a new instance of Client, passing it the respective address and port number. Invokes the EDT thread to prevent deadlock and creates a new instance of ChatDriver, passing the previously created client class within.
+
+refreshMessages: invokes the methods of client in order to refresh the current users and groups list of the client. After this, the method changes the model of the chat according to the selected index of the groupJlist.
+
 ## Login Class
 
 Class Description:
